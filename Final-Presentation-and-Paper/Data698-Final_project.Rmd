@@ -12,27 +12,76 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+$~$
 
-### Load Libraries:
-
-These are the libraries used to explore, prepare and visualize the data
-```{r, warning=FALSE, message=FALSE}
-library(tidyverse)
-library(dplyr)
-library(DataExplorer)
-library(hrbrthemes)
-library(ggplot2)
-library(gridExtra)
-library(plotly)
-```
+# Polycystic Ovarian Syndrome (PCOS)
 
 $~$
 
-### Load data:
+## Overview: 
 
-Below is a short description of the variables of interest in the data sets:
+Polycystic ovarian syndrome (PCOS) is a hormonal imbalance condition affecting 4% – 20% of women worldwide. It's believed that genetics and environmental factors can cause PCOS that affect their body physically and emotionally along with their metabolism, overall health and appearance in women. PCOS causes problems in ovaries making it hard for women to have a healthy menstrual cycle leading to the development of cysts and infertility. Although very common in women of reproductive age, PCOS may begin shortly after puberty but can also develop during the later teenage years and early adulthood.
 
-* The data sets I will be using are from [Kaggle](https://www.kaggle.com/datasets/prasoonkottarathil/polycystic-ovary-syndrome-pcos) collected from 10 different hospital across Kerala, India.
+
+$~$
+
+Hormones that are involved in PCOS are:
+
+* **Androgens: ** aka "male hormones" are present in women with PCOS at higher levels than usual. Excess in androgens can cause symptoms such as acne, unwanted hair, thinning hair, and irregular periods.
+
+* **Insulin: ** allows the body to absorb glucose (blood sugar) into the cells for energy. In PCOS, the body doesn't respond to insulin as intended therefore, elevations in blood glucose levels can be assessed. Such elevations then lead to increased production of androgen.
+
+* **Progesterone: ** vital hormone for menstruation and pregnancy; lack of progesterone contributes to irregular periods.
+
+$~$
+
+PCOS Symptoms:
+
+Many of these symptoms can be attributed to other causes or go unnoticed but it is very common for PCOS to go undiagnosed for some time. Here are some symptoms that help with the diagnosis:
+
+* **Irregular periods: ** irregular or missed periods as are a result of not ovulating is a common signs of PCOS
+
+* **Polycystic ovaries: ** some may develop cysts in their ovaries but some don't. Ovaries may be enlarged and follicles surrounding their eggs therefore failing to function regularly.
+
+* **Excess androgen: ** elevated levels of male hormones can cause excess hair and acne.
+
+$~$
+
+Other symptoms may include:
+
+* **Weight gain: ** many people with PCOS will have weight gain or obesity that is difficult to manage.
+
+* **Fatigue: ** increase in fatigue or low energy is also common
+
+* **Unwanted hair growth: ** due to excess androgen, areas such as face, arms, back, chest, hand, toes and abdomen may have excess hair growth.
+
+* **Thinning hair on the head: ** hair loss may increase in middle age for those with PCOS
+
+* **Infertility: ** PCOS is a leading cause for infertility but not everyone is the same.
+
+* **Acne: ** due to hormonal changes, acne can be arise and make skin oilier than usual and cause breakout in the face, chest and upper back.
+
+* **Darkening of skin: ** areas such as under arms, breasts or back of your neck may get dark, patchy or thicken
+
+* **Mood changes: ** mood swings, depression and anxiety can increase
+
+* **Pelvic pain: ** pain may occur with periods along with heavy bleeding or without bleeding
+
+* **Headaches: ** can occur due to hormonal changes
+
+* **Sleep problems: ** most people often suffer with problem such as insomnia or poor sleep. These arise due to many factors but a common one is having sleep apnea (sleep disorder). Even when you fall asleep you wake up as if you have not slept at all or have trouble falling asleep.
+
+* **Depression: ** can arise due to symptoms that can alter your appearance and have a negative impact on your emotions.
+
+**It's good to note that not everyone who is diagnosed with PCOS experiences all of these symptoms and should always consult with a their PCP or OBGYN to get an accurate diagnosis.**
+
+$~$ 
+
+### The Data:
+
+I am using 10 different data sets for this project to understand the difference between PCOS and non-PCOS women. Below is a description the datasets with the variables of interest for each:
+
+* Data sets labeled as `pcos` and `pcos2` were obtained from [Kaggle.com](https://www.kaggle.com/datasets/prasoonkottarathil/polycystic-ovary-syndrome-pcos) called Polycystic ovary syndrome (PCOS) where it collected data from 10 different hospital across Kerala, India. The dataset contains all physical and clinical parameters to determine PCOS and infertility related issues.
 
 
 Things to consider and understand the data set:
@@ -71,24 +120,155 @@ Things to consider and understand the data set:
 * Cycle(R/I) values are as follows:
   * 4 indicates irregular menstrual cycle
   * 2 indicates a regular menstrual cycle
+  
+----------------------------------------------
+
+* Data set `pcos3` was obtained from [Figshare.com](https://figshare.com/articles/dataset/PCOS_DATA_xlsx/17103995?file=31627232) which is a repository where users can make all of their research outputs available in a citable, shareable and discoverable manner.
+
+Variables in our dataset:
+
+* Age	- age of participants
+* Family history	- whether patient has family with pcos or not
+* Regulation of menstrual cycle	- whether patient has a regular menstrual cycle or not
+* BMI	- body mass index
+* LH	- luteinizing hormone (increases during ovulation)
+* FSH	- follicle stimulating hormone
+* LH:FSH ratio	- women without pcos, the ratio between LH and FSH usually lies between  1 and 2 while those with pcos, this ratio becomes reversed, and it might reach as high as 2 or 3
+* LH:FSH ratio group	- whether ratio fell above or below 1
+* Total Testesterone ng/dL	- total testosterone level
+* anti mullein's hormone - levels correspond to the number of eggs you have or your ovarian reserve
+
+----------------------------------------------
+
+* Data sets `pcos4`, `pcos5`, `pcos6`, and `pcos7` were obtained from [Mendeley Data](https://data.mendeley.com/datasets/mh94mxn3nh). These datasets provides the results of an untargeted metabolomic survey was conducted on the metabolites in the FF of 35 patients with PCOS and 37 age-matched individuals as control.
+
+Variables in the data sets include:
+
+* Case No. - 
+* Age	- age of participant
+* Height (m) - height of participant
+* Weight (kg)	- weight of participant
+* BMI	- body mass index
+* Estrous cyclicity	- the period from one ovulation to a subsequent ovulation
+* Ovarian morphology	- whether or not pcos is present
+* Serum testosterone (ng/ml) - testosterone levels
+
+----------------------------------------------
+
+* Data set `pcos8` was obtained from [Marquette University](https://epublications.marquette.edu/data_nfp/7/) that provides information of women without PCOS and their menstrual cycle.
+
+
+----------------------------------------------
+
+* Data set `pcos9` was 
+
+----------------------------------------------
+
+
+
+----------------------------------------------
+
+
 
 $~$
 
+### Load Libraries:
+
+These are the libraries used to explore, prepare and visualize the data
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(dplyr)
+library(DataExplorer)
+library(hrbrthemes)
+library(ggplot2)
+library(gridExtra)
+library(plotly)
+```
+
+$~$
+
+### Load data:
+
 I have included the original data sets in my [GitHub](https://github.com/letisalba/Data-698/tree/master/Data-Collection-and-Analysis) account and read from this location. 
 ```{r, echo=FALSE}
-pcos <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/Kaggle%20csv/PCOS_infertility.csv")
-pcos2 <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/Kaggle%20csv/PCOSData_without_infertility.csv")
+pcos <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/csv/PCOS_infertility.csv")
+
+pcos2 <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/csv/PCOS_without_infertility.csv")
+
+pcos3 <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/csv/pcos_sudan.csv")
+
+pcos4 <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/csv/No_PCOS-TableS1.csv")
+
+pcos5 <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/csv/No_PCOS-TableS2.csv")
+
+pcos6 <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/csv/PCOS-TableS1.csv")
+
+pcos7 <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/csv/PCOS-TableS2.csv")
+
+pcos8 <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/csv/Menstrual-data.csv")
 ```
 
 
-Lets view the `pcos` data with infertility:
+Lets view the data:
+
+`pcos` data:
 ```{r, echo=FALSE}
+# viewing pcos dataset 
 head(pcos, 4)
 ```
 
-... And the `pcos2` data without infertility:
+`pcos2` data:
 ```{r, echo=FALSE}
+# viewing pcos2 dataset
 head(pcos2, 4)
+```
+
+$~$
+
+`pcos3` data:
+```{r, echo=FALSE}
+# viewing pcos3 dataset
+head(pcos3, 4)
+```
+
+`pcos4` data:
+```{r, echo=FALSE}
+# viewing pcos4 dataset
+head(pcos4, 4)
+```
+
+$~$
+
+`pcos5` data:
+```{r, echo=FALSE}
+# viewing pcos5 dataset
+head(pcos5, 4)
+```
+
+`pcos6` data:
+```{r, echo=FALSE}
+# viewing pcos6 dataset
+head(pcos6, 4)
+```
+
+`pcos7` data:
+```{r, echo=FALSE}
+# viewing pcos7 dataset
+head(pcos7, 4)
+```
+
+`pcos8` data:
+```{r, echo=FALSE}
+# viewing pcos8 dataset
+head(pcos8, 4)
+```
+
+$~$
+
+`pcos9` data:
+```{r, echo=FALSE}
+# viewing pcos9 dataset
+#head(pcos9, 4)
 ```
 
 $~$
@@ -99,17 +279,63 @@ The first data set `pcos` includes 541 observations and a total of 6 variables. 
 
 $~$
 
-The `pcos` data:
+`pcos` data:
 ```{r, echo=FALSE}
 glimpse(pcos)
 ```
 
 $~$
 
-The `pcos2` data:
+`pcos2` data:
 ```{r, echo=FALSE}
 glimpse(pcos2)
 ```
+
+$~$
+
+`pcos3` data:
+```{r, echo=FALSE}
+glimpse(pcos3)
+```
+
+$~$
+
+`pcos4` data:
+```{r, echo=FALSE}
+glimpse(pcos4)
+```
+
+$~$
+
+`pcos5` data:
+```{r, echo=FALSE}
+glimpse(pcos5)
+```
+
+$~$
+
+`pcos6` data:
+```{r, echo=FALSE}
+glimpse(pcos6)
+```
+
+$~$
+
+`pcos7` data:
+```{r, echo=FALSE}
+glimpse(pcos7)
+```
+
+$~$
+
+`pcos8` data:
+```{r, echo=FALSE}
+glimpse(pcos8)
+```
+
+
+
+
 
 $~$
 
@@ -132,6 +358,122 @@ DataExplorer::plot_histogram(
    data = pcos2,
          ggtheme=theme_ipsum())
 ```
+
+$~$
+
+`pcos3` data:
+```{r, fig.height = 10, fig.width = 10, echo=FALSE, fig.align='center', warning=FALSE, eval=TRUE}
+DataExplorer::plot_histogram(
+  geom_histogram_args = list(alpha = 0.5, fill = "pink"),
+   data = pcos3,
+         ggtheme=theme_ipsum())
+```
+
+
+$~$
+
+`pcos4` data:
+```{r, fig.height = 10, fig.width = 10, echo=FALSE, fig.align='center', warning=FALSE, eval=TRUE}
+DataExplorer::plot_histogram(
+  geom_histogram_args = list(alpha = 0.5, fill = "black"),
+   data = pcos4,
+         ggtheme=theme_ipsum())
+```
+
+
+$~$
+
+`pcos5` data:
+```{r, fig.height = 10, fig.width = 10, echo=FALSE, fig.align='center', warning=FALSE, eval=TRUE}
+# DataExplorer::plot_histogram(
+#   geom_histogram_args = list(alpha = 0.5, fill = "black"),
+#    data = pcos5,
+#          ggtheme=theme_ipsum())
+```
+
+
+$~$
+
+`pcos6` data:
+```{r, fig.height = 10, fig.width = 10, echo=FALSE, fig.align='center', warning=FALSE, eval=TRUE}
+DataExplorer::plot_histogram(
+  geom_histogram_args = list(alpha = 0.5, fill = "blue"),
+   data = pcos6,
+         ggtheme=theme_ipsum())
+```
+
+
+$~$
+
+`pcos7` data:
+```{r, fig.height = 10, fig.width = 10, echo=FALSE, fig.align='center', warning=FALSE, eval=TRUE}
+# DataExplorer::plot_histogram(
+#   geom_histogram_args = list(alpha = 0.5, fill = "red"),
+#    data = pcos7,
+#          ggtheme=theme_ipsum())
+```
+
+
+$~$
+
+`pcos8` data:
+```{r, fig.height = 10, fig.width = 10, echo=FALSE, fig.align='center', warning=FALSE, eval=TRUE}
+DataExplorer::plot_histogram(
+  geom_histogram_args = list(alpha = 0.5, fill = "yellow"),
+   data = pcos8,
+         ggtheme=theme_ipsum())
+```
+
+$~$
+
+Checking for missing data:
+```{r, echo=FALSE}
+# missing data
+colSums(is.na(pcos3))
+```
+$~$
+
+Checking for missing data:
+```{r, echo=FALSE}
+# missing data
+colSums(is.na(pcos4))
+```
+
+$~$
+
+Checking for missing data:
+```{r, echo=FALSE}
+# missing data
+colSums(is.na(pcos5))
+```
+
+$~$
+
+Checking for missing data:
+```{r, echo=FALSE}
+# missing data
+colSums(is.na(pcos6))
+```
+
+$~$
+
+Checking for missing data:
+```{r, echo=FALSE}
+# missing data
+colSums(is.na(pcos7))
+```
+
+$~$
+
+Checking for missing data:
+
+NOT USING `pcos8` BECAUSE OF THE MISSING VALUES!
+```{r, echo=FALSE}
+# missing data
+colSums(is.na(pcos8))
+```
+
+
 
 
 $~$
@@ -242,7 +584,7 @@ $~$
 
 For part 2, I tackled the missing values by first transforming `Height` from cm to m, calculate `BMI`, `Waist-hip ratio`  and `FSH/LH`. Then after careful consideration to the data, I decided to use the median number to replace the missing values in `Marriage_Status(yrs)`, `AMH(ng/mL)` and `Fast_food` since it didn't disrupt the data's distribution.
 ```{r, echo=FALSE, warning=FALSE}
-# convert Height from cm to m
+# convert Height from cm to
 pcos_data$"Height(cm)" <- round((pcos_data$"Height(cm)" * 0.01),1)
 
 # convert hip and waist from inches to cm
