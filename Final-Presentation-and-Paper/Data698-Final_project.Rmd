@@ -1,7 +1,7 @@
 ---
 title: "Data 698 - Final Project"
 author: "Leticia Salazar"
-date: "May 17, 2022"
+date: "May 17, 2023"
 output:
   html_document:
     theme: united
@@ -20,7 +20,7 @@ $~$
 
 ## Overview: 
 
-Polycystic ovarian syndrome (PCOS) is a hormonal imbalance condition affecting 4% – 20% of women worldwide. It's believed that genetics and environmental factors can cause PCOS that affect their body physically and emotionally along with their metabolism, overall health and appearance in women. PCOS causes problems in ovaries making it hard for women to have a healthy menstrual cycle leading to the development of cysts and infertility. Although very common in women of reproductive age, PCOS may begin shortly after puberty but can also develop during the later teenage years and early adulthood.
+Polycystic Ovary Syndrome (PCOS) is a complex hormonal disorder that affects people with ovaries, typically during their reproductive years. It's one of the most common endocrine disorders among women of childbearing age, affecting approximately 1 in 10 individuals. Affecting 4% - 20% of women worldwide, it's believed that PCOS affects womens bodies physically and emotionally along with their metabolism and overall health and appearance. PCOS causes problems in ovaries making it hard for women to have a healthy menstrual cycle leading to the development of cysts and infertility. Although very common in women of reproductive age, PCOS may begin shortly after puberty but can also develop during the later teenage years and early adulthood.
 
 
 $~$
