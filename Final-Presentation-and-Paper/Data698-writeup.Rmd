@@ -1,5 +1,5 @@
 ---
-title: 'Using Machine Learning Algorithm to Predict the likelihood of PCOS based on Demographic, Clinical and Lifestyle Factors'
+title: 'Using Machine Learning Algorithms to Predict the likelihood of PCOS based on Demographic, Clinical and Lifestyle Factors'
 author: "Leticia Salazar"
 date: "May 16, 2023"
 output:
@@ -36,11 +36,13 @@ $~$
 
 ## Abstract:
 
+Polycystic Ovary Syndrome (PCOS) stands as a prevalent endocrine disorder affecting women of reproductive age worldwide, presenting a confluence of hormonal imbalances, reproductive irregularities, and potential metabolic complications. Characterized by irregular menstrual cycles, hyperandrogenism, and polycystic ovaries, PCOS poses multifaceted challenges that extend beyond reproductive health, encompassing metabolic disturbances and psychological implications. This complex syndrome, rooted in intricate interplays of genetic predispositions, hormonal dysregulation, and environmental factors, manifests variably among affected individuals. The clinical landscape of PCOS often requires a comprehensive, multidisciplinary approach, incorporating lifestyle modifications, pharmacological interventions, and personalized treatments to address symptoms and reduce associated health risks. Despite ongoing research efforts, elucidating the precise etiology and optimal management strategies for PCOS remains a dynamic area of exploration in contemporary medicine. This research project investigates the current studies on PCOS diagnosis, assessing the effectiveness of various machine learning algorithms including Linear Regression (LM), Logistic Regression, Decision Tree (rpart), Random Forest (randomForest), Gradient Boosting Machines (xgboost or gbm), Support Vector Machines (e1071), Neural Networks (neuralnet), and K-Nearest Neighbors (kknn or class).
+
 $~$
 
 ## Key words:
 
-Polysyctic Ovary Syndrome, Polycystic Ovarian Syndrome, PCOS, Women's Health, Machine Learning, Logistic Regression
+Polysyctic Ovary Syndrome, Polycystic Ovarian Syndrome, PCOS, Women's Health, Machine Learning, Linear Regression, Logistic Regression, Decision Tree, Random Forest, Gradient Boosting, Super Vector Machine, Neural Networks, K-Nearest Neighbors, KNN
 
 $~$
 
@@ -76,16 +78,72 @@ $~$
 
 ## Literature Review:
 
+For this project, my emphasis was on discovering literature reviews that validate the relevance of the dataset utilized alongside the chosen machine learning algorithms. In pursuit of this goal, I identified several articles outlined below, including studies related to PCOS and its findings in order to better understand the data I am working with.
+
+1. **A Critical Study of Polycustic Ovarian Syndrome (PCOS) Classification Techniques**: The article discusses the application of data mining techniques in diagnosing Polycystic Ovarian Syndrome (PCOS) in women. It emphasizes the use of classification methods such as Naïve Bayes, Decision Trees, and Neural Networks to predict the likelihood of PCOS based on gathered data. The study uses a dataset obtained from a survey conducted among 119 women aged 18 to 22, focusing on lifestyle and dietary habits. Different classification algorithms are applied and compared for accuracy, with Naïve Bayes demonstrating the highest accuracy of 97.65%. The conclusion suggests integrating clinical reports and ultrasound images to further enhance PCOS prediction and assist in early medical intervention. The article acknowledges contributions from medical professionals and the university in facilitating data collection and guidance throughout the project.
+
+2. **A Review: Brief Insight into Polycustic Ovarian Syndrome**: The article discusses Polycystic Ovarian Syndrome (PCOS), an endocrine disorder impacting women due to ovarian cysts, anovulation, and hormonal imbalances. Around 116 million women worldwide are affected by PCOS, influenced by factors like genetics, lifestyle, and obesity. The disorder's pathophysiology involves hormonal dysfunction, insulin resistance, and excess androgen leading to complications like diabetes and endometrial cancer. PCOS is linked to various risk factors such as genetics, neuroendocrine issues, lifestyle choices, and obesity. The condition leads to hormonal imbalances, particularly increased androgens, which affect folliculogenesis and ovarian function. Insulin resistance, often observed in PCOS, further exacerbates hormonal disruptions and contributes to metabolic issues like diabetes and cardiovascular problems. Treatment options for PCOS mainly focus on managing symptoms. Medications like oral contraceptives, antiandrogens, insulin sensitizers (e.g., metformin, thiazolidinediones), and ovulation-inducing agents (e.g., clomiphene citrate, letrozole) are used to address specific symptoms such as irregular menstruation, hirsutism, and infertility. Lifestyle interventions including diet and exercise play a crucial role in managing PCOS-related symptoms. The article concludes that while various treatments target PCOS symptoms, there's no singular cure. Lifestyle modifications, in addition to pharmacological interventions, are vital for managing the condition's impact on a patient's health. Further research into the pathophysiology and potential herbal or alternative treatments is recommended for improving long-term outcomes in PCOS patients.
+
+3. **A Novel Approach for Polycystic Ovary Syndrome Prediction Using Machine Learning in Bioinformatics**: The article focuses on Polycystic Ovary Syndrome (PCOS), a disorder affecting women's reproductive health due to hormone imbalances, leading to complications such as infertility and pregnancy issues. It discusses the necessity of early detection and proposes a novel approach using advanced machine learning techniques for PCOS prediction. The study employs a dataset with clinical and physical parameters, introducing a novel feature selection technique called CS-PCOS based on optimized chi-squared mechanism. Ten machine learning models are compared, with Gaussian Naive Bayes (GNB) showing superior performance, achieving 100% accuracy, precision, recall, and F1-scores with minimal computational time. The research identifies key factors like prolactin levels, blood pressure, thyroid stimulating hormone, relative risk, and pregnancy as significant in PCOS prediction. It also details exploratory data analysis methods and concludes by suggesting future enhancements such as expanding the dataset and applying deep learning techniques for PCOS prediction.
+
+4. **A Study of Hormonal and Anthropometric Parameters in Polycystic Ovarian Syndrome**: 
+
+5. **Clinical Characteristics of Polycystic Ovary Syndome in Indian Women**: The article investigates the clinical features of Polycystic Ovary Syndrome (PCOS) in Indian women, focusing on identifying different phenotypes of the syndrome. It examines the prevalence of markers like acanthosis nigricans (AN) linked with insulin resistance, obesity, hirsutism, and hypothyroidism in PCOS women. Conducted over 18 months, the study included 120 newly diagnosed PCOS patients and highlighted the following:
+
+  * PCOS Occurrence: The research found PCOS in both obese and non-obese women, with AN and hirsutism occurring in an equal proportion of patients. Hormonal dysfunctions in PCOS manifested together or independently.
+
+  * Infertility: Infertility due to anovulation is a complication of PCOS. However, infertility risks did not significantly differ between obese and non-obese PCOS women.
+
+  * Obesity: While obesity is common in PCOS, the study noted that PCOS occurred in women with normal BMI as well. It found that obesity was not essential to diagnose PCOS.
+
+  * Acanthosis Nigricans: AN, a marker of insulin resistance, was present in a significant proportion of PCOS women, especially among the obese, indicating a higher risk of insulin resistance at comparatively lower BMI levels among Indian PCOS women.
+
+  * Hirsutism and Other Hyperandrogenic Features: The study observed hirsutism, acne, and baldness among PCOS women. While more obese women had hirsutism, there was no direct correlation between hirsutism and obesity. However, both AN and hirsutism were present in a substantial number of patients, especially among the obese, suggesting a potential link between insulin resistance and hyperandrogenism.
+
+The research aimed to identify clinical features that can help subgroup PCOS women based on endocrinological malfunctions for more appropriate treatment selection. It emphasized the need for tailored treatment modalities based on the specific subgroup of PCOS.
+
+6. **Comparative Analysis of Artificial Intelligence in the Diagnosis of Polycystic Ovary Syndrome**: The article explores Polycystic Ovary Syndrome (PCOS) and the challenges in its diagnosis due to its variable symptoms. It highlights the use of Artificial Intelligence (AI), specifically machine learning models, to improve PCOS diagnosis accuracy. Various machine learning techniques like Convolutional Neural Networks (CNN), Artificial Neural Networks (ANN), Support Vector Machines (SVM), Decision Tree (DT), and K-Nearest Neighbors (KNN) were compared for diagnosing PCOS using datasets like ovarian ultrasound images, tongue images, and pulse parameters. The findings revealed that CNN models performed best, achieving accuracies ranging from 85% to 98.12% in different studies. They effectively classified ovarian ultrasound images and detected cysts for PCOS diagnosis. SVMs also showed high accuracies, particularly in tongue image analysis and ultrasound image detection, achieving around 94% accuracy. KNN and Decision Tree models achieved accuracies of 91% and 81%, respectively. The conclusion emphasizes that AI techniques, particularly CNN models, hold promise in improving PCOS diagnosis. However, further advancements are needed through larger datasets, feature selection improvements, and model performance evaluation to enhance the accuracy of PCOS diagnosis. Utilizing ensemble machine learning approaches could also aid in achieving better classification accuracy for PCOS diagnosis.
+
+7. **Comparative Analysis of Machine Learning Algorithms in Diagnosis of Polycystic Ovarian Syndrome**:
+
+8. **DHEA, DHEAS and PCOS:**
+This article examines the effect of excess adrenal precursor androgen (APA) production on women with PCOS. The extra-adrenal factors, including obesity, insulin and glucose levels, and ovarian secretions, play a limited role in the increased APA production observed in PCOS.
+
+9. **Early identification of PCOS with commonly known diseases: Obesity, diabetes, high blood pressure and heart disease using machine learning techniques**:
+
+10. **Exercise in polycystic ovarian syndrome: An Evidence-based review**:
+
+11. **Genetic Basis of Polycystic Ovary Syndrome (PCOS) Current Perspectives**:
+
+12. **Hyperparameter Optimization for Machine Learning Models Based on Bayesian Optimization**:
+
+13. **PCOS Detect using Machine Learning Algorithms**:
+
+14. **Phenotype and metabolic profile of South Asian Women with polycystic ovary syndrome (PCOS): results of a large database from a specialist Endocrine Clinic**:
+
+15. **Polycystic Ovarian Syndrome (PCOS) awareness amoing young women of central India**:
+
+16. *Prediction of Polycystic Ovarian Syndrome with Clinical dataset using a novel hydrid data mining classification technique***:
+
+17. **Racial and ethnic differences in the polycystic ovary syndrome metabolic phenotypes**:
+
+18. **SPOSDS: A Smart Polycystic Ovary Syndrome diagnostic system using machine learning**:
+
+
+
+
+
+
+
+
+
 The following articles will be resourceful for this project:
 
 **Racial and ethnic differences in the metabolic response of polycystic ovary syndrome:**
 This article speaks on the racial and ethnic disparities in the metabolic dysfunction suffered by PCOS and whether markers of metabolic function differ in nondiabetic Asian American (AS), African American (AA), Hispanic White (HW), compared to non-Hispanic White (NHW) women with PCOS.
 
-**A review- Brief insight into Polycystic Ovarian syndrome:**
-This review highlights a brief overview of risk and pathophysiological treatment with drugs acting on ovulation, infertility plus clinical symptoms of PCOS.
 
-**DHEA, DHEAS and PCOS:**
-This article examines the effect of excess adrenal precursor androgen (APA) production on women with PCOS. The extra-adrenal factors, including obesity, insulin and glucose levels, and ovarian secretions, play a limited role in the increased APA production observed in PCOS.
+
 
 
 $~$
