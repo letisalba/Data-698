@@ -1,32 +1,18 @@
 ---
-title: 'Using Machine Learning Algorithm to Predict the likelihood of PCOS based on Demographic, Clinical and Lifestyle Factors'
+title: 'Using Machine Learning Algorithms to Predict the likelihood of PCOS based on Demographic, Clinical and Lifestyle Factors'
 author: "Leticia Salazar"
 date: "May 16, 2023"
 output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
   html_document:
     toc: yes
     toc_float: yes
     number_sections: no
     theme: united
     highlight: kate
-  pdf_document:
-    latex_engine: xelatex
-    toc: yes
 ---
-
-```{=html}
-<style type="text/css">
-code {
-  font-family: "Consolas";
-  font-size: 12px;
-}
-pre {
-  font-family: "Consolas";
-  font-size: 12px;
-}
-</style>
-```
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -36,23 +22,26 @@ $~$
 
 ## Abstract:
 
+Polycystic Ovary Syndrome (PCOS) stands as a prevalent endocrine disorder affecting women of reproductive age worldwide, presenting a confluence of hormonal imbalances, reproductive irregularities, and potential metabolic complications. Characterized by irregular menstrual cycles, hyperandrogenism, and polycystic ovaries, PCOS poses multifaceted challenges that extend beyond reproductive health, encompassing metabolic disturbances and psychological implications. This complex syndrome, rooted in intricate interplays of genetic predispositions, hormonal dysregulation, and environmental factors, manifests variably among affected individuals. The clinical landscape of PCOS often requires a comprehensive, multidisciplinary approach, incorporating lifestyle modifications, pharmacological interventions, and personalized treatments to address symptoms and reduce associated health risks. Despite ongoing research efforts, elucidating the precise etiology and optimal management strategies for PCOS remains a dynamic area of exploration in contemporary medicine. This research project aims investigates the current studies on PCOS diagnosis, assessing the effectiveness of various machine learning algorithms including Linear Regression (LM), Logistic Regression, Decision Tree (rpart), Random Forest (randomForest), Gradient Boosting Machines (xgboost or gbm), Support Vector Machines (e1071), Neural Networks (neuralnet), and K-Nearest Neighbors (kknn or class). From my research 
+
+
 $~$
 
 ## Key words:
 
-Polysyctic Ovary Syndrome, Polycystic Ovarian Syndrome, PCOS, Women's Health, Machine Learning, Logistic Regression
+Polysyctic Ovary Syndrome, Polycystic Ovarian Syndrome, PCOS, Women's Health, Machine Learning, Linear Regression, Logistic Regression, Decision Tree, Random Forest, Gradient Boosting, Super Vector Machine, Neural Networks, K-Nearest Neighbors
 
 $~$
 
-## Introduction:
+## The Problem:
 
-Polycystic Ovary Syndrome (PCOS) is a hormonal imbalance disorder affecting women of reproductive age. The exact number of women affected by PCOS worldwide is difficult to determine as many cases go undiagnosed but according to the World Health Organization (WHO), there's 3.4% of women who are affected [1].  It may not seem as much, but women make up 49.7% of the today’s population [2], almost 13% of those women are of reproductive age [3], leaving about 17.5 million women who reported to suffer from PCOS. Aside from the toll PCOS takes on your physical and emotional health, it causes problems in the ovaries, making it difficult for women to have a healthy menstrual cycle leading to the development of cysts and infertility. It's important to note that the prevalence of PCOS varies by region and ethnic groups, with some studies suggesting higher rates of PCOS in certain populations [4]. This project will investigate publicly available datasets that will allow us to create predictive models on markers in routine test results to make a diagnosis.
+Polycystic Ovary Syndrome (PCOS) is a hormonal imbalance disorder affecting women of reproductive age. Determining the precise global count of women affected by PCOS poses challenges due to many cases remaining undiagnosed. However, the World Health Organization (WHO) estimates that approximately 3.4% of women are affected [1]. While this percentage might seem relatively small, considering that women constitute 49.7% of today’s population [2], nearly 13% of them fall within the reproductive age bracket [3]. This data suggests that approximately 17.5 million women report suffering from PCOS. Beyond the physical and emotional toll PCOS exacts, it also disrupts ovarian function, leading to challenges in maintaining a healthy menstrual cycle and can result in the formation of cysts, ultimately impacting fertility. It's important to note that the prevalence of PCOS varies by region and ethnic groups, with some studies suggesting higher rates of PCOS in certain populations [4]. Early identification of risk factors associated with PCOS can assist in timely interventions and lifestyle adjustments. Tailoring suggestions or treatments based on individualized risk profiles has the potential to enhance patient outcomes. Employing predictive models can play a pivotal role in increasing awareness regarding PCOS risk factors and preventive measures. However, limitations may exist in accessing comprehensive and varied datasets containing accurate demographic, clinical, and lifestyle data. It is crucial to ensure the model's transparency and interpretability to facilitate well-informed decisions and recommendations. Additionally, it's imperative that the model demonstrates proficiency across diverse demographic groups and populations. Addressing these challenges involves the development of a robust predictive model using machine learning techniques. Such an endeavor holds the promise of significantly contributing to the identification of individuals at risk of PCOS, thereby enabling early interventions and guiding personalized healthcare strategies for improved management of the condition. This project will investigate publicly available datasets that will be used to develop machine learning models that predicts the probability or risk of an individual having or developing PCOS based on demographic information (age, ethnicity, geographical location), clinical data (hormonal levels, BMI, menstrual irregularities), and lifestyle factors (dietary habits, exercise routine, stress levels).
 
 $~$
 
 ### Objectives:
 
-My objective for this project is to predict a PCOS diagnosis using machine learning algorithms like logistic regression on markers presented on blood work. Machine learning algorithms have shown promise in advancing our understanding of the disease and improving its diagnosis and treatment. 
+Construct predictive models using machine learning techniques that utilize a dataset comprising demographic, clinical, and lifestyle variables as features and PCOS diagnosis as the target variable. Machine learning algorithms have shown promise in advancing our understanding of the disease and improving its diagnosis and treatment. 
 
 I anticipate answering the following questions with my data:
 
@@ -68,45 +57,108 @@ I anticipate answering the following questions with my data:
 
 6.	Can we predict the long-term health outcomes and quality of life of women with PCOS based on their age, lifestyle factors, hormone levels, and treatment history?
 
-Note: this methodology plan is not exhaustive and may vary depending on the specific research question, dataset, and machine learning algorithm used.
-
-
-
 $~$
 
 ## Literature Review:
 
-The following articles will be resourceful for this project:
+For this project, my emphasis was on discovering literature reviews that validate the relevance of the dataset utilized alongside the chosen machine learning algorithms. In pursuit of this goal, I've come across various articles that make reference to the Kaggle dataset. These articles investigate studies associated with PCOS, presenting findings aimed at providing a deeper comprehension of the dataset I'm analyzing.
 
-**Racial and ethnic differences in the metabolic response of polycystic ovary syndrome:**
-This article speaks on the racial and ethnic disparities in the metabolic dysfunction suffered by PCOS and whether markers of metabolic function differ in nondiabetic Asian American (AS), African American (AA), Hispanic White (HW), compared to non-Hispanic White (NHW) women with PCOS.
+The literature reviews collectively delve into various aspects of Polycystic Ovarian Syndrome (PCOS), employing diverse methodologies and approaches for diagnosis, classification, understanding clinical manifestations, and proposing potential treatments. Researchers across these studies have primarily utilized data mining, machine learning, and clinical investigations to address the complexity of PCOS. Below are the key characteristics, achievements, advantages, and drawbacks across these reviews:
 
-**A review- Brief insight into Polycystic Ovarian syndrome:**
-This review highlights a brief overview of risk and pathophysiological treatment with drugs acting on ovulation, infertility plus clinical symptoms of PCOS.
+##### Common Focus Areas:
+Multiple studies emphasize the use of machine learning algorithms, such as Naïve Bayes, Decision Trees, Artificial Neural Networks, Support Vector Machines, and ensemble methods, for PCOS diagnosis. They explore the accuracy and predictive power of these models using diverse datasets, including clinical, lifestyle, and physiological parameters. Investigations into clinical parameters and anthropometric measures aim to identify potential predictors or indicators of PCOS, such as hormonal imbalances, insulin resistance, metabolic traits, obesity, and associated risks like infertility and cardiovascular issues. Studies examine the diverse clinical presentations and phenotypic variations within PCOS, shedding light on how different subgroups may manifest the syndrome and respond to various treatments.
 
-**DHEA, DHEAS and PCOS:**
-This article examines the effect of excess adrenal precursor androgen (APA) production on women with PCOS. The extra-adrenal factors, including obesity, insulin and glucose levels, and ovarian secretions, play a limited role in the increased APA production observed in PCOS.
+##### Achievements:
+Machine learning models, particularly those utilizing Convolutional Neural Networks (CNNs) and ensemble methods, have shown high accuracy in diagnosing PCOS. These models effectively utilize diverse datasets, ranging from ultrasound images to clinical parameters. Research has identified several potential predictive factors for PCOS, including hormonal markers, lifestyle attributes, and metabolic indicators, offering insights into early detection and tailored treatment strategies. Studies evaluating PCOS awareness among women have highlighted the importance of education and awareness campaigns in enhancing understanding and facilitating early diagnosis.
+
+##### Advantages:
+Machine learning algorithms offer promising accuracy rates, particularly CNNs and ensemble models, in diagnosing PCOS using various non-invasive parameters. Understanding phenotypic variations aids in tailoring treatments based on specific subgroups, potentially improving patient outcomes and management. Efforts toward identifying early markers or predictive factors can facilitate early intervention and lifestyle modifications, mitigating long-term health risks associated with PCOS.
+
+##### Drawbacks and Recommendations:
+Some studies may suffer from limited sample sizes or datasets, impacting the generalizability of findings. Larger and more diverse datasets are recommended for robust model development and validation. While certain machine learning models showcase high accuracy, the variability in dataset characteristics and preprocessing methods could influence their effectiveness across different populations or settings. The multifaceted nature of PCOS, influenced by both genetic and environmental factors, presents challenges in pinpointing a singular cause or standard diagnostic criteria.
+
+The collective body of literature reviews signifies advancements in PCOS diagnosis, understanding clinical manifestations, and potential avenues for tailored treatments. The use of machine learning models, especially those employing CNNs and ensemble methods, showcases significant promise in accurate PCOS diagnosis based on non-invasive parameters. However, further research is necessary, emphasizing larger and more diverse datasets, refined models, and a multidisciplinary approach to fully comprehend the complexity of PCOS and enhance diagnostic and treatment strategies.
 
 
 $~$
 
-## Datasets:
+## Dataset:
 
-The following datasets will be used in this project:
+The Polycystic ovary syndrome (PCOS) dataset, available on [Kaggle.com](https://www.kaggle.com/datasets/prasoonkottarathil/polycystic-ovary-syndrome-pcos), is comprised of two csv files labeled `PCOS_data_without_infertility` and `PCOS_infertility`. In total, these files encompass 48 variables and 541 data entries all collected from 10 different hospitals across Kerala, India. The dataset contains all physical and clinical parameters to determine PCOS and infertility related issues.
 
-1.	DataSet for PCOS:
-These datasets provide the results of an untargeted metabolomic survey was conducted on the metabolites in the FF of 35 patients with PCOS and 37 age-matched individuals as control
-2.	Polycystic Ovary Syndrome (PCOS):
-PCOS dataset contains all physical and clinical parameters of patients from 10 different hospitals across Kerala, India.
-3.	Menstrual Cycle Data:
-Randomized Comparison of Two Internet –Supported Natural Family Planning Methods.
+**Full description of the variables below:**
+
+* Units used range from imperial to metric system of measurement
+
+* For Yes | No questions
+  * Yes = 1
+  * No = 0
+
+Variables                               Description
+----------------------------            ---------------------------------------
+"Sl..No"                                unique identification number assigned to each entry
+"Patient.File.No."                      file number for each patient's record.       
+"PCOS..Y.N."                            indicates the presence or absence of PCOS, with "Y" denoting "1 or Yes" and "N" for "0 or No."
+"I...beta.HCG.mIU.mL."                  pregnancy hormone case I measured in milli-international units per liter (mIU/L)
+"II....beta.HCG.mIU.mL."                pregnancy hormone case II measured in milli-international units per liter (mIU/L)
+"AMH.ng.mL."                            detects ovarian reserve (egg count)           
+"Age..yrs."                             age of patient in years            
+"Weight..Kg."                           weight of patient in kg            
+"Height.Cm."                            height of patient in cm            
+"BMI"                                   body mass index                    
+"Blood.Group"                           Blood Groups: A+ = 11, A- = 12, B+ = 13, B- = 14, O+ = 15, O- = 16, AB+ = 17, AB- = 18            
+"Pulse.rate.bpm."                       beats per minute       
+"RR..breaths.min."                      respiration rates per minute       
+"Hb.g.dl."                              hemoglobin concentration measured in grams per deciliter (g/dL).               
+"Cycle.R.I."                            cycle Regularity Index used to assess the regularity or irregularity of menstrual cycles in women: 4 indicates irregular menstrual cycle, 2 indicates a regular menstrual cycle           
+"Cycle.length.days."                    length of menstrual cycle     
+"Marraige.Status..Yrs."                 years married  
+"Pregnant.Y.N."                         pregnant yes or no         
+"No..of.aborptions"                     number of abortions      
+"FSH.mIU.mL."                           follicle stimulating hormone measured in milli-international units per liter (mIU/L)            
+"LH.mIU.mL."                            luteinizing hormone (increases during ovulation) measured in milli-international units per liter (mIU/L)             
+"FSH.LH"                                ratio between Follicle-Stimulating Hormone (FSH) and Luteinizing Hormone (LH)                
+"Hip.inch."                             measurement of hips in inches              
+"Waist.inch."                           measurement of waist in inches            
+"Waist.Hip.Ratio"                       ratio of measurement of waist and hip       
+"TSH..mIU.L."                           thyroid stimulating hormone measured in milli-international units per liter (mIU/L)           
+"AMH.ng.mL."                            Anti-Müllerian Hormone (AMH) measured in nanograms per milliliter (ng/mL); a marker used in reproductive medicine to assess ovarian reserve             
+"PRL.ng.mL."                            Prolactin measured in nanograms per milliliter (ng/mL); a hormone produced by the pituitary gland           
+"Vit.D3..ng.mL."                        Vitamin D3 measured in nanograms per milliliter (ng/mL); is essential for bone health, immune function, and various other bodily processes.         
+"PRG.ng.mL."                            Progesterone measured in nanograms per milliliter (ng/mL); a hormone involved in the menstrual cycle, pregnancy, and maintaining the uterine lining for a developing embryo.             
+"RBS.mg.dl."                            Random Blood Sugar measured in milligrams per deciliter (mg/dL); it represents the level of glucose (sugar) present in the blood at a random time, without fasting.            
+"Weight.gain.Y.N."                      weight gain yes or no       
+"hair.growth.Y.N."                      hair growth yes or no (hirsutism)       
+"Skin.darkening..Y.N."                  darkening of skin yes or no  
+"Hair.loss.Y.N."                        hair loss yes or no         
+"Pimples.Y.N."                          pimples (acne) yes or no           
+"Fast.food..Y.N."                       consumption of fast food yes or no    
+"Reg.Exercise.Y.N."                     regularly exercise yes or no                 
+"BP._Systolic..mmHg."                   systolic blood pressure measured in millimeters of mercury (mmHg).     
+"BP._Diastolic..mmHg."                  diastolic blood pressure measured in millimeters of mercury (mmHg)  
+"Follicle.No...L."                      number of follicles on left ovary       
+"Follicle.No...R."                      number of follicles in right ovary       
+"Avg..F.size..L...mm."                  average size of follicles in left ovary measured in millimeters (mm)  
+"Avg..F.size..R...mm."                  average size of follicles in right ovary measured in millimeters (mm)  
+"Endometrium..mm."                      size of the endometrial thickness in millimeters (mm)
 
 
 $~$
 
 ## Methodology:
 
-This project will investigate mainly publicly available datasets except for one dataset from NICHD Dash that will be used to create predictive models on markers in routine test results to make a diagnosis. Some variables that are included in these datasets are:
+
+Data Collection and Preparation: Gather and preprocess a comprehensive dataset containing demographic details, clinical measurements (hormone levels, BMI, menstrual history), and lifestyle information (diet, exercise, stress levels) from a diverse population.
+
+Feature Selection and Engineering: Identify the most relevant features through exploratory analysis and feature engineering techniques, ensuring that the model focuses on key predictors for PCOS.
+
+Model Training and Evaluation: Train the machine learning model using appropriate algorithms (such as Logistic Regression, Random Forest, Support Vector Machines) on a subset of the dataset, validate its performance using cross-validation techniques, and evaluate its accuracy, precision, recall, and F1-score.
+
+Prediction and Risk Assessment: Deploy the trained model to predict the likelihood or risk of PCOS in new, unseen data, providing valuable insights into individuals who might be predisposed to or already have the condition.
+
+Interpretation and Recommendations: Interpret the model's findings, analyze the significance of various factors contributing to the prediction, and offer recommendations or interventions based on identified risk factors to potentially prevent or manage PCOS.
+
+This project will investigate mainly publicly available datasets that will be used to create predictive models on markers in routine test results to make a diagnosis. Some variables that are included in these datasets are:
 
 *	Age
 *	Weight
