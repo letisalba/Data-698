@@ -148,6 +148,7 @@ $~$
 ### Load Libraries:
 
 The following libraries were utilized in this assignment:
+
 ```{r, warning=FALSE, message=FALSE, cache=FALSE, comment=FALSE}
 # load libraries
 library(tidyverse) # data prep
@@ -175,6 +176,7 @@ library(stats) # linear and logistic regression
 library(gbm) # generalized boosted models
 library(xgboost) # extreme gradient boosting
 library(kknn) # weighted k-Nearest neighbors
+library(jtools)  # use of summ()
 #library(class)
 ```
 
@@ -186,14 +188,13 @@ The dataset selected has been incorporated into my [GitHub](https://github.com/l
 
 ```{r, echo=FALSE}
 # load the dataset from github
-
 pcos <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/csv/PCOS_infertility.csv")
 pcos2 <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/Data-Collection-and-Analysis/csv/PCOS_without_infertility.csv")
 ```
 
 $~$
 
-`pcos` data:
+Displaying the `pcos` data:
 ```{r, echo=FALSE, kable.opts=list(caption="data frame is now printed using `kable`.")}
 # display the `pcos` dataset
 
@@ -204,7 +205,7 @@ kable(format = "html", col.names = colnames(pcos)) %>%
 ```
 $~$
 
-`pcos2` data:
+Displaying the `pcos2` data:
 ```{r, echo=FALSE, kable.opts=list(caption="data frame is now printed using `kable`.")}
 # display the `pcos2` dataset
 
@@ -218,11 +219,11 @@ $~$
 
 ### Data Exploration:
 
-Using the `skimr` library we can obtain a quick summary statistic of the dataset. The first data set `pcos` includes 541 observations and a total of 6 variables. The second data set `pcos2` includes 541 observations and a total of 45 variables. There are no missing values in both datasets but there is a mixture of character and numeric column types. Notice that the column names are not clear enough for readers, this will be tackled in the data preparation section.
+Using the `skimr` library we can obtain a quick summary statistic of the dataset. The first data set `pcos` includes 541 observations and a total of 6 variables. The second data set `pcos2` includes 541 observations and a total of 45 variables. There seems to be no missing values in both datasets but there is a mixture of character and numeric column types that have to be addressed / calculated. Notice that the column names are not clear enough for readers, this will be tackled in the data preparation section.
 
 $~$
 
-`pcos` data:
+Summary of the `pcos` data:
 ```{r, echo=FALSE}
 # summary of the pcos dataset
 skim(pcos)
@@ -230,7 +231,7 @@ skim(pcos)
 
 $~$
 
-`pcos2` data:
+Summary of the `pcos2` data:
 ```{r, echo=FALSE}
 # summary of the pcos2 dataset
 skim(pcos2)
@@ -239,15 +240,15 @@ skim(pcos2)
 
 $~$
 
-Histograms provide valuable visual insights into the distribution patterns within a dataset. Using the `Data Explorer` library it allows us to effortlessly generate histograms that showcase the distribution characteristics of the entire dataset, as illustrated below.
+Histograms provide valuable visual insights into the distribution patterns within a dataset. With the use of the `Data Explorer` library it allows us to effortlessly generate histograms that showcase the distribution characteristics of the entire dataset, as illustrated below.
 
 $~$
 
 #### `pcos` data:
 
-Upon analyzing the variable distribution, my initial observation indicates that the variables follow a right-skewed distribution. Although the `SI.No` variable exhibits a unimodal distribution, it lacks significance and will be eliminated upon merging both datasets.
+Upon analyzing the variable distribution, my initial observation indicates that the variables follow a right-skewed distribution. Although the `SI..No` variable exhibits a unimodal distribution, it lacks significance and will be eliminated upon merging both datasets.
 
-```{r, r, fig.height=4, fig.width=8, fig.align='center', warning=FALSE, echo=FALSE, message=FALSE}
+```{r, r, fig.height=4, fig.width=6, fig.align='center', warning=FALSE, echo=FALSE, message=FALSE}
 DataExplorer::plot_histogram(
   geom_histogram_args = list(alpha = 1, fill = "#7e102c"),
    data = pcos,
@@ -256,8 +257,9 @@ DataExplorer::plot_histogram(
 
 $~$
 
-`pcos2` data:
+#### `pcos2` data:
 
+Upon visual inspection, no distinct pattern or discernible shape emerges from the histograms for the second dataset as a whole. Similar to the first dataset, `SI..No` and `Patient.File.No.` has a unimodel distribution but plays no significant role in my analysis.
 
 ```{r, fig.height = 10, fig.width = 10, fig.align='center', warning=FALSE, echo=FALSE, message=FALSE}
 DataExplorer::plot_histogram(
@@ -266,65 +268,20 @@ DataExplorer::plot_histogram(
          ggtheme=theme_ipsum())
 ```
 
-
 $~$
 
-Checking for outliers in the data:
-```{r, fig.height=8, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE, fig.align='center'}
-
-# # boxplot of variables
-# pcos_outliers <- pcos %>%
-#                 gather(variable, values, 1:dim(pcos)[2])
-# pcos_outliers %>%
-#   ggplot() +
-#   geom_boxplot(aes(x = variable, y = values)) +
-#   facet_wrap(~variable, ncol = 4, scales = "free") +
-#   theme_ipsum() +
-#     theme(
-#       plot.title = element_text(size=6)
-#     )
-```
-
-```{r, fig.height=18, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE, fig.align='center'}
-# # boxplot of variables
-# pcos2_outliers <- pcos2 %>%
-#                 gather(variable, values, 1:dim(pcos2)[2])
-# pcos2_outliers %>%
-#   ggplot() +
-#   geom_boxplot(aes(x = variable, y = values)) +
-#   facet_wrap(~variable, ncol = 4, scales = "free") +
-#   theme_ipsum() +
-#     theme(
-#       plot.title = element_text(size=6)
-#     )
-```
-
-$~$
-
-```{r, fig.height=8, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE}
-
-# # Correlation matrix
-# cor_matrix <- cor(pcos[, -ncol(pcos)])
-# 
-# # Visualize the correlation matrix using corrplot
-# corrplot(cor_matrix, method = "color", tl.col = "black")
-```
-$~$
-
-```{r, fig.height=10, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE}
-
-# # Correlation matrix
-# cor_matrix <- cor(pcos2[, -ncol(pcos2)])
-# 
-# # Visualize the correlation matrix using corrplot
-# corrplot(cor_matrix, method = "color", tl.col = "black")
-```
+I would like to further examine these variables but not before preparing the data set to ensure all variables are accounted for especially for `BMI`, `FSH.LH` and `Waist.Hip.Ratio`.
 
 $~$
 
 ### Data Preparation:
 
-Before I start the cleaning process I converted the data sets as numeric since the class of some of the variables differ. 
+My data preparation primarily involves column renaming and addressing missing values. This includes handling missing values by employing mean, median, or mode replacement strategies for columns like `Marriage Status (Yrs)` and `Fast Food (Y/N)`. Additionally, for columns such as `BMI`, `FSH.LH`, and `Waist.Hip.Ratio`, I will compute overall values. Specific columns will be converted to the metric system, and redundant or unnecessary columns will be removed. These steps aim to streamline data management before merging the two datasets.
+
+$~$
+
+Prior to commencing the cleaning process, I standardized the datasets to numeric format due to variations in the class of certain variables.
+
 ```{r, echo=FALSE, warning=FALSE}
 pcos <- mutate_all(pcos, function(x) as.numeric(as.character(x)))
 pcos2 <- mutate_all(pcos2, function(x) as.numeric(as.character(x)))
@@ -332,54 +289,76 @@ pcos2 <- mutate_all(pcos2, function(x) as.numeric(as.character(x)))
 
 $~$
 
+From the `skimr` summary it was noted that there were no missing values but there was an error in the computational values of certain columns. Below is the initial count of missing values for each data set:
 
-As previously stated, my data preparation primarily involves column renaming and addressing missing values. This includes handling missing values by employing mean, median, or mode replacement strategies for columns like `Marriage Status (Yrs)` and `Fast Food (Y/N)`. Additionally, for columns such as `BMI`, `FSH.LH`, and `Waist.Hip.Ratio`, I will compute overall values. Furthermore, specific columns will be converted to the metric system, and redundant or unnecessary columns will be removed. These steps aim to streamline data management before merging the two datasets.
+`pcos` dataset:
+
+```{r, echo=FALSE}
+# missing data
+colSums(is.na(pcos))
+```
+$~$
+
+`pcos2` dataset:
+```{r, echo=FALSE}
+# missing data
+colSums(is.na(pcos2))
+```
+
+```{r, echo=FALSE, eval=FALSE}
+colnames(pcos)
+```
+
+```{r, echo=FALSE, eval=FALSE}
+colnames(pcos2)
+```
+$~$
+
+
 
 ```{r, echo=FALSE}
 # removing first two column for `pcos` data
-# pcos <- dplyr::select(pcos, -c(1:2)) 
-pcos <- dplyr::select(pcos, -c(2))
+pcos <- dplyr::select(pcos, -c(2:6))
 
 # renaming columns for `pcos` data
 pcos <- pcos %>% 
-  rename("Sl.No" = "Sl..No",
-         "PCOS" = "PCOS..Y.N.",
-         "Ibeta-HCG(mIU/mL)" = "I...beta.HCG.mIU.mL.",
-         "IIbeta-HCG(mIU/mL)" = "II....beta.HCG.mIU.mL.",
-         "AMH(ng/mL)" = "AMH.ng.mL." )
+  rename("Sl.No" = "Sl..No")
 
 # removing columns not needed for `pcos_infertility` data
-#pcos_infertility <- dplyr::select(pcos_infertility, -c(1:2, 17:18, 26, 45))
-pcos2 <- dplyr::select(pcos2, -c(2:3, 17:18, 26, 45))
+pcos2 <- dplyr::select(pcos2, -c(2, 45))
 
 # renaming columns for `pcos_infertility` data
 pcos2 <- pcos2 %>% 
   rename("Sl.No" = "Sl..No",
+         "PCOS(Y/N)" = "PCOS..Y.N.",
          "Age(yrs)" = "Age..yrs.",
          "Weight(kg)" = "Weight..Kg.",
          "Height(cm)" = "Height.Cm.",
          "Blood_Group" = "Blood.Group", 
-         "Pulse rate(bpm)" = "Pulse.rate.bpm.",
+         "Pulse_rate(bpm)" = "Pulse.rate.bpm.",
          "RR(breaths/min)" = "RR..breaths.min.",
          "Hb(g/dl)" = "Hb.g.dl.",
          "Cycle(R/I)" = "Cycle.R.I.",
          "Cycle_length(days)" = "Cycle.length.days.",
-         "Marriage_Status(yrs)" = "Marraige.Status..Yrs.",
+         "Married(yrs)" = "Marraige.Status..Yrs.",
          "Pregnant" = "Pregnant.Y.N.",
          "No_of_abortions" = "No..of.aborptions",
+         "Ibeta-HCG(mIU/mL)" = "I...beta.HCG.mIU.mL.",
+         "IIbeta-HCG(mIU/mL)" = "II....beta.HCG.mIU.mL.",
          "FSH(mIU/mL)" = "FSH.mIU.mL.",
          "LH(mIU/mL)" = "LH.mIU.mL.",
          "FSH-LH" = "FSH.LH",
          "Hip(in)" = "Hip.inch.",
          "Waist(in)" = "Waist.inch.",
          "Waist-Hip_Ratio" = "Waist.Hip.Ratio",
-         "TSH (mIU/L)" = "TSH..mIU.L.",
+         "TSH(mIU/L)" = "TSH..mIU.L.",
+         "AMH(ng/mL)" = "AMH.ng.mL.",
          "PRL(ng/mL)" = "PRL.ng.mL.",
          "Vit_D3(ng/mL)" = "Vit.D3..ng.mL.",
          "PRG(ng/mL)" = "PRG.ng.mL.",
          "RBS(mg/dl)" = "RBS.mg.dl.",
          "Weight_gain" = "Weight.gain.Y.N.",
-         "hair_growth" = "hair.growth.Y.N.",
+         "Hair_growth" = "hair.growth.Y.N.",
          "Skin_darkening" = "Skin.darkening..Y.N.",
          "Hair_loss" = "Hair.loss.Y.N.",
          "Pimples" = "Pimples.Y.N.",
@@ -393,9 +372,11 @@ pcos2 <- pcos2 %>%
          "Avg_F_size(R)(mm)" = "Avg..F.size..R...mm.",
          "Endometrium(mm)" = "Endometrium..mm.")
 ```
+
 $~$
 
-Here's the results after part 1 of the preparation process:
+After making the first part of addressing the column names, the results are seen below of the merged datasets: 
+
 ```{r, echo=FALSE, kable.opts=list(caption="data frame is now printed using `kable`.")}
 # merge data sets
 pcos_data <- merge(pcos, pcos2,  by=c("Sl.No"))
@@ -407,9 +388,7 @@ kable(format = "html", col.names = colnames(pcos_data)) %>%
 
 $~$
 
-$~$
-
-For part 2, I tackled the missing values by first transforming `Height` from cm to m, calculate `BMI`, `Waist-hip ratio`  and `FSH/LH`. Then after careful consideration to the data, I decided to use the median number to replace the missing values in `Marriage_Status(yrs)`, `AMH(ng/mL)` and `Fast_food` since it didn't disrupt the data's distribution.
+For part 2, I tackled the missing values by first transforming `Height` from cm to m, calculate `BMI`, `Waist-hip ratio`  and `FSH/LH`. Then after careful consideration to the data, I decided to use the median number to replace the missing values in `Marriage_Status(yrs)`, `AMH(ng/mL)` and `Fast_food` since it didn't disrupt the data's distribution. 
 ```{r, echo=FALSE, warning=FALSE}
 # convert Height from cm to
 pcos_data$"Height(cm)" <- round((pcos_data$"Height(cm)" * 0.01),1)
@@ -433,8 +412,8 @@ pcos_data$"Waist-Hip_Ratio" <- round((pcos_data$"Waist(cm)" / pcos_data$"Hip(cm)
 # calculate FSH/LH
 pcos_data$"FSH-LH" <- round((pcos_data$"FSH(mIU/mL)"/pcos_data$"LH(mIU/mL)"),2)
 
-# calculate Marriage Status
-pcos_data$"Marriage_Status(yrs)"[is.na(pcos_data$"Marriage_Status(yrs)")] <- median(pcos_data$"Marriage_Status(yrs)", na.rm = T)
+# calculate Married years
+pcos_data$"Married(yrs)"[is.na(pcos_data$"Married(yrs)")] <- median(pcos_data$"Married(yrs)", na.rm = T)
 
 # calculate Fast food
 pcos_data$"Fast_food"[is.na(pcos_data$"Fast_food")] <- median(pcos_data$"Fast_food", na.rm = T)
@@ -442,54 +421,79 @@ pcos_data$"Fast_food"[is.na(pcos_data$"Fast_food")] <- median(pcos_data$"Fast_fo
 # calculate 
 pcos_data$"AMH(ng/mL)"[is.na(pcos_data$"AMH(ng/mL)")] <- median(pcos_data$"AMH(ng/mL)", na.rm = T)
 
-# remove 1st column
-pcos_df <- pcos_data[-1]
+# List of variables to round
+vars_to_round <- c("Hb(g/dl)", "Married(yrs)", "Ibeta-HCG(mIU/mL)", "IIbeta-HCG(mIU/mL)", 
+                   "FSH(mIU/mL)", "LH(mIU/mL)", "FSH-LH", "TSH(mIU/L)", "AMH(ng/mL)", "PRL(ng/mL)", 
+                   "Vit_D3(ng/mL)", "PRG(ng/mL)", "Avg_F_size(R)(mm)", "Endometrium(mm)")
 
-pcos_df %>% 
-kable(format = "html", col.names = colnames(pcos_df)) %>%
+# Rounding the variables to 1 decimal places
+pcos_data <- pcos_data %>%
+  mutate_at(vars(vars_to_round), ~ round(., digits = 1))
+
+
+# remove 1st column
+pcos_cleaned <- pcos_data[-1]
+```
+
+$~$
+
+The final results are seen in `pcos_cleaned` below:
+```{r,echo=FALSE}
+pcos_cleaned %>% 
+kable(format = "html", col.names = colnames(pcos_cleaned)) %>%
   kable_styling() %>%
   kableExtra::scroll_box(width = "100%", height = "400px")
 ```
 
 $~$
 
-After tidying up the data, below is the final distribution:
-```{r, fig.height = 10, fig.width = 10, echo=FALSE, fig.align='center', warning=FALSE, eval=TRUE}
+Once more, I generated a `DataExplorer` histogram to inspect the impact of the alterations on the distribution. While more variables have been included in the distribution, there isn't a consistent pattern; each variable demonstrates variations, displaying either a normal distribution, right-skewed, left-skewed, or no discernible pattern.
+
+```{r, fig.height = 10, fig.width = 10, echo=FALSE, fig.align='center', warning=FALSE, eval=TRUE, message=FALSE}
 DataExplorer::plot_histogram(
   geom_histogram_args = list(alpha = 1, fill = "dark blue"),
-   data = pcos_df,
+   data = pcos_cleaned,
          ggtheme=theme_ipsum())
 ```
 
-Correlation Plot
+$~$
+
+The correlation plot below is measuring the degree of linear relationship within the dataset. The values in which this is measured falls between -1 and +1, with +1 being a strong positive correlation and -1 a strong negative correlation. The darker the dot the more strongly correlated (whether positive or negative). Based on the findings below, there aren't many variables that exhibit a notably strong positive or negative correlation, although some variables do fall within these categories to some extent.
+
+Some notable correlations are as follows:
+
+* Positive correlations between: `Weight(kg)` and `BMI`, `Married(yrs)` and `Age(yrs)`, `Follicle_No(L)`, `Follicle_No(R)` and `PCOS(Y/N)` to name a few.
+
+* Negative correlations between: 
+
 ```{r, fig.height=8, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE}
+# Selecting only the numerical variables for correlation
+numerical_data <- pcos_cleaned[, sapply(pcos_cleaned, is.numeric)]
 
-# Correlation matrix
-cor_matrix3 <- cor(pcos_df[, -ncol(pcos)])
+# Calculating the correlation matrix
+cor_matrix <- cor(numerical_data)
 
-# Visualize the correlation matrix using corrplot
-corrplot(cor_matrix3, method = "color", tl.col = "black")
+# Print the correlation matrix
+corrplot(cor_matrix, method = "color", type = "lower", 
+         tl.col = "black", tl.cex = 0.5)
 ```
 
 ```{r, fig.height=18, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE, fig.align='center'}
 
-# boxplot of the variables with the outlier parameters
-pcos_df2 <- pcos_df %>%
-                gather(variable, values, 1:dim(pcos_df)[2])
-pcos_df2 %>%
-  ggplot() +
-  geom_boxplot(aes(x = variable, y = values)) +
-  facet_wrap(~variable, ncol = 4, scales = "free") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=6)
-    )
+# # boxplot of the variables with the outlier parameters
+# pcos_df2 <- pcos_cleaned %>%
+#                 gather(variable, values, 1:dim(pcos_cleaned)[2])
+# pcos_df2 %>%
+#   ggplot() +
+#   geom_boxplot(aes(x = variable, y = values)) +
+#   facet_wrap(~variable, ncol = 4, scales = "free") +
+#   theme_ipsum() +
+#     theme(
+#       plot.title = element_text(size=6)
+#     )
 ```
 
 
-
-
-Address the outliers
 ```{r, echo=FALSE}
 
 # # Separate the target variable
@@ -532,32 +536,137 @@ Let's now examine the impact of incorporating parameters for outliers in each va
 
 ### Model Building:
 
-#### Linear Regression:
+```{r,echo=FALSE}
+# create some random numbers for reproduction
+set.seed(29)
 
-```{r, echo=FALSE}
-
+# Cross Validation Set-up
+inTrain <- createDataPartition(pcos_cleaned$`PCOS(Y/N)`, p=.75, list = F)
+train <- pcos_cleaned[inTrain,]
+valid <- pcos_cleaned[-inTrain,]
 ```
 
-
-#### Logistic Regression:
-
-```{r, echo=FALSE}
-
-```
 
 #### Decision Tree (rpart):
 
 ```{r, echo=FALSE}
+# create the decision tree
+rpart_model <- rpart(`PCOS(Y/N)` ~ ., method = "class", data = train)
 
+# display the decision tree
+prp(rpart_model, extra=1, faclen=0,  nn=T, box.palette="Blues")
 ```
 
+```{r,echo=FALSE}
+# creating our prediction
+rpart_result <- predict(rpart_model, newdata = valid[, !colnames(valid) %in% "PCOS(Y/N)"], type = 'class')
+
+# confusion matrix
+confusionMatrix(rpart_result, as.factor(valid$`PCOS(Y/N)`))
+```
+
+```{r, echo=FALSE}
+# contribution of variables
+varImp(rpart_model) %>% kable()
+```
+
+```{r, echo=FALSE}
+# Extract accuracy from the confusion matrix
+accuracy_rpart <- confusionMatrix(rpart_result, as.factor(valid$`PCOS(Y/N)`))$overall["Accuracy"]
+kable(accuracy_rpart, align = "l")
+```
+```{r, echo=FALSE}
+# creating the second dataset from the original
+pcos_cleaned2 <- pcos_cleaned %>%
+  select(`PCOS(Y/N)`, `Follicle_No(R)`, `Follicle_No(L)`, `Weight_gain`, `Skin_darkening`, `Hair_growth`)
+
+# create some random number for reproduction
+set.seed(28)
+
+# Cross Validation Set-up
+inTrain2 <- createDataPartition(pcos_cleaned2$`PCOS(Y/N)`, p=.75, list = F)
+train2 <- pcos_cleaned2[inTrain2,]
+valid2 <- pcos_cleaned2[-inTrain2,]
+
+# create the decision tree
+rpart_model2 <- rpart(`PCOS(Y/N)` ~ ., method = "class", data = train2)
+
+# display the decision tree
+prp(rpart_model2, extra=1, faclen=0,  nn=T, box.palette="Blues")
+```
+
+
+The confusion matrix and statistics for the third decision tree:
+```{r, echo=FALSE}
+# creating our prediction
+rpart_result2 <- predict(rpart_model2, newdata = valid2[, !colnames(valid2) %in% "PCOS(Y/N)"], type = 'class')
+
+# creating the third confusion matrix
+confusionMatrix(rpart_result2, as.factor(valid2$`PCOS(Y/N)`))
+```
+
+Let's look at the contribution of each variable for the third dataset:
+```{r, echo=FALSE}
+# contribution of variables
+varImp(rpart_model2) %>% kable()
+```
+
+
+and now for the accuracy of 58.4% which is higher than the first and second decision tree models:
+```{r, echo=FALSE}
+# Extract accuracy from the confusion matrix
+accuracy_rpart2 <- confusionMatrix(rpart_result2, as.factor(valid2$`PCOS(Y/N)`))$overall["Accuracy"]
+kable(accuracy_rpart2, align = "l")
+```
+
+
+
 #### Random Forest (randomForest):
+
+```{r, echo=FALSE}
+# create some random number for reproduction
+# set.seed(30)
+# 
+# # create random forest model using the training data
+# rf_model <- randomForest(`PCOS(Y/N)`~., train)
+# rf_model
+# 
+# # prediction
+# rf_result <- predict(rf_model, newdata = valid[, !colnames(valid) %in% "PCOS(Y/N)"])
+# 
+# # confusion matrix
+# confusionMatrix(rf_result, valid$`PCOS(Y/N)`)
+```
+
+```{r, echo=FALSE}
+# plot for rf_model
+# varImpPlot(rf_model)
+```
+
+```{r, echo=FALSE}
+# Extract accuracy from the confusion matrix for the rf_model
+# accuracy_rf <- confusionMatrix(rf_result, valid$`PCOS(Y/N)`)$overall["Accuracy"]
+# accuracy_rf
+```
+
+
+#### Gradient Boosting Machines (xgboost or gbm):
 
 ```{r, echo=FALSE}
 
 ```
 
-#### Gradient Boosting Machines (xgboost or gbm):
+```{r, echo=FALSE}
+
+```
+
+```{r, echo=FALSE}
+
+```
+
+```{r, echo=FALSE}
+
+```
 
 ```{r, echo=FALSE}
 
@@ -566,10 +675,48 @@ Let's now examine the impact of incorporating parameters for outliers in each va
 #### Support Vector Machines (e1071):
 
 ```{r, echo=FALSE}
+# create some random numbers for reproduction
+# set.seed(31)
+# 
+# # SVM
+# svm_model <- svm(`PCOS(Y/N)` ~ ., train)
+# 
+# # create prediction
+# svm_result <- predict(svm_model, newdata = valid)
+# 
+# # confusion matrix for svm
+# confusionMatrix(svm_result, as.factor(valid$PCOS(Y/N)))
+```
+
+```{r, echo=FALSE}
+# summary(svm_result)
+```
+
+```{r, echo=FALSE}
+# Extract accuracy from the confusion matrix
+# accuracy_svm <- confusionMatrix(svm_result, as.factor(valid$PCOS(Y/N)))$overall["Accuracy"]
+# accuracy_svm
+```
+
+
+```{r, echo=FALSE}
 
 ```
 
+
 #### Neural Networks (neuralnet):
+
+```{r, echo=FALSE}
+
+```
+
+```{r, echo=FALSE}
+
+```
+
+```{r, echo=FALSE}
+
+```
 
 ```{r, echo=FALSE}
 
@@ -581,8 +728,33 @@ Let's now examine the impact of incorporating parameters for outliers in each va
 
 ```
 
+```{r, echo=FALSE}
+
+```
+
+```{r, echo=FALSE}
+
+```
+
+```{r, echo=FALSE}
+
+```
+
+```{r, echo=FALSE}
+
+```
 
 ### Model Comparison:
+
+Lastly, let's do a model comparison for Decision Tree, Random Forest and SVM:
+```{r, echo=FALSE}
+# Compare models
+# model_names <- c("Decision Tree","Random Forest", "SVM")
+# accuracies <- c(0.5843829, 0.7128463, 0.6372796)
+# results <- data.frame(Model = model_names, Accuracy = accuracies)
+# results <- results[order(results$Accuracy, decreasing = TRUE), ]
+# results
+```
 
 
 ### Conclusion:
