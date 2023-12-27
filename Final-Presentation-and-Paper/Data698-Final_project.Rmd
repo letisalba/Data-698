@@ -388,7 +388,8 @@ kable(format = "html", col.names = colnames(pcos_data)) %>%
 
 $~$
 
-For part 2, I tackled the missing values by first transforming `Height` from cm to m, calculate `BMI`, `Waist-hip ratio`  and `FSH/LH`. Then after careful consideration to the data, I decided to use the median number to replace the missing values in `Marriage_Status(yrs)`, `AMH(ng/mL)` and `Fast_food` since it didn't disrupt the data's distribution. 
+In the second part, I addressed missing values by initially converting 'Height' from centimeters to meters, computing 'BMI,' 'Waist-hip ratio,' and 'FSH/LH.' Following a thorough assessment of the dataset, I opted to substitute missing values in 'Marriage_Status(yrs),' 'AMH(ng/mL),' and 'Fast_food' with the median value as it didn't significantly affect the data's distribution.
+
 ```{r, echo=FALSE, warning=FALSE}
 # convert Height from cm to
 pcos_data$"Height(cm)" <- round((pcos_data$"Height(cm)" * 0.01),1)
@@ -462,11 +463,11 @@ The correlation plot below is measuring the degree of linear relationship within
 
 Some notable correlations are as follows:
 
-* Positive correlations between: `Weight(kg)` and `BMI`, `Married(yrs)` and `Age(yrs)`, `Follicle_No(L)`, `Follicle_No(R)` and `PCOS(Y/N)` to name a few.
+* Positive correlations between: `Weight(kg)` and `BMI`, `Married(yrs)` and `Age(yrs)`, and `Follicle_No(L)`, `Follicle_No(R)` and `PCOS(Y/N)` to name a few.
 
-* Negative correlations between: 
+* Negative correlations between: `Hip(cm)` and `Waist-Hip_Ratio)`, `AMH(ng/mL)` and `Age(yrs)`, and `Cycle(R/I)` and  `Follicle_No(R)`.
 
-```{r, fig.height=8, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE}
+```{r, fig.height=10, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE}
 # Selecting only the numerical variables for correlation
 numerical_data <- pcos_cleaned[, sapply(pcos_cleaned, is.numeric)]
 
@@ -475,44 +476,729 @@ cor_matrix <- cor(numerical_data)
 
 # Print the correlation matrix
 corrplot(cor_matrix, method = "color", type = "lower", 
-         tl.col = "black", tl.cex = 0.5)
+         tl.col = "black", tl.cex = 0.9)
 ```
+
+$~$
+
+Outliers, while sometimes seen as anomalies or errors, hold significant importance in data analysis for various reasons. They can substantially influence statistical measures, potentially skewing interpretations of central tendency (mean, median, mode) and dispersion (variance, standard deviation). Their presence might distort the true characteristics of the data distribution. Outliers can adversely affect the performance of predictive models. Many machine learning algorithms are sensitive to outliers, leading to biased predictions or reduced model accuracy. Identifying and handling outliers appropriately is crucial for robust model building. Recognizing outliers aids in improving data quality by either correcting errors or understanding exceptional cases in the dataset. Outliers sometimes provide unique insights and reveal interesting patterns or phenomena within the data. They could represent valuable information about rare occurrences, anomalies, or significant trends that merit further investigation.
+
+If handled properly, outliers can enhance our understanding of the dataset, improve model performance, and contribute to more accurate and meaningful insights. Detecting and managing outliers is essential for maintaining the integrity and reliability of data-driven analyses. With the help of boxplots we can identify outliers  across a complete dataset. 
+
+According to the visualizations provided, a handful of outliers are evident. Considering the dataset's relatively small size, I've chosen to retain these outliers to ensure the inclusion of every individual data point as it represents natural variations in the population.
 
 ```{r, fig.height=18, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE, fig.align='center'}
 
-# # boxplot of the variables with the outlier parameters
-# pcos_df2 <- pcos_cleaned %>%
-#                 gather(variable, values, 1:dim(pcos_cleaned)[2])
-# pcos_df2 %>%
-#   ggplot() +
-#   geom_boxplot(aes(x = variable, y = values)) +
-#   facet_wrap(~variable, ncol = 4, scales = "free") +
-#   theme_ipsum() +
-#     theme(
-#       plot.title = element_text(size=6)
-#     )
+# boxplot of the variables with the outlier parameters
+pcos_df2 <- pcos_cleaned %>%
+                gather(variable, values, 1:dim(pcos_cleaned)[2])
+pcos_df2 %>%
+  ggplot() +
+  geom_boxplot(aes(x = variable, y = values)) +
+  facet_wrap(~variable, ncol = 4, scales = "free") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=6)
+    )
+```
+
+$~$
+
+Visualizing the relationships between variables has unveiled some notable observations:
+
+* The distribution of women's age and weight seems uniform rather than concentrated within specific age or weight groups.
+  
+* The hip-to-waist ratio is higher for individuals, regardless of PCOS presence.
+
+* A consistent relationship is observed between random glucose levels and waist-hip ratio, although this might not offer significant insights.
+
+* Cycle length seems to be very consistent regardless of PCOS diagnosis
+
+* Women with PCOS (blue) experience more irregular periods with a few with no PCOS(coral) do as well
+
+* With or without PCOS women's BMI fluctuate
+
+* The distribution of number of follicles is greater for those women without PCOS.
+
+* The distribution of number of size in follicles left or right differ for those with and without PCOS
+
+* The endometrium is the inner layer. During a woman's menstrual cycle, hormones cause the endometrium to change. Estrogen causes the endometrium to thicken so that it could nourish an embryo if pregnancy occurs. In the plot below you notice the difference in endometrium size for women with PCOS (lower) than with those without PCOS (slightly higher).
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=12, fig.width=12, fig.align='center'}
+p1 <- pcos_cleaned %>% 
+  ggplot(aes(x=`Age(yrs)`, y=`Weight(kg)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS(Y/N)", labels = c("No", 
+    "Yes")) +
+  labs(title="Age(yrs) with Weight(kg)",
+        x ="Age(yrs)", y = "Weight(kg)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p2 <- pcos_cleaned %>% 
+  ggplot(aes(x=`Hip(cm)`, y=`Waist(cm)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS(Y/N)", labels = c("No", 
+    "Yes")) +
+  labs(title="Relationship between Hip(cm) and Waist(cm)",
+        x ="Hip (cm)", y = "Waist (cm)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p3 <- pcos_cleaned %>% 
+  ggplot(aes(x=`Waist-Hip_Ratio`, y=`RBS(mg/dl)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS(Y/N)", labels = c("No", 
+    "Yes")) +
+  labs(title="Relationship between Waist-Hip ration and Glucose",
+        x ="Waist-Hip Ratio", y = "RBS (mg/dl)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p4 <- pcos_cleaned %>% 
+ggplot(aes(x=`Age(yrs)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Length of cycle based on Age",
+        x ="Age(yrs)", y = "Cycle Length(days)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p5 <- pcos_cleaned %>% 
+ggplot(aes(x=`Age(yrs)`, y=`Cycle(R/I)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Type of cycle based on Age",
+        x ="Age(yrs)", y = "Cycle(R/I)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p6 <- pcos_cleaned %>% 
+ggplot(aes(x=`Age(yrs)`, y=BMI, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="BMI based on Age",
+        x ="Age(yrs)", y = "BMI") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p7 <- pcos_cleaned %>% 
+ggplot(aes(x=`Follicle_No(R)`, y=`Follicle_No(L)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Number of Follicles",
+        x ="Follicles Right", y = "Follicles Left") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p8 <- pcos_cleaned %>% 
+ggplot(aes(x=`Avg_F_size(R)(mm)`, y=`Avg_F_size(L)(mm)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Follicle size's",
+        x ="Follicle size right", y = "Follicle size left") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p9 <- pcos_cleaned %>% 
+ggplot(aes(x=`Endometrium(mm)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Endometrium and length of cycle(days)",
+        x ="Endometrium(mm)", y = "Cycle Length(days)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+# displaying the histograms
+par(mfrow = c(3, 3))
+grid.arrange(p1,p2,p3,p4,p5,p6,p7,p8,p9)
 ```
 
 
-```{r, echo=FALSE}
 
-# # Separate the target variable
-# target <- pcos_df$PCOS
-# predictors <- pcos_df[, -which(names(pcos_df) == "PCOS")]
-# 
-# # Apply outlier treatment to predictors
-# # Example: Using Winsorization for outlier treatment
-# 
-# predictors_cleaned <- predictors %>%
-#   mutate_all(~ifelse(. < quantile(., 0.05), quantile(., 0.05),
-#                      ifelse(. > quantile(., 0.95), quantile(., 0.95), .)))
-# 
-# # Reconstruct the dataset with cleaned predictors and the original target variable
-# pcos_df_cleaned <- cbind(predictors_cleaned, PCOS = target)
-# 
-# # Use 'data_cleaned' for model training while keeping the original target variable unchanged
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=12, fig.width=12, fig.align='center'}
+
+p10 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`PCOS(Y/N)`), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "PCOS(Y/N)", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="PCOS", x ="PCOS(Yes or No)", y = "count") +
+   theme_ipsum() +
+      theme(
+        plot.title = element_text(size=10)
+      )
+
+p11 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Pregnant), fill = as.factor(Pregnant))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Pregnant", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Pregnant", x ="Pregnant(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p12 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Weight_gain), fill = as.factor(Weight_gain))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Weight Gain", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Weight Gain", x ="Weight Gain (Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p13 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Hair_growth), fill = as.factor(Hair_growth))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Hair Growth", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Hair Growth", x ="Hair Growth(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p14 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Skin_darkening), fill = as.factor(Skin_darkening))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Skin Darkening", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Skin Darkening", x ="Skin Darkening (Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p15 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Hair_loss), fill = as.factor(Hair_loss))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Hair Loss", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Hair Loss", x ="Hair Loss(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p16 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Pimples), fill = as.factor(Pimples))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Pimples", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Pimples", x ="Pimples(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p17 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Fast_food), fill = as.factor(Fast_food))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Fast Food", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Fast Food", x ="Fast Food(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p18 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Reg_Exercise), fill = as.factor(Reg_Exercise))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Regular Exercise", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Regularly Exercise", x ="Regular Exercise(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+# displaying the histograms
+par(mfrow = c(3, 3))
+grid.arrange(p10,p11,p12,p13,p14,p15,p16,p17,p18)
 ```
 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=12, fig.width=12, fig.align='center'}
+p19 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Blood_Group), fill = as.factor(Blood_Group))) +
+    geom_bar(show.legend = FALSE) +
+  geom_text(aes(label = ..count..), stat = "count", vjust = 1.5, colour = "black") +
+  labs(title="Blood Groups",
+        x ="Blood Groups", y = "count") +
+  scale_x_discrete(labels=c('A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-')) +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p20 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`Age(yrs)`))) +
+    geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+  labs(title="Age range", x ="Age(yrs)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p21 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`Weight(kg)`))) +
+    geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    labs(title="Weight range", x ="Weight(kg)", y = "count") +
+    theme_ipsum() +
+      theme(
+        plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
+    )
+
+p22 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`Height(m)`))) +
+    geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    labs(title="Height range", x ="Height (m)", y = "count") +
+    theme_ipsum() +
+      theme(
+        plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=10)
+    )
+
+p23 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`Married(yrs)`))) +
+    geom_histogram(stat="count", show.legend = FALSE, fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    labs(title="Years married range", x ="Married (yrs)", y = "count") +
+    theme_ipsum() +
+      theme(
+        plot.title = element_text(size=10)
+    )
+
+p24 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`PRG(ng/mL)`))) +
+  geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
+  labs(title="PRG range", x ="PRG(ng/mL)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
+    )
+
+# displaying the histograms
+par(mfrow = c(2, 3))
+grid.arrange(p19,p20,p21,p22,p23,p24)
+```
+
+
+
+```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=12, message=FALSE}
+p25 <- pcos_cleaned %>% 
+ggplot(aes(x=`Age(yrs)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Length of cycle based on Age",
+        x ="Age(yrs)", y = "Cycle Length(days)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p26 <- pcos_cleaned %>% 
+ggplot(aes(x=`Age(yrs)`, y=`Cycle(R/I)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Type of cycle based on Age",
+        x ="Age(yrs)", y = "Cycle(R/I)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p27 <- pcos_cleaned %>% 
+ggplot(aes(x=`Age(yrs)`, y=BMI, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="BMI based on Age",
+        x ="Age(yrs)", y = "BMI") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p28 <- pcos_cleaned %>% 
+ggplot(aes(x=`Follicle_No(R)`, y=`Follicle_No(L)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Number of Follicles",
+        x ="Follicles Right", y = "Follicles Left") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p29 <- pcos_cleaned %>% 
+ggplot(aes(x=`Avg_F_size(R)(mm)`, y=`Avg_F_size(L)(mm)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Follicle size's",
+        x ="Follicle size right", y = "Follicle size left") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p30 <- pcos_cleaned %>% 
+ggplot(aes(x=`Endometrium(mm)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Endometrium and length of cycle(days)",
+        x ="Endometrium(mm)", y = "Cycle Length(days)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+# displaying the histograms
+par(mfrow = c(3, 3))
+grid.arrange(p25,p26,p27,p28,p29,p30)
+```
+
+$~$
+
+Blood tests are very important to notice abnormalities to detect PCOS, below my findings after examining these variables:
+
+* Pregnancy hormones are higher with those who reported to have PCOS than with those who reported to not have PCOS.
+
+* Vitamin D3 levels are spread out for those who reported with or without PCOS.
+
+* FSH/LH levels are also spread out for those who reported with or without PCOS.
+
+* Blood pressure levels seem a little off but are all in the high range.
+
+* Pulse rate (normal 60-100 bpm) and respiration rate (normal 12-20 breathes/min) seems normal for those who reported to be with or without PCOS.
+
+* The egg count and follicle growth are clustered for women who reported to have PCOS and those who don't.
+
+* TSH levels are also spread out for women who reported to have PCOS and those who don't.
+
+* Hemoglobin levels seem to be higher for those who reported to have PCOS.
+
+* PRL levels (prolactin in the blood) are consistent at 1 or 2 for those with or without PCOS.
+
+* RBS (random glucose) is fairly distributed with those with and without PCOS.
+```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=12, message=FALSE}
+p31 <- pcos_cleaned %>% 
+ggplot(aes(x=`Ibeta-HCG(mIU/mL)`, y=`IIbeta-HCG(mIU/mL)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Pregnancy hormone levels",
+        x ="I Beta-HCG(mIu/mL)", y = "II Beta-HCG(mIu/mL)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p32 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`Vit_D3(ng/mL)`), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Vitamin D3 levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+p33 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`FSH-LH`), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("FSH/LH levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+p34 <- pcos_cleaned %>% 
+ggplot(aes(x=`BP_Diastolic(mmHg)`, y=`BP_Systolic(mmHg)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Blood Pressure levels",
+        x ="BP_Diastolic(mmHg)", y = "BP_Systolic(mmHg)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p35 <- pcos_cleaned %>% 
+ggplot(aes(x=`RR(breaths/min)`, y=`Pulse_rate(bpm)`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Respiration rate vs Pulse rate(bpm)",
+        x ="RR(breaths/min)", y = "Pulse rate(bpm)") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p36 <- pcos_cleaned %>% 
+ggplot(aes(x=`AMH(ng/mL)`, y=`FSH-LH`, color=as.factor(`PCOS(Y/N)`))) + 
+    geom_point() +
+    geom_smooth(method="lm", se=FALSE) +
+    scale_colour_discrete("PCOS", labels = c("No", 
+    "Yes")) +
+  labs(title="Ovarian reserve against follicle growth",
+        x ="Ovarian reserve", y = "Growth of ovarian follicles") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+p37 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`TSH(mIU/L)`), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("TSH (mIU/L) levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+p38 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`Hb(g/dl)`), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Hb(g/dl) levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+p39 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`PRL(ng/mL)`), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("PRL (ng/mL) levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+p40 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`RBS(mg/dl)`), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("RBS (mg/dl) levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+# displaying the histograms
+par(mfrow = c(4, 3))
+grid.arrange(p31,p32,p33,p34,p35,p36,p37,p38,p39,p40)
+```
+
+$~$
+
+```{r, echo=FALSE, warning=FALSE, fig.height=12, fig.width=14, message=FALSE}
+p41 <- pcos_cleaned %>% 
+  ggplot(aes(x = Blood_Group, fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Blood Group with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+    )
+
+p42 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Pregnant), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Pregnant with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+    )
+
+p43 <- pcos_cleaned %>%
+  ggplot(aes(x = as.factor(Weight_gain), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Weight gain with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No','Yes')) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+    )
+
+p44 <- pcos_cleaned %>%
+  ggplot(aes(x = as.factor(Hair_growth), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Hair growth with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No','Yes')) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+    )
+
+p45 <- pcos_cleaned %>%
+  ggplot(aes(x = as.factor(Skin_darkening), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Skin darkening with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No','Yes')) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+    )
+
+p46 <- pcos_cleaned %>%
+  ggplot(aes(x = as.factor(Hair_loss), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Hair loss with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No','Yes')) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+    )
+
+p47 <- pcos_cleaned %>%
+  ggplot(aes(x = as.factor(Pimples), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Pimples with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No','Yes')) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+    )
+
+p48 <- pcos_cleaned %>%
+  ggplot(aes(x = as.factor(Fast_food), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Fast food consumption with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No','Yes')) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+    )
+
+p49 <- pcos_cleaned %>%
+  ggplot(aes(x = as.factor(Reg_Exercise), fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Regularly exercises with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No','Yes')) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+    )
+
+p50 <- pcos_cleaned %>% 
+  ggplot(aes(x = `Cycle_length(days)`, fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Cycle length in days with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+    )
+
+p51 <- pcos_cleaned %>% 
+  ggplot(aes(x = No_of_abortions, fill = as.factor(`PCOS(Y/N)`))) +
+    geom_bar(position = "dodge") +
+    ggtitle("Number of abortions with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+    )
+
+# displaying the histograms
+par(mfrow = c(4, 3))
+grid.arrange(p41,p42,p43,p44,p45,p46,p47,p48,p49,p50,p51)
+```
 
 $~$
 
@@ -549,7 +1235,7 @@ valid <- pcos_cleaned[-inTrain,]
 
 #### Decision Tree (rpart):
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.height=10, fig.width=10, fig.align='center'}
 # create the decision tree
 rpart_model <- rpart(`PCOS(Y/N)` ~ ., method = "class", data = train)
 
