@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 $~$
 
-# [Polycystic Ovarian Syndrome (PCOS)]()
+## [Polycystic Ovarian Syndrome (PCOS)]()
 
 $~$
 
@@ -177,6 +177,7 @@ library(gbm) # generalized boosted models
 library(xgboost) # extreme gradient boosting
 library(kknn) # weighted k-Nearest neighbors
 library(jtools)  # use of summ()
+library(patchwork) # ggplot2 multiplot title
 #library(class)
 ```
 
@@ -194,7 +195,7 @@ pcos2 <- read.csv("https://raw.githubusercontent.com/letisalba/Data-698/master/D
 
 $~$
 
-Displaying the `pcos` data:
+#### Displaying the `pcos` data:
 ```{r, echo=FALSE, kable.opts=list(caption="data frame is now printed using `kable`.")}
 # display the `pcos` dataset
 
@@ -205,7 +206,9 @@ kable(format = "html", col.names = colnames(pcos)) %>%
 ```
 $~$
 
-Displaying the `pcos2` data:
+$~$
+
+#### Displaying the `pcos2` data:
 ```{r, echo=FALSE, kable.opts=list(caption="data frame is now printed using `kable`.")}
 # display the `pcos2` dataset
 
@@ -223,7 +226,7 @@ Using the `skimr` library we can obtain a quick summary statistic of the dataset
 
 $~$
 
-Summary of the `pcos` data:
+#### Summary of the `pcos` data:
 ```{r, echo=FALSE}
 # summary of the pcos dataset
 skim(pcos)
@@ -231,14 +234,17 @@ skim(pcos)
 
 $~$
 
-Summary of the `pcos2` data:
+#### Summary of the `pcos2` data:
 ```{r, echo=FALSE}
 # summary of the pcos2 dataset
 skim(pcos2)
 ```
 
+$~$
+
 
 $~$
+
 
 Histograms provide valuable visual insights into the distribution patterns within a dataset. With the use of the `Data Explorer` library it allows us to effortlessly generate histograms that showcase the distribution characteristics of the entire dataset, as illustrated below.
 
@@ -251,6 +257,7 @@ Upon analyzing the variable distribution, my initial observation indicates that 
 ```{r, r, fig.height=4, fig.width=6, fig.align='center', warning=FALSE, echo=FALSE, message=FALSE}
 DataExplorer::plot_histogram(
   geom_histogram_args = list(alpha = 1, fill = "#7e102c"),
+  title = "Fig. 1 - Histogram of `pcos` data",
    data = pcos,
          ggtheme=theme_ipsum())
 ```
@@ -264,6 +271,7 @@ Upon visual inspection, no distinct pattern or discernible shape emerges from th
 ```{r, fig.height = 10, fig.width = 10, fig.align='center', warning=FALSE, echo=FALSE, message=FALSE}
 DataExplorer::plot_histogram(
   geom_histogram_args = list(alpha = 1, fill = "#a86800"),
+  title = "Fig. 1 - Histogram of `pcos2` data",
    data = pcos2,
          ggtheme=theme_ipsum())
 ```
@@ -438,7 +446,7 @@ pcos_cleaned <- pcos_data[-1]
 
 $~$
 
-The final results are seen in `pcos_cleaned` below:
+#### The final results are seen in `pcos_cleaned` below:
 ```{r,echo=FALSE}
 pcos_cleaned %>% 
 kable(format = "html", col.names = colnames(pcos_cleaned)) %>%
@@ -453,6 +461,7 @@ Once more, I generated a `DataExplorer` histogram to inspect the impact of the a
 ```{r, fig.height = 10, fig.width = 10, echo=FALSE, fig.align='center', warning=FALSE, eval=TRUE, message=FALSE}
 DataExplorer::plot_histogram(
   geom_histogram_args = list(alpha = 1, fill = "dark blue"),
+  title = "Fig. 3 - Histogram of `pcos_cleaned` data",
    data = pcos_cleaned,
          ggtheme=theme_ipsum())
 ```
@@ -476,14 +485,12 @@ cor_matrix <- cor(numerical_data)
 
 # Print the correlation matrix
 corrplot(cor_matrix, method = "color", type = "lower", 
-         tl.col = "black", tl.cex = 0.9)
+         tl.col = "black", tl.cex = 0.9, title = "Fig. 4 Correlation plot of `pcos_cleaned` data",mar=c(0,0,1,0))#http://stackoverflow.com/a/14754408/54964
 ```
 
 $~$
 
-Outliers, while sometimes seen as anomalies or errors, hold significant importance in data analysis for various reasons. They can substantially influence statistical measures, potentially skewing interpretations of central tendency (mean, median, mode) and dispersion (variance, standard deviation). Their presence might distort the true characteristics of the data distribution. Outliers can adversely affect the performance of predictive models. Many machine learning algorithms are sensitive to outliers, leading to biased predictions or reduced model accuracy. Identifying and handling outliers appropriately is crucial for robust model building. Recognizing outliers aids in improving data quality by either correcting errors or understanding exceptional cases in the dataset. Outliers sometimes provide unique insights and reveal interesting patterns or phenomena within the data. They could represent valuable information about rare occurrences, anomalies, or significant trends that merit further investigation.
-
-If handled properly, outliers can enhance our understanding of the dataset, improve model performance, and contribute to more accurate and meaningful insights. Detecting and managing outliers is essential for maintaining the integrity and reliability of data-driven analyses. With the help of boxplots we can identify outliers  across a complete dataset. 
+Outliers, while sometimes seen as anomalies or errors, hold significant importance in data analysis for various reasons. They can substantially influence statistical measures, potentially skewing interpretations of central tendency (mean, median, mode) and dispersion (variance, standard deviation). Their presence might distort the true characteristics of the data distribution. Outliers can adversely affect the performance of predictive models. Many machine learning algorithms are sensitive to outliers, leading to biased predictions or reduced model accuracy. Identifying and handling outliers appropriately is crucial for robust model building. Recognizing outliers aids in improving data quality by either correcting errors or understanding exceptional cases in the dataset. If handled properly, outliers can enhance our understanding of the dataset, improve model performance, and contribute to more accurate and meaningful insights. Detecting and managing outliers is essential for maintaining the integrity and reliability of data-driven analyses. With the help of boxplots we can identify outliers  across a complete dataset. 
 
 According to the visualizations provided, a handful of outliers are evident. Considering the dataset's relatively small size, I've chosen to retain these outliers to ensure the inclusion of every individual data point as it represents natural variations in the population.
 
@@ -496,33 +503,19 @@ pcos_df2 %>%
   ggplot() +
   geom_boxplot(aes(x = variable, y = values)) +
   facet_wrap(~variable, ncol = 4, scales = "free") +
+  ggtitle("Fig. 5 - Boxplot outliers for `pcos_cleaned` data") +
   theme_ipsum() +
     theme(
-      plot.title = element_text(size=6)
+      plot.title = element_text(size=12)
     )
 ```
 
 $~$
 
-Visualizing the relationships between variables has unveiled some notable observations:
+#### Further visualizations:
 
-* The distribution of women's age and weight seems uniform rather than concentrated within specific age or weight groups.
-  
-* The hip-to-waist ratio is higher for individuals, regardless of PCOS presence.
+Before diving into the model-building phase of this project, let's further visualize the variables with a series of scatter plots and bar charts.
 
-* A consistent relationship is observed between random glucose levels and waist-hip ratio, although this might not offer significant insights.
-
-* Cycle length seems to be very consistent regardless of PCOS diagnosis
-
-* Women with PCOS (blue) experience more irregular periods with a few with no PCOS(coral) do as well
-
-* With or without PCOS women's BMI fluctuate
-
-* The distribution of number of follicles is greater for those women without PCOS.
-
-* The distribution of number of size in follicles left or right differ for those with and without PCOS
-
-* The endometrium is the inner layer. During a woman's menstrual cycle, hormones cause the endometrium to change. Estrogen causes the endometrium to thicken so that it could nourish an embryo if pregnancy occurs. In the plot below you notice the difference in endometrium size for women with PCOS (lower) than with those without PCOS (slightly higher).
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=12, fig.width=12, fig.align='center'}
 p1 <- pcos_cleaned %>% 
@@ -641,9 +634,16 @@ ggplot(aes(x=`Endometrium(mm)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/
     theme(
       plot.title = element_text(size=10)
     )
+
+ggp_all <- (p1 + p2 + p3) / (p4 + p5 + p6) / (p7 + p8 + p9) +    # Create grid of plots with title
+  plot_annotation(title = "Fig. 6 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
+  theme(plot.title = element_text(hjust = 0.5))
+ggp_all  
+
 # displaying the histograms
-par(mfrow = c(3, 3))
-grid.arrange(p1,p2,p3,p4,p5,p6,p7,p8,p9)
+# par(mfrow = c(3, 3))
+# grid.arrange(p1,p2,p3,p4,p5,p6,p7,p8,p9)
+
 ```
 
 
@@ -759,9 +759,14 @@ p18 <- pcos_cleaned %>%
       plot.title = element_text(size=10)
     )
 
+ggp_all2 <- (p10 + p11 + p12) / (p13 + p14 + p15) / (p16 + p17 + p18) +    # Create grid of plots with title
+  plot_annotation(title = "Fig. 7 - Bar charts of Yes or No variables") & 
+  theme(plot.title = element_text(hjust = 0.5))
+ggp_all2 
+
 # displaying the histograms
-par(mfrow = c(3, 3))
-grid.arrange(p10,p11,p12,p13,p14,p15,p16,p17,p18)
+# par(mfrow = c(3, 3))
+# grid.arrange(p10,p11,p12,p13,p14,p15,p16,p17,p18)
 ```
 
 
@@ -827,9 +832,14 @@ p24 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
     )
 
+ggp_all3 <- (p19 + p20 + p21) / (p22 + p23 + p24) +    # Create grid of plots with title
+  plot_annotation(title = "Fig. 6 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
+  theme(plot.title = element_text(hjust = 0.5))
+ggp_all3 
+
 # displaying the histograms
-par(mfrow = c(2, 3))
-grid.arrange(p19,p20,p21,p22,p23,p24)
+# par(mfrow = c(2, 3))
+# grid.arrange(p19,p20,p21,p22,p23,p24)
 ```
 
 
@@ -912,34 +922,21 @@ ggplot(aes(x=`Endometrium(mm)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/
     theme(
       plot.title = element_text(size=10)
     )
+
+ggp_all4 <- (p25 + p26 + p27) / (p28 + p29 + p30) +    # Create grid of plots with title
+  plot_annotation(title = "Fig. 6 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
+  theme(plot.title = element_text(hjust = 0.5))
+ggp_all4 
+
+
 # displaying the histograms
-par(mfrow = c(3, 3))
-grid.arrange(p25,p26,p27,p28,p29,p30)
+# par(mfrow = c(3, 3))
+# grid.arrange(p25,p26,p27,p28,p29,p30)
 ```
 
 $~$
 
-Blood tests are very important to notice abnormalities to detect PCOS, below my findings after examining these variables:
 
-* Pregnancy hormones are higher with those who reported to have PCOS than with those who reported to not have PCOS.
-
-* Vitamin D3 levels are spread out for those who reported with or without PCOS.
-
-* FSH/LH levels are also spread out for those who reported with or without PCOS.
-
-* Blood pressure levels seem a little off but are all in the high range.
-
-* Pulse rate (normal 60-100 bpm) and respiration rate (normal 12-20 breathes/min) seems normal for those who reported to be with or without PCOS.
-
-* The egg count and follicle growth are clustered for women who reported to have PCOS and those who don't.
-
-* TSH levels are also spread out for women who reported to have PCOS and those who don't.
-
-* Hemoglobin levels seem to be higher for those who reported to have PCOS.
-
-* PRL levels (prolactin in the blood) are consistent at 1 or 2 for those with or without PCOS.
-
-* RBS (random glucose) is fairly distributed with those with and without PCOS.
 ```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=12, message=FALSE}
 p31 <- pcos_cleaned %>% 
 ggplot(aes(x=`Ibeta-HCG(mIU/mL)`, y=`IIbeta-HCG(mIU/mL)`, color=as.factor(`PCOS(Y/N)`))) + 
@@ -1059,9 +1056,14 @@ p40 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
     )
 
+ggp_all5 <- (p10 + p11 + p12) / (p13 + p14 + p15) / (p16 + p17 + p18) +    # Create grid of plots with title
+  plot_annotation(title = "Fig. 6 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
+  theme(plot.title = element_text(hjust = 0.5))
+ggp_all5 
+
 # displaying the histograms
-par(mfrow = c(4, 3))
-grid.arrange(p31,p32,p33,p34,p35,p36,p37,p38,p39,p40)
+# par(mfrow = c(4, 3))
+# grid.arrange(p31,p32,p33,p34,p35,p36,p37,p38,p39,p40)
 ```
 
 $~$
@@ -1195,32 +1197,38 @@ p51 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
+ggp_all6 <- (p10 + p11 + p12) / (p13 + p14 + p15) / (p16 + p17 + p18) +    # Create grid of plots with title
+  plot_annotation(title = "Fig. 6 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
+  theme(plot.title = element_text(hjust = 0.5))
+ggp_all6
+
 # displaying the histograms
-par(mfrow = c(4, 3))
-grid.arrange(p41,p42,p43,p44,p45,p46,p47,p48,p49,p50,p51)
+# par(mfrow = c(4, 3))
+# grid.arrange(p41,p42,p43,p44,p45,p46,p47,p48,p49,p50,p51)
 ```
 
 $~$
 
-Let's now examine the impact of incorporating parameters for outliers in each variable through a boxplot. The initial observation reveals a notable decrease in outliers, particularly noticeable within the variables.
-
-```{r, fig.height=18, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE, fig.align='center'}
-
-# # boxplot of the variables with the outlier parameters
-# pcos_df2 <- pcos_df_cleaned %>%
-#                 gather(variable, values, 1:dim(pcos_df_cleaned)[2])
-# pcos_df2 %>%
-#   ggplot() +
-#   geom_boxplot(aes(x = variable, y = values)) +
-#   facet_wrap(~variable, ncol = 4, scales = "free") +
-#   theme_ipsum() +
-#     theme(
-#       plot.title = element_text(size=6)
-#     )
-```
-
 
 ### Model Building:
+
+As previously mentioned, I've decided for the prediction anaylsis to do Decision Tree (rpart), Random Forest (randomForest), Gradient Boosting Machines (xgboost or gbm), Support Vector Machines (e1071), Neural Networks (neuralnet), and K-Nearest Neighbors (kknn or class). 
+
+Decision Tree (rpart): Decision trees recursively split the dataset based on features to make decisions. They represent a tree-like structure where nodes correspond to features, branches represent decisions, and leaves denote outcomes. R's rpart package builds decision trees using the Recursive Partitioning and Regression Trees algorithm.
+
+Random Forest (randomForest): Random Forest is an ensemble learning method that constructs multiple decision trees and merges their predictions to improve accuracy and reduce overfitting. The randomForest package in R implements this ensemble method, creating a collection of decision trees and aggregating their predictions.
+
+Gradient Boosting Machines (xgboost or gbm): Gradient Boosting Machines (GBMs) create an ensemble of weak learners (typically decision trees) sequentially, where each new tree corrects the errors made by the previous one. R provides packages like xgboost and gbm to implement gradient boosting, allowing users to build efficient and optimized boosting models.
+
+Support Vector Machines (e1071): Support Vector Machines are supervised learning models used for classification or regression tasks. They find a hyperplane that best separates data into different classes while maximizing the margin. The e1071 package in R includes SVM implementations for classification and regression tasks.
+
+Neural Networks (neuralnet): Neural Networks are a set of algorithms designed to recognize patterns. They consist of interconnected nodes (neurons) organized in layers and can model complex relationships in data. The neuralnet package in R allows users to create and train neural networks for various tasks like regression and classification.
+
+K-Nearest Neighbors (kknn or class): K-Nearest Neighbors (KNN) is a simple, instance-based learning algorithm. It classifies new data points based on majority voting from the k-nearest data points in the training set. R provides packages like kknn or class to implement KNN algorithms for both classification and regression tasks.
+
+$~$
+
+To start the model building we start by splitting the dataset into training and validation sets for machine learning models. The training set is used to train the model, while the validation set helps evaluate its performance. The 75:25 ratio used strikes a balance between having enough data to train the model effectively and having a substantial validation set for robust evaluation.
 
 ```{r,echo=FALSE}
 # create some random numbers for reproduction
@@ -1235,6 +1243,9 @@ valid <- pcos_cleaned[-inTrain,]
 
 #### Decision Tree (rpart):
 
+The initial decision tree constructed is based on `PCOS(Y/N)` against the entire dataset. Employing a 75:25 cross-validation approach to divided the data I created the decision tree. The output is below:
+
+
 ```{r, echo=FALSE, fig.height=10, fig.width=10, fig.align='center'}
 # create the decision tree
 rpart_model <- rpart(`PCOS(Y/N)` ~ ., method = "class", data = train)
@@ -1243,6 +1254,9 @@ rpart_model <- rpart(`PCOS(Y/N)` ~ ., method = "class", data = train)
 prp(rpart_model, extra=1, faclen=0,  nn=T, box.palette="Blues")
 ```
 
+$~$
+
+Then we test the model using the validation dataset. The results are seen in the confusion matrix and statistics output:
 ```{r,echo=FALSE}
 # creating our prediction
 rpart_result <- predict(rpart_model, newdata = valid[, !colnames(valid) %in% "PCOS(Y/N)"], type = 'class')
@@ -1250,18 +1264,30 @@ rpart_result <- predict(rpart_model, newdata = valid[, !colnames(valid) %in% "PC
 # confusion matrix
 confusionMatrix(rpart_result, as.factor(valid$`PCOS(Y/N)`))
 ```
+$~$
+
+Upon examining the individual contributions of each variable. It's evident that `Follicle_No(L)`, `Follicle_No(R)`, `Hair_growth`, `Skin_darkening`, and `Weight_gain`, hold significant influence within the dataset. I expected a wider range of influential bloodwork-related tests beyond those presented in this outcome.
 
 ```{r, echo=FALSE}
 # contribution of variables
 varImp(rpart_model) %>% kable()
 ```
+$~$
+
+The model's accuracy stands at 85.93%, which is commendable. However, considering the variable contributions, I'm planning to build a second decision tree by removing the variables with lower contributions.
 
 ```{r, echo=FALSE}
 # Extract accuracy from the confusion matrix
 accuracy_rpart <- confusionMatrix(rpart_result, as.factor(valid$`PCOS(Y/N)`))$overall["Accuracy"]
 kable(accuracy_rpart, align = "l")
 ```
-```{r, echo=FALSE}
+$~$
+
+##### Second Decision Tree:
+
+The second decision tree is based off the variables with the highest contribution: `Follicle_No(L)`, `Follicle_No(R)`, `Hair_growth`, `Skin_darkening`, `Weight_gain` and the target variable `PCOS(Y/N)`. The results are below:
+
+```{r, echo=FALSE, fig.height=10, fig.width=10, fig.align='center'}
 # creating the second dataset from the original
 pcos_cleaned2 <- pcos_cleaned %>%
   select(`PCOS(Y/N)`, `Follicle_No(R)`, `Follicle_No(L)`, `Weight_gain`, `Skin_darkening`, `Hair_growth`)
@@ -1281,8 +1307,9 @@ rpart_model2 <- rpart(`PCOS(Y/N)` ~ ., method = "class", data = train2)
 prp(rpart_model2, extra=1, faclen=0,  nn=T, box.palette="Blues")
 ```
 
+$~$
 
-The confusion matrix and statistics for the third decision tree:
+Same as before, we create the confusion matrix and statistics for the second decision tree using the validation data:
 ```{r, echo=FALSE}
 # creating our prediction
 rpart_result2 <- predict(rpart_model2, newdata = valid2[, !colnames(valid2) %in% "PCOS(Y/N)"], type = 'class')
@@ -1291,14 +1318,18 @@ rpart_result2 <- predict(rpart_model2, newdata = valid2[, !colnames(valid2) %in%
 confusionMatrix(rpart_result2, as.factor(valid2$`PCOS(Y/N)`))
 ```
 
-Let's look at the contribution of each variable for the third dataset:
+$~$
+
+Let's examine the impact of each variable within the context of the second dataset. There's a noticeable shift in the overall contribution levels among the variables.
+
 ```{r, echo=FALSE}
 # contribution of variables
 varImp(rpart_model2) %>% kable()
 ```
+$~$
 
+Ultimately, we observe that the accuracy has increased to 91.85% compared to the initial decision tree.
 
-and now for the accuracy of 58.4% which is higher than the first and second decision tree models:
 ```{r, echo=FALSE}
 # Extract accuracy from the confusion matrix
 accuracy_rpart2 <- confusionMatrix(rpart_result2, as.factor(valid2$`PCOS(Y/N)`))$overall["Accuracy"]
@@ -1309,28 +1340,29 @@ kable(accuracy_rpart2, align = "l")
 
 #### Random Forest (randomForest):
 
+
 ```{r, echo=FALSE}
-# create some random number for reproduction
+# #create some random number for reproduction
 # set.seed(30)
 # 
 # # create random forest model using the training data
-# rf_model <- randomForest(`PCOS(Y/N)`~., train)
+# rf_model <- randomForest("PCOS(Y/N)" ~ ., data = train)
 # rf_model
 # 
 # # prediction
 # rf_result <- predict(rf_model, newdata = valid[, !colnames(valid) %in% "PCOS(Y/N)"])
 # 
 # # confusion matrix
-# confusionMatrix(rf_result, valid$`PCOS(Y/N)`)
+# confusionMatrix(rf_result, as.factor(valid$"PCOS(Y/N)"))
 ```
 
 ```{r, echo=FALSE}
-# plot for rf_model
+# # plot for rf_model
 # varImpPlot(rf_model)
 ```
 
 ```{r, echo=FALSE}
-# Extract accuracy from the confusion matrix for the rf_model
+# # Extract accuracy from the confusion matrix for the rf_model
 # accuracy_rf <- confusionMatrix(rf_result, valid$`PCOS(Y/N)`)$overall["Accuracy"]
 # accuracy_rf
 ```
@@ -1361,7 +1393,7 @@ kable(accuracy_rpart2, align = "l")
 #### Support Vector Machines (e1071):
 
 ```{r, echo=FALSE}
-# create some random numbers for reproduction
+# #create some random numbers for reproduction
 # set.seed(31)
 # 
 # # SVM
@@ -1371,7 +1403,7 @@ kable(accuracy_rpart2, align = "l")
 # svm_result <- predict(svm_model, newdata = valid)
 # 
 # # confusion matrix for svm
-# confusionMatrix(svm_result, as.factor(valid$PCOS(Y/N)))
+# confusionMatrix(svm_result, valid$`PCOS(Y/N)`)
 ```
 
 ```{r, echo=FALSE}
@@ -1379,7 +1411,7 @@ kable(accuracy_rpart2, align = "l")
 ```
 
 ```{r, echo=FALSE}
-# Extract accuracy from the confusion matrix
+# #Extract accuracy from the confusion matrix
 # accuracy_svm <- confusionMatrix(svm_result, as.factor(valid$PCOS(Y/N)))$overall["Accuracy"]
 # accuracy_svm
 ```
@@ -1393,19 +1425,46 @@ kable(accuracy_rpart2, align = "l")
 #### Neural Networks (neuralnet):
 
 ```{r, echo=FALSE}
-
+# set a seed for reproducibility purposes
+set.seed(13)
+# create the model
+nn_model <-  neuralnet(`PCOS(Y/N)`~Follicle_No(L) + Follicle_No(R) + Hair_growth + Skin_darkening + Weight_gain,
+data=train,
+hidden=c(1,1), # specify the number of hidden layers and the number of neurons in each layer. In this case, there are two hidden layers with four and two neurons, respectively.
+linear.output = FALSE,
+stepmax = 10000  # Increase the maximum number of iterations
+)
 ```
 
 ```{r, echo=FALSE}
-
+# create the plot based on the model above
+plot(nn_model,rep = "best")
 ```
 
 ```{r, echo=FALSE}
+# make predictions on the test data using a previously trained model
+pred <- predict(nn_model, valid)
 
+# create a vector of labels for the two possible `PCOS(Y/N)` status in the dataset.
+labels <- c("0", "1")
+
+# creates a data frame with the column index of the maximum value in each row of the "pred" variable
+prediction_label <- data.frame(max.col(pred)) %>% 
+# use the mutate function to add a new column to the data frame called "pred"
+mutate(pred=labels[max.col.pred.]) %>%
+select(2) %>%
+# convert the data frame to a vector.
+unlist()
+
+# print the table
+table(valid$`PCOS(Y/N)`, prediction_label)
 ```
 
 ```{r, echo=FALSE}
-
+# checking the accuracy
+check <- as.numeric(valid$`PCOS(Y/N)`) == max.col(pred)
+nn_accuracy <-  (sum(check)/nrow(valid))
+nn_accuracy
 ```
 
 #### K-Nearest Neighbors (kknn or class):
