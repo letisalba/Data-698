@@ -178,7 +178,7 @@ library(xgboost) # extreme gradient boosting
 library(kknn) # weighted k-Nearest neighbors
 library(jtools)  # use of summ()
 library(patchwork) # ggplot2 multiplot title
-#library(class)
+library(class) # knn function
 ```
 
 $~$
@@ -313,15 +313,7 @@ $~$
 colSums(is.na(pcos2))
 ```
 
-```{r, echo=FALSE, eval=FALSE}
-colnames(pcos)
-```
-
-```{r, echo=FALSE, eval=FALSE}
-colnames(pcos2)
-```
 $~$
-
 
 
 ```{r, echo=FALSE}
@@ -338,33 +330,34 @@ pcos2 <- dplyr::select(pcos2, -c(2, 45))
 # renaming columns for `pcos_infertility` data
 pcos2 <- pcos2 %>% 
   rename("Sl.No" = "Sl..No",
-         "PCOS(Y/N)" = "PCOS..Y.N.",
-         "Age(yrs)" = "Age..yrs.",
-         "Weight(kg)" = "Weight..Kg.",
-         "Height(cm)" = "Height.Cm.",
+         "PCOS" = "PCOS..Y.N.",
+         "Age_yrs" = "Age..yrs.",
+         "Weight" = "Weight..Kg.",
+         "Height" = "Height.Cm.",
+         "BMI" = "BMI",
          "Blood_Group" = "Blood.Group", 
-         "Pulse_rate(bpm)" = "Pulse.rate.bpm.",
-         "RR(breaths/min)" = "RR..breaths.min.",
-         "Hb(g/dl)" = "Hb.g.dl.",
-         "Cycle(R/I)" = "Cycle.R.I.",
-         "Cycle_length(days)" = "Cycle.length.days.",
-         "Married(yrs)" = "Marraige.Status..Yrs.",
+         "Pulse_rate_bpm" = "Pulse.rate.bpm.",
+         "RR_breaths_min" = "RR..breaths.min.",
+         "Hb_gdl" = "Hb.g.dl.",
+         "Cycle_RI" = "Cycle.R.I.",
+         "Cycle_length_days" = "Cycle.length.days.",
+         "Married_yrs" = "Marraige.Status..Yrs.",
          "Pregnant" = "Pregnant.Y.N.",
          "No_of_abortions" = "No..of.aborptions",
-         "Ibeta-HCG(mIU/mL)" = "I...beta.HCG.mIU.mL.",
-         "IIbeta-HCG(mIU/mL)" = "II....beta.HCG.mIU.mL.",
-         "FSH(mIU/mL)" = "FSH.mIU.mL.",
-         "LH(mIU/mL)" = "LH.mIU.mL.",
-         "FSH-LH" = "FSH.LH",
-         "Hip(in)" = "Hip.inch.",
-         "Waist(in)" = "Waist.inch.",
-         "Waist-Hip_Ratio" = "Waist.Hip.Ratio",
-         "TSH(mIU/L)" = "TSH..mIU.L.",
-         "AMH(ng/mL)" = "AMH.ng.mL.",
-         "PRL(ng/mL)" = "PRL.ng.mL.",
-         "Vit_D3(ng/mL)" = "Vit.D3..ng.mL.",
-         "PRG(ng/mL)" = "PRG.ng.mL.",
-         "RBS(mg/dl)" = "RBS.mg.dl.",
+         "IbetaHCG_mIUmL" = "I...beta.HCG.mIU.mL.",
+         "IIbetaHCG_mIUmL" = "II....beta.HCG.mIU.mL.",
+         "FSH_mIUmL" = "FSH.mIU.mL.",
+         "LH_mIUmL" = "LH.mIU.mL.",
+         "FSH_LH" = "FSH.LH",
+         "Hip" = "Hip.inch.",
+         "Waist" = "Waist.inch.",
+         "Waist_Hip_Ratio" = "Waist.Hip.Ratio",
+         "TSH_mIUmL" = "TSH..mIU.L.",
+         "AMH_ngmL" = "AMH.ng.mL.",
+         "PRL_ngmL" = "PRL.ng.mL.",
+         "Vit_D3_ngmL" = "Vit.D3..ng.mL.",
+         "PRG_ngmL" = "PRG.ng.mL.",
+         "RBS_mgdl" = "RBS.mg.dl.",
          "Weight_gain" = "Weight.gain.Y.N.",
          "Hair_growth" = "hair.growth.Y.N.",
          "Skin_darkening" = "Skin.darkening..Y.N.",
@@ -372,13 +365,13 @@ pcos2 <- pcos2 %>%
          "Pimples" = "Pimples.Y.N.",
          "Fast_food" = "Fast.food..Y.N.",
          "Reg_Exercise" = "Reg.Exercise.Y.N.",
-         "BP_Systolic(mmHg)" = "BP._Systolic..mmHg.",
-         "BP_Diastolic(mmHg)" = "BP._Diastolic..mmHg.",
-         "Follicle_No(L)" = "Follicle.No...L.",
-         "Follicle_No(R)" = "Follicle.No...R.",
-         "Avg_F_size(L)(mm)" = "Avg..F.size..L...mm.",
-         "Avg_F_size(R)(mm)" = "Avg..F.size..R...mm.",
-         "Endometrium(mm)" = "Endometrium..mm.")
+         "BP_Systolic_mmHg" = "BP._Systolic..mmHg.",
+         "BP_Diastolic_mmHg" = "BP._Diastolic..mmHg.",
+         "Follicle_NoL" = "Follicle.No...L.",
+         "Follicle_NoR" = "Follicle.No...R.",
+         "Avg_F_sizeL_mm" = "Avg..F.size..L...mm.",
+         "Avg_F_sizeR_mm" = "Avg..F.size..R...mm.",
+         "Endometrium_mm" = "Endometrium..mm.")
 ```
 
 $~$
@@ -398,28 +391,23 @@ $~$
 
 In the second part, I addressed missing values by initially converting 'Height' from centimeters to meters, computing 'BMI,' 'Waist-hip ratio,' and 'FSH/LH.' Following a thorough assessment of the dataset, I opted to substitute missing values in 'Marriage_Status(yrs),' 'AMH(ng/mL),' and 'Fast_food' with the median value as it didn't significantly affect the data's distribution.
 
+
 ```{r, echo=FALSE, warning=FALSE}
 # convert Height from cm to
-pcos_data$"Height(cm)" <- round((pcos_data$"Height(cm)" * 0.01),1)
+pcos_data$"Height" <- round((pcos_data$"Height" * 0.01),1)
 
 # convert hip and waist from inches to cm
-pcos_data$`Hip(in)` <- round((pcos_data$`Hip(in)` * 2.54),1)
-pcos_data$`Waist(in)` <- round((pcos_data$`Waist(in)` * 2.54),1)
+pcos_data$"Hip" <- round((pcos_data$"Hip" * 2.54),1)
+pcos_data$"Waist" <- round((pcos_data$"Waist" * 2.54),1)
 
-# renaming variables
-pcos_data <- pcos_data %>% 
-  rename("Height(m)" = "Height(cm)",
-         "Hip(cm)" = "Hip(in)",
-         "Waist(cm)" = "Waist(in)")
-
-# calculate BMI
-pcos_data$BMI <- round((pcos_data$"Weight(kg)" / pcos_data$"Height(m)"^2), 1)
+#calculate BMI
+pcos_data$"BMI" <- round((pcos_data$"Weight" / pcos_data$"Height"^2), 1)
 
 # calculate waist-hip ratio
-pcos_data$"Waist-Hip_Ratio" <- round((pcos_data$"Waist(cm)" / pcos_data$"Hip(cm)"),2)
+pcos_data$"Waist_Hip_Ratio" <- round((pcos_data$"Waist" / pcos_data$"Hip"),2)
 
 # calculate FSH/LH
-pcos_data$"FSH-LH" <- round((pcos_data$"FSH(mIU/mL)"/pcos_data$"LH(mIU/mL)"),2)
+pcos_data$"FSH_LH" <- round((pcos_data$"FSH_mIUmL"/pcos_data$"LH_mIUmL"),2)
 
 # calculate Married years
 pcos_data$"Married(yrs)"[is.na(pcos_data$"Married(yrs)")] <- median(pcos_data$"Married(yrs)", na.rm = T)
@@ -428,12 +416,12 @@ pcos_data$"Married(yrs)"[is.na(pcos_data$"Married(yrs)")] <- median(pcos_data$"M
 pcos_data$"Fast_food"[is.na(pcos_data$"Fast_food")] <- median(pcos_data$"Fast_food", na.rm = T)
 
 # calculate 
-pcos_data$"AMH(ng/mL)"[is.na(pcos_data$"AMH(ng/mL)")] <- median(pcos_data$"AMH(ng/mL)", na.rm = T)
+pcos_data$"AMH_ngmL"[is.na(pcos_data$"AMH_ngmL")] <- median(pcos_data$"AMH_ngmL", na.rm = T)
 
 # List of variables to round
-vars_to_round <- c("Hb(g/dl)", "Married(yrs)", "Ibeta-HCG(mIU/mL)", "IIbeta-HCG(mIU/mL)", 
-                   "FSH(mIU/mL)", "LH(mIU/mL)", "FSH-LH", "TSH(mIU/L)", "AMH(ng/mL)", "PRL(ng/mL)", 
-                   "Vit_D3(ng/mL)", "PRG(ng/mL)", "Avg_F_size(R)(mm)", "Endometrium(mm)")
+vars_to_round <- c("Hb_gdl", "Married_yrs", "IbetaHCG_mIUmL", "IbetaHCG_mIUmL", 
+                   "FSH_mIUmL", "LH_mIUmL", "FSH_LH", "TSH_mIUmL", "AMH_ngmL", "PRL_ngmL", 
+                   "Vit_D3_ngmL", "PRG_ngmL", "Avg_F_sizeR_mm", "Endometrium_mm")
 
 # Rounding the variables to 1 decimal places
 pcos_data <- pcos_data %>%
@@ -472,9 +460,9 @@ The correlation plot below is measuring the degree of linear relationship within
 
 Some notable correlations are as follows:
 
-* Positive correlations between: `Weight(kg)` and `BMI`, `Married(yrs)` and `Age(yrs)`, and `Follicle_No(L)`, `Follicle_No(R)` and `PCOS(Y/N)` to name a few.
+* Positive correlations between: `Weight` and `BMI`, `Married_yrs` and `Age_yrs`, and `Follicle_NoL`, `Follicle_No)` and `PCOS` to name a few.
 
-* Negative correlations between: `Hip(cm)` and `Waist-Hip_Ratio)`, `AMH(ng/mL)` and `Age(yrs)`, and `Cycle(R/I)` and  `Follicle_No(R)`.
+* Negative correlations between: `Hip` and `Waist-Hip_Ratio`, `AMH_ngmL` and `Age_yrs`, and `Cycle_RI` and  `Follicle_NoR`.
 
 ```{r, fig.height=10, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE}
 # Selecting only the numerical variables for correlation
@@ -519,10 +507,10 @@ Before diving into the model-building phase of this project, let's further visua
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=12, fig.width=12, fig.align='center'}
 p1 <- pcos_cleaned %>% 
-  ggplot(aes(x=`Age(yrs)`, y=`Weight(kg)`, color=as.factor(`PCOS(Y/N)`))) + 
+  ggplot(aes(x=`Age_yrs`, y=`Weight`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
-    scale_colour_discrete("PCOS(Y/N)", labels = c("No", 
+    scale_colour_discrete("PCOS", labels = c("No", 
     "Yes")) +
   labs(title="Age(yrs) with Weight(kg)",
         x ="Age(yrs)", y = "Weight(kg)") +
@@ -532,10 +520,10 @@ p1 <- pcos_cleaned %>%
     )
 
 p2 <- pcos_cleaned %>% 
-  ggplot(aes(x=`Hip(cm)`, y=`Waist(cm)`, color=as.factor(`PCOS(Y/N)`))) + 
+  ggplot(aes(x=`Hip`, y=`Waist`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
-    scale_colour_discrete("PCOS(Y/N)", labels = c("No", 
+    scale_colour_discrete("PCOS", labels = c("No", 
     "Yes")) +
   labs(title="Relationship between Hip(cm) and Waist(cm)",
         x ="Hip (cm)", y = "Waist (cm)") +
@@ -545,10 +533,10 @@ p2 <- pcos_cleaned %>%
     )
 
 p3 <- pcos_cleaned %>% 
-  ggplot(aes(x=`Waist-Hip_Ratio`, y=`RBS(mg/dl)`, color=as.factor(`PCOS(Y/N)`))) + 
+  ggplot(aes(x=`Waist_Hip_Ratio`, y=`RBS_mgdl`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
-    scale_colour_discrete("PCOS(Y/N)", labels = c("No", 
+    scale_colour_discrete("PCOS", labels = c("No", 
     "Yes")) +
   labs(title="Relationship between Waist-Hip ration and Glucose",
         x ="Waist-Hip Ratio", y = "RBS (mg/dl)") +
@@ -558,7 +546,7 @@ p3 <- pcos_cleaned %>%
     )
 
 p4 <- pcos_cleaned %>% 
-ggplot(aes(x=`Age(yrs)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Age_yrs`, y=`Cycle_length_days`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -571,7 +559,7 @@ ggplot(aes(x=`Age(yrs)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/N)`))) 
     )
 
 p5 <- pcos_cleaned %>% 
-ggplot(aes(x=`Age(yrs)`, y=`Cycle(R/I)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Age_yrs`, y=`Cycle_RI`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -584,7 +572,7 @@ ggplot(aes(x=`Age(yrs)`, y=`Cycle(R/I)`, color=as.factor(`PCOS(Y/N)`))) +
     )
 
 p6 <- pcos_cleaned %>% 
-ggplot(aes(x=`Age(yrs)`, y=BMI, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Age_yrs`, y=BMI, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -597,7 +585,7 @@ ggplot(aes(x=`Age(yrs)`, y=BMI, color=as.factor(`PCOS(Y/N)`))) +
     )
 
 p7 <- pcos_cleaned %>% 
-ggplot(aes(x=`Follicle_No(R)`, y=`Follicle_No(L)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Follicle_NoR`, y=`Follicle_NoL`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -610,7 +598,7 @@ ggplot(aes(x=`Follicle_No(R)`, y=`Follicle_No(L)`, color=as.factor(`PCOS(Y/N)`))
     )
 
 p8 <- pcos_cleaned %>% 
-ggplot(aes(x=`Avg_F_size(R)(mm)`, y=`Avg_F_size(L)(mm)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Avg_F_sizeR_mm`, y=`Avg_F_sizeL_mm`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -623,7 +611,7 @@ ggplot(aes(x=`Avg_F_size(R)(mm)`, y=`Avg_F_size(L)(mm)`, color=as.factor(`PCOS(Y
     )
 
 p9 <- pcos_cleaned %>% 
-ggplot(aes(x=`Endometrium(mm)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Endometrium_mm`, y=`Cycle_length_days`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -652,10 +640,10 @@ ggp_all
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=12, fig.width=12, fig.align='center'}
 
 p10 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`PCOS(Y/N)`), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(`PCOS`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") + 
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    scale_fill_discrete(name = "PCOS(Y/N)", labels = c("No", "Yes")) +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     scale_x_discrete(labels=c('No', 'Yes')) +
     labs(title="PCOS", x ="PCOS(Yes or No)", y = "count") +
    theme_ipsum() +
@@ -784,7 +772,7 @@ p19 <- pcos_cleaned %>%
     )
 
 p20 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Age(yrs)`))) +
+  ggplot(aes(x = as.factor(`Age_yrs`))) +
     geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
   labs(title="Age range", x ="Age(yrs)", y = "count") +
@@ -794,7 +782,7 @@ p20 <- pcos_cleaned %>%
     )
 
 p21 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Weight(kg)`))) +
+  ggplot(aes(x = as.factor(`Weight`))) +
     geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     labs(title="Weight range", x ="Weight(kg)", y = "count") +
@@ -804,7 +792,7 @@ p21 <- pcos_cleaned %>%
     )
 
 p22 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Height(m)`))) +
+  ggplot(aes(x = as.factor(`Height`))) +
     geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     labs(title="Height range", x ="Height (m)", y = "count") +
@@ -814,7 +802,7 @@ p22 <- pcos_cleaned %>%
     )
 
 p23 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Married(yrs)`))) +
+  ggplot(aes(x = as.factor(`Married_yrs`))) +
     geom_histogram(stat="count", show.legend = FALSE, fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     labs(title="Years married range", x ="Married (yrs)", y = "count") +
@@ -824,7 +812,7 @@ p23 <- pcos_cleaned %>%
     )
 
 p24 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`PRG(ng/mL)`))) +
+  ggplot(aes(x = as.factor(`PRG_ngmL`))) +
   geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
   labs(title="PRG range", x ="PRG(ng/mL)", y = "count") +
   theme_ipsum() +
@@ -833,7 +821,7 @@ p24 <- pcos_cleaned %>%
     )
 
 ggp_all3 <- (p19 + p20 + p21) / (p22 + p23 + p24) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 6 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
+  plot_annotation(title = "Fig. 8 - Scatterplot of Yes or No variables") & 
   theme(plot.title = element_text(hjust = 0.5))
 ggp_all3 
 
@@ -846,7 +834,7 @@ ggp_all3
 
 ```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=12, message=FALSE}
 p25 <- pcos_cleaned %>% 
-ggplot(aes(x=`Age(yrs)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Age_yrs`, y=`Cycle_length_days`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -859,7 +847,7 @@ ggplot(aes(x=`Age(yrs)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/N)`))) 
     )
 
 p26 <- pcos_cleaned %>% 
-ggplot(aes(x=`Age(yrs)`, y=`Cycle(R/I)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Age_yrs`, y=`Cycle_RI`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -872,7 +860,7 @@ ggplot(aes(x=`Age(yrs)`, y=`Cycle(R/I)`, color=as.factor(`PCOS(Y/N)`))) +
     )
 
 p27 <- pcos_cleaned %>% 
-ggplot(aes(x=`Age(yrs)`, y=BMI, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Age_yrs`, y=`BMI`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -885,7 +873,7 @@ ggplot(aes(x=`Age(yrs)`, y=BMI, color=as.factor(`PCOS(Y/N)`))) +
     )
 
 p28 <- pcos_cleaned %>% 
-ggplot(aes(x=`Follicle_No(R)`, y=`Follicle_No(L)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Follicle_NoR`, y=`Follicle_NoL`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -898,7 +886,7 @@ ggplot(aes(x=`Follicle_No(R)`, y=`Follicle_No(L)`, color=as.factor(`PCOS(Y/N)`))
     )
 
 p29 <- pcos_cleaned %>% 
-ggplot(aes(x=`Avg_F_size(R)(mm)`, y=`Avg_F_size(L)(mm)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Avg_F_sizeR_mm`, y=`Avg_F_sizeL_mm`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -911,7 +899,7 @@ ggplot(aes(x=`Avg_F_size(R)(mm)`, y=`Avg_F_size(L)(mm)`, color=as.factor(`PCOS(Y
     )
 
 p30 <- pcos_cleaned %>% 
-ggplot(aes(x=`Endometrium(mm)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`Endometrium_mm`, y=`Cycle_length_days`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -924,7 +912,7 @@ ggplot(aes(x=`Endometrium(mm)`, y=`Cycle_length(days)`, color=as.factor(`PCOS(Y/
     )
 
 ggp_all4 <- (p25 + p26 + p27) / (p28 + p29 + p30) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 6 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
+  plot_annotation(title = "Fig. 9 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
   theme(plot.title = element_text(hjust = 0.5))
 ggp_all4 
 
@@ -939,7 +927,7 @@ $~$
 
 ```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=12, message=FALSE}
 p31 <- pcos_cleaned %>% 
-ggplot(aes(x=`Ibeta-HCG(mIU/mL)`, y=`IIbeta-HCG(mIU/mL)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`IbetaHCG_mIUmL`, y=`IIbetaHCG_mIUmL`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -952,7 +940,7 @@ ggplot(aes(x=`Ibeta-HCG(mIU/mL)`, y=`IIbeta-HCG(mIU/mL)`, color=as.factor(`PCOS(
     )
 
 p32 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Vit_D3(ng/mL)`), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(`Vit_D3_ngmL`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Vitamin D3 levels with PCOS") +
@@ -963,7 +951,7 @@ p32 <- pcos_cleaned %>%
     )
 
 p33 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`FSH-LH`), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(`FSH_LH`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("FSH/LH levels with PCOS") +
@@ -974,7 +962,7 @@ p33 <- pcos_cleaned %>%
     )
 
 p34 <- pcos_cleaned %>% 
-ggplot(aes(x=`BP_Diastolic(mmHg)`, y=`BP_Systolic(mmHg)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`BP_Diastolic_mmHg`, y=`BP_Systolic_mmHg`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -987,7 +975,7 @@ ggplot(aes(x=`BP_Diastolic(mmHg)`, y=`BP_Systolic(mmHg)`, color=as.factor(`PCOS(
     )
 
 p35 <- pcos_cleaned %>% 
-ggplot(aes(x=`RR(breaths/min)`, y=`Pulse_rate(bpm)`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`RR_breaths_min`, y=`Pulse_rate_bpm`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -1000,7 +988,7 @@ ggplot(aes(x=`RR(breaths/min)`, y=`Pulse_rate(bpm)`, color=as.factor(`PCOS(Y/N)`
     )
 
 p36 <- pcos_cleaned %>% 
-ggplot(aes(x=`AMH(ng/mL)`, y=`FSH-LH`, color=as.factor(`PCOS(Y/N)`))) + 
+ggplot(aes(x=`AMH_ngmL`, y=`FSH_LH`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
     scale_colour_discrete("PCOS", labels = c("No", 
@@ -1013,7 +1001,7 @@ ggplot(aes(x=`AMH(ng/mL)`, y=`FSH-LH`, color=as.factor(`PCOS(Y/N)`))) +
     )
 
 p37 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`TSH(mIU/L)`), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(`TSH_mIUL`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("TSH (mIU/L) levels with PCOS") +
@@ -1024,7 +1012,7 @@ p37 <- pcos_cleaned %>%
     )
 
 p38 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Hb(g/dl)`), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(`Hb_gdl`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Hb(g/dl) levels with PCOS") +
@@ -1035,7 +1023,7 @@ p38 <- pcos_cleaned %>%
     )
 
 p39 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`PRL(ng/mL)`), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(`PRL_ngmL`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("PRL (ng/mL) levels with PCOS") +
@@ -1046,7 +1034,7 @@ p39 <- pcos_cleaned %>%
     )
 
 p40 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`RBS(mg/dl)`), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(`RBS_mgdl`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("RBS (mg/dl) levels with PCOS") +
@@ -1057,7 +1045,7 @@ p40 <- pcos_cleaned %>%
     )
 
 ggp_all5 <- (p10 + p11 + p12) / (p13 + p14 + p15) / (p16 + p17 + p18) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 6 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
+  plot_annotation(title = "Fig. 10 - Bar charts of Yes or No variables") & 
   theme(plot.title = element_text(hjust = 0.5))
 ggp_all5 
 
@@ -1070,7 +1058,7 @@ $~$
 
 ```{r, echo=FALSE, warning=FALSE, fig.height=12, fig.width=14, message=FALSE}
 p41 <- pcos_cleaned %>% 
-  ggplot(aes(x = Blood_Group, fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = Blood_Group, fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Blood Group with PCOS") +
@@ -1081,7 +1069,7 @@ p41 <- pcos_cleaned %>%
     )
 
 p42 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(Pregnant), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(Pregnant), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Pregnant with PCOS") +
@@ -1093,7 +1081,7 @@ p42 <- pcos_cleaned %>%
     )
 
 p43 <- pcos_cleaned %>%
-  ggplot(aes(x = as.factor(Weight_gain), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(Weight_gain), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Weight gain with PCOS") +
@@ -1105,7 +1093,7 @@ p43 <- pcos_cleaned %>%
     )
 
 p44 <- pcos_cleaned %>%
-  ggplot(aes(x = as.factor(Hair_growth), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(Hair_growth), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Hair growth with PCOS") +
@@ -1117,7 +1105,7 @@ p44 <- pcos_cleaned %>%
     )
 
 p45 <- pcos_cleaned %>%
-  ggplot(aes(x = as.factor(Skin_darkening), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(Skin_darkening), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Skin darkening with PCOS") +
@@ -1129,7 +1117,7 @@ p45 <- pcos_cleaned %>%
     )
 
 p46 <- pcos_cleaned %>%
-  ggplot(aes(x = as.factor(Hair_loss), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(Hair_loss), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Hair loss with PCOS") +
@@ -1141,7 +1129,7 @@ p46 <- pcos_cleaned %>%
     )
 
 p47 <- pcos_cleaned %>%
-  ggplot(aes(x = as.factor(Pimples), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(Pimples), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Pimples with PCOS") +
@@ -1153,7 +1141,7 @@ p47 <- pcos_cleaned %>%
     )
 
 p48 <- pcos_cleaned %>%
-  ggplot(aes(x = as.factor(Fast_food), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(Fast_food), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Fast food consumption with PCOS") +
@@ -1165,7 +1153,7 @@ p48 <- pcos_cleaned %>%
     )
 
 p49 <- pcos_cleaned %>%
-  ggplot(aes(x = as.factor(Reg_Exercise), fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = as.factor(Reg_Exercise), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Regularly exercises with PCOS") +
@@ -1177,7 +1165,7 @@ p49 <- pcos_cleaned %>%
     )
 
 p50 <- pcos_cleaned %>% 
-  ggplot(aes(x = `Cycle_length(days)`, fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = `Cycle_length_days`, fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Cycle length in days with PCOS") +
@@ -1188,7 +1176,7 @@ p50 <- pcos_cleaned %>%
     )
 
 p51 <- pcos_cleaned %>% 
-  ggplot(aes(x = No_of_abortions, fill = as.factor(`PCOS(Y/N)`))) +
+  ggplot(aes(x = No_of_abortions, fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     ggtitle("Number of abortions with PCOS") +
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
@@ -1198,7 +1186,7 @@ p51 <- pcos_cleaned %>%
     )
 
 ggp_all6 <- (p10 + p11 + p12) / (p13 + p14 + p15) / (p16 + p17 + p18) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 6 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
+  plot_annotation(title = "Fig. 11 - Bar charts of Yes or No variables` as factor") & 
   theme(plot.title = element_text(hjust = 0.5))
 ggp_all6
 
@@ -1228,45 +1216,72 @@ K-Nearest Neighbors (kknn or class): K-Nearest Neighbors (KNN) is a simple, inst
 
 $~$
 
-To start the model building we start by splitting the dataset into training and validation sets for machine learning models. The training set is used to train the model, while the validation set helps evaluate its performance. The 75:25 ratio used strikes a balance between having enough data to train the model effectively and having a substantial validation set for robust evaluation.
+We start by splitting the dataset into training and validation sets for machine learning models. The training set is used to train the model, while the validation set helps evaluate its performance. The 75:25 ratio used strikes a balance between having enough data to train the model effectively and having a substantial validation set for robust evaluation.
 
 ```{r,echo=FALSE}
 # create some random numbers for reproduction
 set.seed(29)
 
 # Cross Validation Set-up
-inTrain <- createDataPartition(pcos_cleaned$`PCOS(Y/N)`, p=.75, list = F)
+inTrain <- createDataPartition(pcos_cleaned$`PCOS`, p=.75, list = F)
 train <- pcos_cleaned[inTrain,]
 valid <- pcos_cleaned[-inTrain,]
 ```
 
+$~$
 
 #### Decision Tree (rpart):
 
-The initial decision tree constructed is based on `PCOS(Y/N)` against the entire dataset. Employing a 75:25 cross-validation approach to divided the data I created the decision tree. The output is below:
-
+The initial decision tree constructed is based on `PCOS` against the entire dataset. Employing a 75:25 cross-validation approach to divided the data I created the decision tree. The output is below:
 
 ```{r, echo=FALSE, fig.height=10, fig.width=10, fig.align='center'}
 # create the decision tree
-rpart_model <- rpart(`PCOS(Y/N)` ~ ., method = "class", data = train)
+rpart_model <- rpart(`PCOS` ~ ., method = "class", data = train)
 
 # display the decision tree
-prp(rpart_model, extra=1, faclen=0,  nn=T, box.palette="Blues")
+prp(rpart_model, main = "Fig. 12 - Decision Tree with entire dataset", extra=1, faclen=0,  nn=T, box.palette="Blues")
 ```
 
 $~$
 
-Then we test the model using the validation dataset. The results are seen in the confusion matrix and statistics output:
+Then we test the model using the validation dataset. The results are seen in the confusion matrix and statistics output.
+
+The confusion matrix shows the following layout:
+
+* True Negative (TN) = 88: Actual class 0 (negative) correctly predicted as 0.
+* False Positive (FP) = 13: Actual class 0 incorrectly predicted as 1 (positive).
+* False Negative (FN) = 6: Actual class 1 incorrectly predicted as 0.
+* True Positive (TP) = 28: Actual class 1 correctly predicted as 1.
+
+Accuracy and Confidence Interval (CI):
+
+Accuracy: 85.93% - The proportion of correctly classified instances out of the total instances.
+95% Confidence Interval: The range within which the true accuracy is likely to lie.
+
+Other Statistics:
+
+* No Information Rate (NIR): The accuracy rate if the model simply predicted the majority class for all instances.
+
+Interpretation:
+
+* The model has a relatively high accuracy (85.93%), suggesting it correctly predicts classes in the dataset.
+* Sensitivity (True Positive Rate) is high (93.62%), indicating that the model is good at identifying actual positive instances.
+* Specificity (True Negative Rate) is moderate (68.29%), suggesting a decent ability to identify actual negative instances.
+* The positive predictive value (Precision) is 87.13%, indicating the proportion of correctly predicted positive instances out of all positive predictions.
+
+There might be a class imbalance issue, considering the differences in sensitivity and specificity. Overall, while the model shows relatively good performance, further analysis might be required to understand its behavior, especially if sensitivity or specificity is more critical for the specific application or domain.
+
 ```{r,echo=FALSE}
 # creating our prediction
-rpart_result <- predict(rpart_model, newdata = valid[, !colnames(valid) %in% "PCOS(Y/N)"], type = 'class')
+rpart_result <- predict(rpart_model, newdata = valid[, !colnames(valid) %in% "PCOS"], type = 'class')
 
 # confusion matrix
-confusionMatrix(rpart_result, as.factor(valid$`PCOS(Y/N)`))
+confusionMatrix(rpart_result, as.factor(valid$`PCOS`))
 ```
+
 $~$
 
-Upon examining the individual contributions of each variable. It's evident that `Follicle_No(L)`, `Follicle_No(R)`, `Hair_growth`, `Skin_darkening`, and `Weight_gain`, hold significant influence within the dataset. I expected a wider range of influential bloodwork-related tests beyond those presented in this outcome.
+Upon examining the individual contributions of each variable. It's evident that `Follicle_NoL`, `Follicle_NoR`, `Hair_growth`, `Skin_darkening`, and `Weight_gain`, hold significant influence within the dataset. I expected a wider range of influential bloodwork-related tests beyond those presented in this outcome.
 
 ```{r, echo=FALSE}
 # contribution of variables
@@ -1278,44 +1293,53 @@ The model's accuracy stands at 85.93%, which is commendable. However, considerin
 
 ```{r, echo=FALSE}
 # Extract accuracy from the confusion matrix
-accuracy_rpart <- confusionMatrix(rpart_result, as.factor(valid$`PCOS(Y/N)`))$overall["Accuracy"]
+accuracy_rpart <- confusionMatrix(rpart_result, as.factor(valid$`PCOS`))$overall["Accuracy"]
 kable(accuracy_rpart, align = "l")
 ```
 $~$
 
 ##### Second Decision Tree:
 
-The second decision tree is based off the variables with the highest contribution: `Follicle_No(L)`, `Follicle_No(R)`, `Hair_growth`, `Skin_darkening`, `Weight_gain` and the target variable `PCOS(Y/N)`. The results are below:
+The second decision tree is based off the variables with the highest contribution: `Follicle_NoL`, `Follicle_NoR`, `Hair_growth`, `Skin_darkening`, `Weight_gain` and the target variable `PCOS`. I also created a second cross validation data set that include the 6 variables chosen. The results are below:
 
 ```{r, echo=FALSE, fig.height=10, fig.width=10, fig.align='center'}
 # creating the second dataset from the original
 pcos_cleaned2 <- pcos_cleaned %>%
-  select(`PCOS(Y/N)`, `Follicle_No(R)`, `Follicle_No(L)`, `Weight_gain`, `Skin_darkening`, `Hair_growth`)
+  select(`PCOS`, `Follicle_NoR`, `Follicle_NoL`, `Weight_gain`, `Skin_darkening`, `Hair_growth`)
 
 # create some random number for reproduction
 set.seed(28)
 
 # Cross Validation Set-up
-inTrain2 <- createDataPartition(pcos_cleaned2$`PCOS(Y/N)`, p=.75, list = F)
+inTrain2 <- createDataPartition(pcos_cleaned2$`PCOS`, p=.75, list = F)
 train2 <- pcos_cleaned2[inTrain2,]
 valid2 <- pcos_cleaned2[-inTrain2,]
 
 # create the decision tree
-rpart_model2 <- rpart(`PCOS(Y/N)` ~ ., method = "class", data = train2)
+rpart_model2 <- rpart(`PCOS` ~ ., method = "class", data = train2)
 
 # display the decision tree
-prp(rpart_model2, extra=1, faclen=0,  nn=T, box.palette="Blues")
+prp(rpart_model2, main = "Fig. 13 - Second Decision Tree with 6 variables", extra=1, faclen=0,  nn=T, box.palette="Blues")
 ```
 
 $~$
 
 Same as before, we create the confusion matrix and statistics for the second decision tree using the validation data:
+
+Interpretation:
+
+* The model displays high accuracy (91.85%) in correctly predicting classes.
+* Sensitivity (True Positive Rate) is very high (98.94%), indicating an excellent ability to identify actual positive instances.
+* Specificity (True Negative Rate) is moderate (75.61%), suggesting a decent ability to identify actual negative instances.
+* Positive Predictive Value (Precision) is 90.29%, meaning that around 90.29% of the predicted positive instances are actually positive.
+
+The model seems to perform well in this dataset, with high sensitivity and specificity, indicating robustness in classifying both positive and negative instances effectively.
 ```{r, echo=FALSE}
 # creating our prediction
-rpart_result2 <- predict(rpart_model2, newdata = valid2[, !colnames(valid2) %in% "PCOS(Y/N)"], type = 'class')
+rpart_result2 <- predict(rpart_model2, newdata = valid2[, !colnames(valid2) %in% "PCOS"], type = 'class')
 
 # creating the third confusion matrix
-confusionMatrix(rpart_result2, as.factor(valid2$`PCOS(Y/N)`))
+confusionMatrix(rpart_result2, as.factor(valid2$`PCOS`))
 ```
 
 $~$
@@ -1332,116 +1356,501 @@ Ultimately, we observe that the accuracy has increased to 91.85% compared to the
 
 ```{r, echo=FALSE}
 # Extract accuracy from the confusion matrix
-accuracy_rpart2 <- confusionMatrix(rpart_result2, as.factor(valid2$`PCOS(Y/N)`))$overall["Accuracy"]
+accuracy_rpart2 <- confusionMatrix(rpart_result2, as.factor(valid2$`PCOS`))$overall["Accuracy"]
 kable(accuracy_rpart2, align = "l")
 ```
 
-
+$~$
 
 #### Random Forest (randomForest):
 
+The second model we create a random forest model for the entire dataset. Following similar steps as the decision tree, the model was trained using the entire dataset. This produced an error that wouldn't display a confusion matrix. Despite my efforts, the first model wasn't achieved. I was however, able to produce a plot of the variable contribution seen below:
 
-```{r, echo=FALSE}
-# #create some random number for reproduction
-# set.seed(30)
-# 
-# # create random forest model using the training data
-# rf_model <- randomForest("PCOS(Y/N)" ~ ., data = train)
-# rf_model
-# 
-# # prediction
-# rf_result <- predict(rf_model, newdata = valid[, !colnames(valid) %in% "PCOS(Y/N)"])
-# 
-# # confusion matrix
-# confusionMatrix(rf_result, as.factor(valid$"PCOS(Y/N)"))
+```{r,echo=FALSE}
+# create some random numbers for reproduction
+set.seed(30)
+
+# Cross Validation Set-up
+rf_inTrain <- createDataPartition(pcos_cleaned$`PCOS`, p=.75, list = F)
+rf_train <- pcos_cleaned[rf_inTrain,]
+rf_valid <- pcos_cleaned[-rf_inTrain,]
+```
+
+
+```{r, echo=FALSE, include=FALSE}
+# check the levels of PCOS using levels() 
+levels(rf_train$PCOS)
+levels(rf_valid$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# Convert PCOS to factor in svm_train
+rf_train$PCOS <- factor(rf_train$PCOS)
+
+# Convert PCOS to factor in svm_valid
+rf_valid$PCOS <- factor(rf_valid$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# rechecking levels again to ensure no NULL values
+levels(rf_train$PCOS)
+levels(rf_valid$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# explicitly set the levels to match the levels in svm_train.
+rf_valid$PCOS <- factor(rf_valid$PCOS, levels = levels(rf_train$PCOS))
+levels(rf_valid$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# Check the length of svm_result and svm_valid$PCOS
+length_rf_result <- length(rf_result)
+length_rf_valid <- length(rf_valid$PCOS)
+
+# Print the lengths for comparison
+print(length_rf_result)
+print(length_rf_valid)
+```
+
+```{r, echo=FALSE, error = TRUE}
+#create some random number for reproduction
+set.seed(39)
+
+# create random forest model using the training data
+rf_model <- randomForest(PCOS~., rf_train)
+rf_model
+
+# prediction
+rf_result <- predict(rf_model, newdata = valid[, !colnames(valid) %in% "PCOS"])
+
+# Create a confusion matrix
+confusionMatrix(data = rf_result, reference = rf_valid$PCOS)
 ```
 
 ```{r, echo=FALSE}
-# # plot for rf_model
-# varImpPlot(rf_model)
+# plot for rf_model
+varImpPlot(rf_model)
 ```
+
+```{r, echo=FALSE, error=TRUE}
+# Extract accuracy from the confusion matrix for the rf_model
+accuracy_rf <- confusionMatrix(rf_result, valid$PCOS)$overall["Accuracy"]
+accuracy_rf
+```
+
+$~$
+
+#### Second Random Forest Model:
+
+The second random forest model was created using the 6 variables `Follicle_NoL`, `Follicle_NoR`, `Hair_growth`, `Skin_darkening`, `Weight_gain` and the target variable `PCOS`. After training this model, the following confusion matrix was the result.
+
+```{r,echo=FALSE}
+# create some random numbers for reproduction
+set.seed(78)
+
+# Cross Validation Set-up
+rf_inTrain2 <- createDataPartition(pcos_cleaned2$`PCOS`, p=.75, list = F)
+rf_train2 <- pcos_cleaned2[rf_inTrain2,]
+rf_valid2 <- pcos_cleaned2[-rf_inTrain2,]
+```
+
+```{r, echo=FALSE, include=FALSE}
+# check the levels of PCOS using levels() 
+levels(rf_train2$PCOS)
+levels(rf_valid2$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# Convert PCOS to factor in svm_train
+rf_train2$PCOS <- factor(rf_train2$PCOS)
+
+# Convert PCOS to factor in svm_valid
+rf_valid2$PCOS <- factor(rf_valid2$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# rechecking levels again to ensure no NULL values
+levels(rf_train2$PCOS)
+levels(rf_valid2$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# explicitly set the levels to match the levels in svm_train.
+rf_valid2$PCOS <- factor(rf_valid2$PCOS, levels = levels(rf_train2$PCOS))
+levels(rf_valid2$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# Check the length of svm_result and svm_valid$PCOS
+length_rf_result2 <- length(rf_result2)
+length_rf_valid2 <- length(rf_valid2$PCOS)
+
+# Print the lengths for comparison
+print(length_rf_result2)
+print(length_rf_valid2)
+```
+
 
 ```{r, echo=FALSE}
-# # Extract accuracy from the confusion matrix for the rf_model
-# accuracy_rf <- confusionMatrix(rf_result, valid$`PCOS(Y/N)`)$overall["Accuracy"]
-# accuracy_rf
+# create some random number for reproduction
+set.seed(7)
+
+# create the second random forest model using the training data from the third decision tree
+rf_model2 <- randomForest(PCOS ~ Follicle_NoR + Follicle_NoL + Weight_gain + Skin_darkening + Hair_growth, data = rf_train2)
+rf_model2
+
+# creating the prediction for the third decision tree
+rf_result2 <- predict(rf_model2, newdata = rf_valid2[, !colnames(rf_valid2) %in% "PCOS"])
+
+# Convert PCOS column to factor in rf_train2 and rf_valid2
+rf_train2$PCOS <- factor(rf_train2$PCOS)
+rf_valid2$PCOS <- factor(rf_valid2$PCOS)
+
+# # Check unique levels in rf_result2 and rf_valid2$PCOS
+# unique_levels_result <- unique(rf_result2)
+# unique_levels_valid <- unique(rf_valid2$PCOS)
+# 
+# # Check if the levels match
+# identical(unique_levels_result, unique_levels_valid)
+# 
+# # If levels do not match, manually set levels in rf_result2 to match those in rf_valid2$PCOS
+# levels(rf_result2) <- levels(rf_valid2$PCOS)
+# 
+# Convert rf_result2 to factor and align levels with rf_valid2$PCOS
+rf_result2_factor <- factor(rf_result2, levels = levels(rf_valid2$PCOS))
+
+# Create a confusion matrix
+confusionMatrix(data = rf_result2_factor, reference = rf_valid2$PCOS)
 ```
 
+$~$
+
+From the random forest model we created, we can create a variable importance plot which shows each variable and how important it is in classifying the data. From the plot below we note that `Follicle_NoR` and `Follicle_NoL` are among the top variables that play a significant role in the classification of having or not having PCOS .
+
+```{r, echo=FALSE}
+# plot for the second rf_model
+varImpPlot(rf_model2)
+```
+
+$~$
+
+Numerically, we can see the same result below:
+```{r, echo=FALSE}
+# table for rf_model2 variable contribution
+varImp(rf_model2) %>% kable()
+```
+
+$~$
+
+Lastly, I checked against the validation data the accuracy of the second model with the results of 90.37% accuracy.
+
+```{r, echo=FALSE}
+# Extract accuracy from the confusion matrix for the rf_model2
+accuracy_rf2 <- confusionMatrix(data = rf_result2_factor, reference = rf_valid2$PCOS)$overall["Accuracy"]
+accuracy_rf2
+```
+
+$~$
 
 #### Gradient Boosting Machines (xgboost or gbm):
 
-```{r, echo=FALSE}
+The first gbm model is created using the entire dataset with the target variable `PCOS`. 
 
-```
-
-```{r, echo=FALSE}
-
-```
+In a GBM model, the "rel.inf" typically denotes the relative importance of each feature in predicting the target variable. `Follicle_NoR` is identified as the most crucial variable in the model, followed by others that contribute to a lesser extent.
 
 ```{r, echo=FALSE}
+# Set seed for reproducibility
+set.seed(67)
 
+# Train the GBM model
+gbm_model <- gbm(`PCOS` ~ ., data = train, distribution = "bernoulli", n.trees = 100, interaction.depth = 4, shrinkage = 0.01, bag.fraction = 0.5)
+
+# Print the summary of the trained model
+summary(gbm_model)
+
+# Predict on the validation dataset (assuming 'valid' contains your validation dataset)
+gbm_pred <- predict(gbm_model, newdata = valid, type = "response")
 ```
+
+$~$
+
+We create the confusion matrix and statistics for the first gbm. The model exhibits strong overall accuracy, substantial agreement (Kappa), and good performance in correctly identifying positive and negative classes, as indicated by sensitivity, specificity, and predictive values.
 
 ```{r, echo=FALSE}
+# Calculate predicted classes (0 or 1) based on the predicted probabilities
+predicted_classes <- ifelse(gbm_pred > 0.5, 1, 0)
 
+# Create confusion matrix
+confusionMatrix(data = factor(predicted_classes), reference = factor(valid$`PCOS`))
 ```
+
+$~$
+
+The accuracy of this model is 88.89% which is good but a second model will be created with the selected variables.
+```{r, echo=FALSE}
+# Calculate accuracy
+gbm_accuracy <- sum(predicted_classes == valid$`PCOS`) / length(valid$`PCOS`)
+cat("Accuracy:", gbm_accuracy)
+```
+
+
+$~$
+
+##### Second GBM:
+
+The second GBM is based off the variables: `Follicle_NoL`, `Follicle_NoR`, `Hair_growth`, `Skin_darkening`, `Weight_gain` and the target variable `PCOS`. The results are below:
+
+Similar to before: `Follicle_NoR` is identified as the most crucial variable in the model, with the increased rel.inf of 65.135909 followed by others that contribute to a lesser extent.
 
 ```{r, echo=FALSE}
+# creating the second dataset from the original
+pcos_cleaned3 <- pcos_cleaned %>%
+  select(`PCOS`, `Follicle_NoR`, `Follicle_NoL`, `Weight_gain`, `Skin_darkening`, `Hair_growth`)
 
+# Set seed for reproducibility
+set.seed(68)
+
+# Cross Validation Set-up
+inTrain3 <- createDataPartition(pcos_cleaned3$`PCOS`, p=.75, list = F)
+train3 <- pcos_cleaned3[inTrain3,]
+valid3 <- pcos_cleaned3[-inTrain3,]
+
+# Train the GBM model
+gbm_model2 <- gbm(`PCOS` ~ ., data = train3, distribution = "bernoulli", n.trees = 100, interaction.depth = 4, shrinkage = 0.01, bag.fraction = 0.5)
+
+# Print the summary of the trained model
+summary(gbm_model2)
+
+# Predict on the validation dataset (assuming 'valid' contains your validation dataset)
+gbm_pred2 <- predict(gbm_model2, newdata = valid3, type = "response")
 ```
+
+$~$
+
+The model also exhibits a reasonably good accuracy and agreement between actual and predicted classes. It shows higher sensitivity than the first model but relatively lower specificity. The model's overall performance is moderately robust but might have some limitations in correctly identifying negative instances (class 0).
+
+```{r, echo=FALSE}
+# Calculate predicted classes (0 or 1) based on the predicted probabilities
+predicted_classes2 <- ifelse(gbm_pred2 > 0.5, 1, 0)
+
+# Create confusion matrix
+confusionMatrix(data = factor(predicted_classes2), reference = factor(valid3$`PCOS`))
+```
+
+$~$
+
+The accuracy observed in this subsequent GBM model is slightly reduced compared to the initial one, achieving an 88.15% accuracy rate.
+```{r, echo=FALSE}
+# Calculate accuracy
+gbm_accuracy2 <- sum(predicted_classes2 == valid3$`PCOS`) / length(valid3$`PCOS`)
+cat("Accuracy:", gbm_accuracy2)
+```
+
+
+$~$
 
 #### Support Vector Machines (e1071):
 
-```{r, echo=FALSE}
-# #create some random numbers for reproduction
-# set.seed(31)
-# 
-# # SVM
-# svm_model <- svm(`PCOS(Y/N)` ~ ., train)
-# 
-# # create prediction
-# svm_result <- predict(svm_model, newdata = valid)
-# 
-# # confusion matrix for svm
-# confusionMatrix(svm_result, valid$`PCOS(Y/N)`)
-```
 
-```{r, echo=FALSE}
-# summary(svm_result)
-```
 
-```{r, echo=FALSE}
-# #Extract accuracy from the confusion matrix
-# accuracy_svm <- confusionMatrix(svm_result, as.factor(valid$PCOS(Y/N)))$overall["Accuracy"]
-# accuracy_svm
+```{r, echo=FALSE, include=FALSE}
+# check the levels of PCOS using levels() 
+levels(train$PCOS)
+levels(valid$PCOS)
+```
+```{r, echo=FALSE, include=FALSE}
+# Convert PCOS to factor in svm_train
+train$PCOS <- factor(train$PCOS)
+
+# Convert PCOS to factor in svm_valid
+valid$PCOS <- factor(valid$PCOS)
 ```
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
+# rechecking levels again to ensure no NULL values
+levels(train$PCOS)
+levels(valid$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# checking the structure of both valid and train datasets
+str(valid)
+str(train)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# explicitly set the levels to match the levels in svm_train.
+valid$PCOS <- factor(valid$PCOS, levels = levels(train$PCOS))
+levels(valid$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# Check the length of svm_result and svm_valid$PCOS
+length_svm_result <- length(svm_result)
+length_svm_valid <- length(svm_valid$PCOS)
+
+# Print the lengths for comparison
+print(length_svm_result)
+print(length_svm_valid)
+```
+
+
+```{r, echo=FALSE, error = TRUE }
+#create some random numbers for reproduction
+set.seed(31)
+
+# SVM
+svm_model <- svm(PCOS ~ ., train)
+
+# create prediction
+svm_result <- predict(svm_model, newdata = valid)
+
+
+# confusion matrix for svm
+confusionMatrix(svm_result, valid$PCOS)
+```
+
+```{r, echo=FALSE, error=TRUE}
+summary(svm_result)
+```
+
+```{r, echo=FALSE, error=TRUE}
+#Extract accuracy from the confusion matrix
+accuracy_svm <- confusionMatrix(svm_result, as.factor(valid$`PCOS`))$overall["Accuracy"]
+accuracy_svm
+```
+
+$~$
+
+##### Second SVM
+
+```{r}
+# create some random numbers for reproduction
+set.seed(8)
+
+# Cross Validation Set-up
+svm_inTrain2 <- createDataPartition(pcos_cleaned2$PCOS, p=.75, list = FALSE)
+svm_train2 <- pcos_cleaned2[svm_inTrain2,]
+svm_valid2 <- pcos_cleaned2[-svm_inTrain2,]
+```
+
+```{r, echo=FALSE, include=FALSE}
+# check the levels of PCOS using levels() 
+levels(svm_train2$PCOS)
+levels(svm_valid2$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# Convert PCOS to factor in svm_train
+svm_train2$PCOS <- factor(svm_train2$PCOS)
+
+# Convert PCOS to factor in svm_valid
+svm_valid2$PCOS <- factor(svm_valid2$PCOS)
 
 ```
 
+```{r, echo=FALSE, include=FALSE}
+# rechecking levels again to ensure no NULL values
+levels(svm_train2$PCOS)
+levels(svm_valid2$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# explicitly set the levels to match the levels in svm_train.
+valid$PCOS <- factor(svm_valid2$PCOS, levels = levels(svm_train2$PCOS))
+levels(svm_valid2$PCOS)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# Check the length of svm_result and svm_valid$PCOS
+length_svm_result <- length(svm_result)
+length_svm_valid2 <- length(svm_valid2$PCOS)
+
+# Print the lengths for comparison
+print(length_svm_result)
+print(length_svm_valid2)
+```
+
+$~$
+
+The confusion matrix for the second SVM:
+```{r, echo=FALSE, error = TRUE}
+# SVM
+svm_model2 <- svm(PCOS ~ Follicle_NoR + Follicle_NoL + Weight_gain + Skin_darkening + Hair_growth, svm_train2)
+
+# create prediction
+svm_result2 <- predict(svm_model2, newdata = svm_valid2)
+
+# confusion matrix for svm
+confusionMatrix(svm_result2, svm_valid2$PCOS)
+```
+
+
+```{r, echo=FALSE, error=TRUE}
+summary(svm_result2)
+```
+
+```{r, echo=FALSE, error=TRUE}
+#Extract accuracy from the confusion matrix
+accuracy_svm2 <- confusionMatrix(svm_result2, svm_valid2$`PCOS`)$overall["Accuracy"]
+accuracy_svm2
+```
+
+
+$~$
 
 #### Neural Networks (neuralnet):
 
-```{r, echo=FALSE}
+Utilizing the neuralnet package in R I created the neural network models. The neural network is constructed to predict the target variable `PCOS` using all available predictors. The model is then trained using the training dataset using hidden argument that help specify the architecture of the neural network. These included setting up two hidden layers with 12 and 8 neurons, respectively. The stepmax parameter determines the maximum number of iterations allowed during training, here set to 20000 to ensure the model has enough iterations to learn from the data and optimize its parameters.
+
+For context, neural network plots are composed of:
+
+* The left-most nodes (i.e. input nodes) are the raw data variables used in the model.
+
+* The arrows in black (and associated numbers) are the weights which you can think of as how much that variable contributes to the next node. The blue lines are the bias weights which are an additional parameter introduced to each neuron and serves as an offset or intercept term, contributing to the ability of the network to fit more complex patterns in the data.
+
+* The middle nodes (i.e. anything between the input and output nodes) are your hidden nodes. This is where the image analogy helps. Each of these nodes constitute a component that the network is learning to recognize. 
+
+* The far-right (output node(s)) node is the final output of the neural network.
+
+
+```{r,echo=FALSE}
+# create some random numbers for reproduction
+set.seed(67)
+
+# Cross Validation Set-up
+nn_inTrain <- createDataPartition(pcos_cleaned$PCOS, p=.75, list = F)
+nn_train <- pcos_cleaned[nn_inTrain,]
+nn_valid <- pcos_cleaned[-nn_inTrain,]
+```
+
+
+```{r, echo=FALSE, error=TRUE}
 # set a seed for reproducibility purposes
-set.seed(13)
+set.seed(19)
+
 # create the model
-nn_model <-  neuralnet(`PCOS(Y/N)`~Follicle_No(L) + Follicle_No(R) + Hair_growth + Skin_darkening + Weight_gain,
-data=train,
-hidden=c(1,1), # specify the number of hidden layers and the number of neurons in each layer. In this case, there are two hidden layers with four and two neurons, respectively.
-linear.output = FALSE,
-stepmax = 10000  # Increase the maximum number of iterations
+nn_model <- neuralnet(`PCOS`~.,
+                      data = nn_train,
+                      hidden = c(12, 8),  # Specify the number of hidden layers and neurons
+                      linear.output = FALSE,
+                      stepmax = 20000  # Increase the maximum number of iterations
 )
 ```
 
-```{r, echo=FALSE}
+Although not displayed when knitting, the plot produced is seen below:
+
+![Fig. 15 - Neural Network 1](/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/Fig.15-Neural_Network_1.png)
+
+```{r, echo=FALSE, fig.width=18, fig.height=12, fig.align='center', include=FALSE, error=TRUE}
 # create the plot based on the model above
-plot(nn_model,rep = "best")
+#plot(nn_model, rep = "best", main="")
+#grid::grid.text("Fig. 15 - Neural Network", x = 0.5, y = 0.1)
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, error=TRUE}
 # make predictions on the test data using a previously trained model
 pred <- predict(nn_model, valid)
 
@@ -1449,7 +1858,7 @@ pred <- predict(nn_model, valid)
 labels <- c("0", "1")
 
 # creates a data frame with the column index of the maximum value in each row of the "pred" variable
-prediction_label <- data.frame(max.col(pred)) %>% 
+prediction_label <- data.frame(max.col(pred)) %>%
 # use the mutate function to add a new column to the data frame called "pred"
 mutate(pred=labels[max.col.pred.]) %>%
 select(2) %>%
@@ -1457,48 +1866,173 @@ select(2) %>%
 unlist()
 
 # print the table
-table(valid$`PCOS(Y/N)`, prediction_label)
+table(valid$`PCOS`, prediction_label)
 ```
 
-```{r, echo=FALSE}
-# checking the accuracy
-check <- as.numeric(valid$`PCOS(Y/N)`) == max.col(pred)
+
+$~$
+
+The accuracy of the model above was of 30.37%. Hoping this could improve in the second model.
+
+```{r, echo=FALSE, error=TRUE}
+#checking the accuracy
+check <- as.numeric(valid$`PCOS`) == max.col(pred)
 nn_accuracy <-  (sum(check)/nrow(valid))
 nn_accuracy
 ```
 
+$~$
+
+##### Second Neural Network:
+
+For the second neural network model I am also using the `neuralnet` package. Similar to the first model, I created the model by specifying the variables from `pcos_cleaned2` which included `Follicle_No(L)`, `Follicle_No(R)`, `Hair_growth`, `Skin_darkening`, `Weight_gain`, and the target variable `PCOS` and setting the parameters to 1 hidden layer containing 2 neurons and an output layer with 1 neuron.
+
+```{r, echo=FALSE}
+# set a seed for reproducibility purposes
+set.seed(13)
+
+# create the model
+nn_model2 <-  neuralnet(`PCOS`~Follicle_NoL + Follicle_NoR + Hair_growth + Skin_darkening + Weight_gain,
+                        data=train2,
+                        hidden=c(2,1),
+                        linear.output = FALSE,
+                        stepmax = 10000  # Increase the maximum number of iterations
+)
+```
+
+$~$
+
+The plot below is the output of the model created:
+
+In the context of a `neuralnet` plot displaying an error of 13.733636 and steps of 2518, this information typically pertains to the training progress of a neural network model and provides insights into the model's learning behavior.
+
+* An error value of 13.733636 suggests the current level of model error or loss at the 2518th step/iteration during training.
+
+* Each step involves adjusting the model's weights and biases to reduce the error, moving closer towards an optimal solution. Higher step counts usually mean more training iterations were required for the network to converge.
+
+```{r, echo=FALSE}
+# create the plot based on the model above
+plot(nn_model2, rep = "best", main="")
+grid::grid.text("Fig. 15 - Neural Network", x = .5, y = .2)
+```
+
+$~$
+
+Below is a table displaying the predicted outcomes for the `PCOS` status, where the highest count of predictions corresponds to the absence of PCOS.
+
+```{r, echo=FALSE}
+# make predictions on the test data using a previously trained model
+pred2 <- predict(nn_model2, valid2)
+
+# create a vector of labels for the two possible `PCOS` status in the dataset.
+labels2 <- c("0", "1")
+
+# creates a data frame with the column index of the maximum value in each row of the "pred" variable
+prediction_label2 <- data.frame(max.col(pred2)) %>% 
+# use the mutate function to add a new column to the data frame called "pred"
+mutate(pred=labels2[max.col.pred2.]) %>%
+select(2) %>%
+# convert the data frame to a vector.
+unlist()
+
+# print the table
+table(valid2$`PCOS`, prediction_label2)
+```
+
+$~$
+
+Lastly, we check the accuracy using the validation data by first converting actual categorical values into numerical ones and compare them with predicted values. The `neuralnet` accuracy is 30.37% which is oddly similar to the accuracy of the first model.
+```{r, echo=FALSE}
+# checking the accuracy
+check2 <- as.numeric(valid2$`PCOS`) == max.col(pred2)
+nn_accuracy2 <-  (sum(check2)/nrow(valid2))
+nn_accuracy2
+```
+
+
+$~$
+
 #### K-Nearest Neighbors (kknn or class):
 
-```{r, echo=FALSE}
+To build the k-Nearest Neighbors model I prepared the data by removing rows with missing values, although there were none, the code wouldn't run without it. After setting a seed for reproducibility I trained a kNN model using the training data and predict the 'PCOS' variable for the validation dataset. The kNN algorithm allows tweaking the number of neighbors (k) to impact the outcome. Here, it was fixed at 5; as a result, the accuracy achieved was 71.11%.
 
+```{r, echo=FALSE}
+# Remove rows with missing values from train and valid datasets
+train <- train[complete.cases(train), ]
+valid <- valid[complete.cases(valid), ]
+
+# set a seed for reproducibility purposes
+set.seed(78)
+
+# Set the value of k for kNN
+k <- 5  # Change this value as needed
+
+# Fit the kNN model using the training data
+knn_model <- knn(train[, -which(names(train) == "PCOS")], 
+                 valid[, -which(names(valid) == "PCOS")], 
+                 train$`PCOS`, 
+                 k = k)
+```
+
+
+```{r, echo=FALSE}
+# Calculate accuracy
+knn_accuracy <- mean(knn_model == valid$`PCOS`)
+knn_accuracy
+```
+
+$~$
+
+#### Second kNN:
+
+For the second kNN, the same steps were takes as the first model with the exception of using the 6 variables of `Follicle_NoR`, `Follicle_NoL`, `Weight_gain`, `Skin_darkening`, `Hair_growth` and target variable `PCOS`. The result, an accuracy of 88.15% was achieved, which is much higher than the first model.
+
+```{r, echo=FALSE}
+# Filter and select the desired columns for the new dataset
+pcos_cleaned4 <- pcos_cleaned %>%
+  select(`PCOS`, `Follicle_NoR`, `Follicle_NoL`, `Weight_gain`, `Skin_darkening`, `Hair_growth`)
+
+# Split the data into training and validation sets (if needed)
+set.seed(123)  # Set seed for reproducibility
+inTrain4 <- createDataPartition(pcos_cleaned4$`PCOS`, p = 0.75, list = FALSE)
+train4 <- pcos_cleaned4[inTrain4, ]
+valid4 <- pcos_cleaned4[-inTrain4, ]
+
+# Check for missing values and remove them if present
+train4 <- train4[complete.cases(train4), ]
+valid4 <- valid4[complete.cases(valid4), ]
+
+# Set the value of k for kNN
+k <- 5  # Change this value as needed
+
+# Fit the kNN model using the training data
+knn_model2 <- knn(train4[, -which(names(train4) == "PCOS")], 
+                  valid4[, -which(names(valid4) == "PCOS")], 
+                  train4$`PCOS`, 
+                  k = k)
 ```
 
 ```{r, echo=FALSE}
-
+# Calculate accuracy for the new kNN model
+knn_accuracy2 <- mean(knn_model2 == valid4$`PCOS`)
+knn_accuracy2
 ```
 
-```{r, echo=FALSE}
 
-```
-
-```{r, echo=FALSE}
-
-```
-
-```{r, echo=FALSE}
-
-```
+$~$
 
 ### Model Comparison:
 
-Lastly, let's do a model comparison for Decision Tree, Random Forest and SVM:
+Lastly, let's do a model comparison. Overall the top 5 models with the highest accuracies were: Decision Tree (second model), SVM (second and first model), Random Forest (second model), and Gradient Boost Machine (first model).
+
+
 ```{r, echo=FALSE}
 # Compare models
-# model_names <- c("Decision Tree","Random Forest", "SVM")
-# accuracies <- c(0.5843829, 0.7128463, 0.6372796)
-# results <- data.frame(Model = model_names, Accuracy = accuracies)
-# results <- results[order(results$Accuracy, decreasing = TRUE), ]
-# results
+model_names <- c("Decision Tree 1","Decision Tree 2", "Random Forest 1", "Random Forest 2", "Gradient Boost Machines 1", "Gradient Boost Machines 2" ,"SVM 1", "SVM 2", "Neural Network 1", "Neural Network 2", "k-Nearest 1", "k-Nearest 2")
+accuracies <- c(0.8592593, 0.9185185, 0.0000, 0.9037037, 0.8814815, 0.6222222, 0.9111111, 0.9185185, 0.3037037, 0.3037037, 0.7111111, 0.8814815)
+results <- data.frame(Model = model_names, Accuracy = accuracies)
+results <- results[order(results$Accuracy, decreasing = TRUE), ]
+head(results)
 ```
 
 
