@@ -1404,13 +1404,13 @@ levels(rf_valid$PCOS)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
-# Check the length of svm_result and svm_valid$PCOS
-length_rf_result <- length(rf_result)
-length_rf_valid <- length(rf_valid$PCOS)
-
-# Print the lengths for comparison
-print(length_rf_result)
-print(length_rf_valid)
+# # Check the length of svm_result and svm_valid$PCOS
+# length_rf_result <- length(rf_result)
+# length_rf_valid <- length(rf_valid$PCOS)
+# 
+# # Print the lengths for comparison
+# print(length_rf_result)
+# print(length_rf_valid)
 ```
 
 ```{r, echo=FALSE, error = TRUE}
@@ -1494,13 +1494,13 @@ levels(rf_valid2$PCOS)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
-# Check the length of svm_result and svm_valid$PCOS
-length_rf_result2 <- length(rf_result2)
-length_rf_valid2 <- length(rf_valid2$PCOS)
-
-# Print the lengths for comparison
-print(length_rf_result2)
-print(length_rf_valid2)
+# # Check the length of svm_result and svm_valid$PCOS
+# length_rf_result2 <- length(rf_result2)
+# length_rf_valid2 <- length(rf_valid2$PCOS)
+# 
+# # Print the lengths for comparison
+# print(length_rf_result2)
+# print(length_rf_valid2)
 ```
 
 
@@ -1699,13 +1699,13 @@ levels(valid$PCOS)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
-# Check the length of svm_result and svm_valid$PCOS
-length_svm_result <- length(svm_result)
-length_svm_valid <- length(svm_valid$PCOS)
-
-# Print the lengths for comparison
-print(length_svm_result)
-print(length_svm_valid)
+# # Check the length of svm_result and svm_valid$PCOS
+# length_svm_result <- length(svm_result)
+# length_svm_valid <- length(svm_valid$PCOS)
+# 
+# # Print the lengths for comparison
+# print(length_svm_result)
+# print(length_svm_valid)
 ```
 $~$
 
@@ -1747,7 +1747,7 @@ $~$
 
 The second SVM model was constructed following the same methodology as the initial model, utilizing the identical selection of the six variables employed thus far.
 
-```{r}
+```{r, echo=FALSE}
 # create some random numbers for reproduction
 set.seed(8)
 
@@ -1785,13 +1785,13 @@ levels(svm_valid2$PCOS)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
-# Check the length of svm_result and svm_valid$PCOS
-length_svm_result <- length(svm_result)
-length_svm_valid2 <- length(svm_valid2$PCOS)
-
-# Print the lengths for comparison
-print(length_svm_result)
-print(length_svm_valid2)
+# # Check the length of svm_result and svm_valid$PCOS
+# length_svm_result <- length(svm_result)
+# length_svm_valid2 <- length(svm_valid2$PCOS)
+# 
+# # Print the lengths for comparison
+# print(length_svm_result)
+# print(length_svm_valid2)
 ```
 
 $~$
@@ -1867,7 +1867,7 @@ nn_model <- neuralnet(`PCOS`~.,
 
 Although not displayed when knitting, the plot produced is seen below:
 
-![Fig. 15 - Neural Network 1](/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/Fig.15-Neural_Network_1.png)
+![Fig. 14 - Neural Network 1](/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/Fig.15-Neural_Network_1.png)
 
 ```{r, echo=FALSE, fig.width=18, fig.height=12, fig.align='center', include=FALSE, error=TRUE}
 # create the plot based on the model above
@@ -2060,6 +2060,7 @@ results <- results[order(results$Accuracy, decreasing = TRUE), ]
 head(results)
 ```
 
+$~$
 
 ### Conclusion:
 
@@ -2069,14 +2070,25 @@ I anticipated answering the following questions with my data:
 
 2.	Are there differences for women of different race/ethnic background when it comes to having PCOS? What about women without PCOS?
 
+  * These accuracies don't directly address racial or ethnic differences. Further analysis involving feature exploration or specific subgroup analysis using demographic data might unveil associations or variations among different racial/ethnic groups in PCOS prevalence or features.
+
 3.	What is the likelihood of a woman developing PCOS based on her age, ethnicity, and BMI history?
+
+  * While machine learning models can predict, the accuracies from my models don't explicitly indicate predictions on likelihood. Specific models with feature importance or coefficients might offer insights into how age, ethnicity, and BMI contribute to predicting PCOS likelihood.
 
 4.	Can we predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on their medical history, hormone levels, and lifestyle factors?
 
+  * Machine learning models could help predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on available medical history, hormone levels, and lifestyle factors. For this a larger dataset would be needed in order to create specialized modeling to derive precise predictions.
+
 5.	Can we predict the likelihood of successful pregnancy outcomes in women with PCOS based on their age, weight, hormone levels, and treatment history?
+
+  * Similar to the above, machine learning models can potentially predict the likelihood of successful pregnancy outcomes in women with PCOS based on various factors like age, weight, hormone levels, and treatment history. A larger dataset, specific models or analyses could provide more detailed predictive insights.
 
 6.	Can we predict the long-term health outcomes and quality of life of women with PCOS based on their age, lifestyle factors, hormone levels, and treatment history?
 
+  * Machine learning models, when trained with extensive data including age, lifestyle factors, hormone levels, and treatment history, might offer predictive insights into long-term health outcomes and quality of life for women with PCOS. However, these models might need additional feature engineering and specialized analyses to offer accurate predictions.
+
+$~$
 
 ### References:
 
