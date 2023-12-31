@@ -1364,7 +1364,7 @@ $~$
 
 #### Random Forest (randomForest):
 
-The second model we create a random forest model for the entire dataset. Following similar steps as the decision tree, the model was trained using the entire dataset. This produced an error that wouldn't display a confusion matrix. Despite my efforts, the first model wasn't achieved. I was however, able to produce a plot of the variable contribution seen below:
+The second model we create a random forest model for the entire dataset. Following similar steps as the decision tree, the model was trained using the entire dataset. The model's performance, as indicated by the confusion matrix, demonstrates a limited accuracy and predictive power. The Kappa statistic reflects weak agreement, and the sensitivity and specificity are relatively imbalanced. This suggests that the model might require further refinement or alternative approaches to improve its predictive capability.
 
 ```{r,echo=FALSE}
 # create some random numbers for reproduction
@@ -1428,11 +1428,23 @@ rf_result <- predict(rf_model, newdata = valid[, !colnames(valid) %in% "PCOS"])
 confusionMatrix(data = rf_result, reference = rf_valid$PCOS)
 ```
 
-```{r, echo=FALSE}
+
+$~$
+
+The plot below demonstrates the variable importance of the entire dataset. `Follicle_NoR`, `FollicleNoL` and `Hair_growth` are the top 3 variables that play a significant role in the classification of PCOS presence.
+```{r, echo=FALSE, fig.height=8}
 # plot for rf_model
 varImpPlot(rf_model)
 ```
 
+Numerically, we can see the same result below:
+```{r, echo=FALSE}
+# table for rf_model variable contribution
+varImp(rf_model) %>% kable()
+```
+$~$
+
+The model's accuracy stood at 61.48%, demonstrating a performance that was not particularly strong.
 ```{r, echo=FALSE, error=TRUE}
 # Extract accuracy from the confusion matrix for the rf_model
 accuracy_rf <- confusionMatrix(rf_result, valid$PCOS)$overall["Accuracy"]
@@ -1652,7 +1664,7 @@ $~$
 
 #### Support Vector Machines (e1071):
 
-
+To start the SVM algorithm, we follow similar criteria to the decision tree and random forest model by setting up the cross validation set-up, create the prediction and confusion matrix and lastly it's accuracy. Results are below:
 
 ```{r, echo=FALSE, include=FALSE}
 # check the levels of PCOS using levels() 
@@ -1695,7 +1707,9 @@ length_svm_valid <- length(svm_valid$PCOS)
 print(length_svm_result)
 print(length_svm_valid)
 ```
+$~$
 
+The confusion matrix below shows sensitivity (true positive rate) for class 0 is high at 95.74%, indicating the model's effectiveness in identifying instances of class 0. Specificity for class 1 is 80.49%, which is reasonably good. The balanced accuracy, which considers both sensitivity and specificity, is at 88.12%, demonstrating a good overall performance in distinguishing between both classes. Overall, based on these metrics, the confusion matrix generally portrays a good performance of the model.
 
 ```{r, echo=FALSE, error = TRUE }
 #create some random numbers for reproduction
@@ -1711,11 +1725,16 @@ svm_result <- predict(svm_model, newdata = valid)
 # confusion matrix for svm
 confusionMatrix(svm_result, valid$PCOS)
 ```
+$~$
 
+Within the SVM, there were 98 instances have been predicted as class 0 and 37 instances have been predicted as class 1.
 ```{r, echo=FALSE, error=TRUE}
 summary(svm_result)
 ```
 
+$~$
+
+The accuracy for the first model is 91.11%.
 ```{r, echo=FALSE, error=TRUE}
 #Extract accuracy from the confusion matrix
 accuracy_svm <- confusionMatrix(svm_result, as.factor(valid$`PCOS`))$overall["Accuracy"]
@@ -1724,7 +1743,9 @@ accuracy_svm
 
 $~$
 
-##### Second SVM
+##### Second SVM:
+
+The second SVM model was constructed following the same methodology as the initial model, utilizing the identical selection of the six variables employed thus far.
 
 ```{r}
 # create some random numbers for reproduction
@@ -1748,8 +1769,8 @@ svm_train2$PCOS <- factor(svm_train2$PCOS)
 
 # Convert PCOS to factor in svm_valid
 svm_valid2$PCOS <- factor(svm_valid2$PCOS)
-
 ```
+
 
 ```{r, echo=FALSE, include=FALSE}
 # rechecking levels again to ensure no NULL values
@@ -1775,7 +1796,7 @@ print(length_svm_valid2)
 
 $~$
 
-The confusion matrix for the second SVM:
+The confusion matrix for the second SVM suggest that the model performs well in classifying instances, demonstrating high accuracy, sensitivity, specificity, and precision for the predicted classes. The Kappa statistic also indicates substantial agreement between the actual and predicted classes.
 ```{r, echo=FALSE, error = TRUE}
 # SVM
 svm_model2 <- svm(PCOS ~ Follicle_NoR + Follicle_NoL + Weight_gain + Skin_darkening + Hair_growth, svm_train2)
@@ -1792,6 +1813,9 @@ confusionMatrix(svm_result2, svm_valid2$PCOS)
 summary(svm_result2)
 ```
 
+$~$
+
+The second model demonstrated enhanced performance, achieving an accuracy of 91.85%.
 ```{r, echo=FALSE, error=TRUE}
 #Extract accuracy from the confusion matrix
 accuracy_svm2 <- confusionMatrix(svm_result2, svm_valid2$`PCOS`)$overall["Accuracy"]
@@ -1826,6 +1850,7 @@ nn_train <- pcos_cleaned[nn_inTrain,]
 nn_valid <- pcos_cleaned[-nn_inTrain,]
 ```
 
+$~$
 
 ```{r, echo=FALSE, error=TRUE}
 # set a seed for reproducibility purposes
@@ -2029,7 +2054,7 @@ Lastly, let's do a model comparison. Overall the top 5 models with the highest a
 ```{r, echo=FALSE}
 # Compare models
 model_names <- c("Decision Tree 1","Decision Tree 2", "Random Forest 1", "Random Forest 2", "Gradient Boost Machines 1", "Gradient Boost Machines 2" ,"SVM 1", "SVM 2", "Neural Network 1", "Neural Network 2", "k-Nearest 1", "k-Nearest 2")
-accuracies <- c(0.8592593, 0.9185185, 0.0000, 0.9037037, 0.8814815, 0.6222222, 0.9111111, 0.9185185, 0.3037037, 0.3037037, 0.7111111, 0.8814815)
+accuracies <- c(0.8592593, 0.9185185, 0.6148148, 0.9037037, 0.8814815, 0.6222222, 0.9111111, 0.9185185, 0.3037037, 0.3037037, 0.7111111, 0.8814815)
 results <- data.frame(Model = model_names, Accuracy = accuracies)
 results <- results[order(results$Accuracy, decreasing = TRUE), ]
 head(results)
@@ -2037,6 +2062,20 @@ head(results)
 
 
 ### Conclusion:
+
+I anticipated answering the following questions with my data:
+
+1.	Are there commonalities women with and without PCOS have that can be easily dismissed as normal?
+
+2.	Are there differences for women of different race/ethnic background when it comes to having PCOS? What about women without PCOS?
+
+3.	What is the likelihood of a woman developing PCOS based on her age, ethnicity, and BMI history?
+
+4.	Can we predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on their medical history, hormone levels, and lifestyle factors?
+
+5.	Can we predict the likelihood of successful pregnancy outcomes in women with PCOS based on their age, weight, hormone levels, and treatment history?
+
+6.	Can we predict the long-term health outcomes and quality of life of women with PCOS based on their age, lifestyle factors, hormone levels, and treatment history?
 
 
 ### References:
