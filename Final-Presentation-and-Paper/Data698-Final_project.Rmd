@@ -20,7 +20,7 @@ $~$
 
 ## Overview: 
 
-Polycystic Ovary Syndrome (PCOS) stands as one of the most prevalent endocrine disorders affecting reproductive-aged women globally. This complex condition disrupts hormone levels within the body, impacting the ovaries and often leading to a myriad of symptoms. PCOS is characterized by a spectrum of irregularities, including menstrual irregularities, hormonal imbalances, and the formation of cysts on the ovaries. Its manifestation varies among individuals, typically marked by excessive production of androgens, irregular menstrual cycles, and difficulties in ovulation, potentially leading to fertility challenges. Beyond reproductive health concerns, PCOS also presents with metabolic implications, such as insulin resistance, which can elevate the risk of developing type 2 diabetes and cardiovascular issues. The exact cause of PCOS remains multifaceted and isn't singularly defined, encompassing a combination of genetic, hormonal, and lifestyle factors. As a chronic disorder, PCOS poses significant challenges to those affected, impacting their overall health and quality of life.
+Polycystic Ovarian Syndrome (PCOS) stands as one of the most prevalent endocrine disorders affecting reproductive-aged women globally. This complex condition disrupts hormone levels within the body, impacting the ovaries and often leading to a myriad of symptoms. PCOS is characterized by a spectrum of irregularities, including menstrual irregularities, hormonal imbalances, and the formation of cysts on the ovaries. Its manifestation varies among individuals, typically marked by excessive production of androgens, irregular menstrual cycles, and difficulties in ovulation, potentially leading to fertility challenges. Beyond reproductive health concerns, PCOS also presents with metabolic implications, such as insulin resistance, which can elevate the risk of developing type 2 diabetes and cardiovascular issues. The exact cause of PCOS remains multifaceted and isn't singularly defined, encompassing a combination of genetic, hormonal, and lifestyle factors. As a chronic disorder, PCOS poses significant challenges to those affected, impacting their overall health and quality of life.
 
 This syndrome's diagnosis is often challenging due to its diverse array of symptoms and the absence of a singular definitive test. Clinicians typically rely on a set of diagnostic criteria, such as irregular menstrual cycles, elevated androgen levels, and the presence of ovarian cysts, to identify and evaluate PCOS. However, the complexity of this condition extends beyond its diagnostic challenges, as managing PCOS necessitates a multifaceted approach. Treatment strategies often focus on alleviating specific symptoms, such as irregular periods, infertility, and excessive hair growth, through medications, lifestyle modifications, and sometimes surgical interventions. Additionally, lifestyle changes involving diet adjustments and regular exercise play a crucial role in managing the metabolic aspects of PCOS. Research into PCOS continues to expand, aiming to enhance diagnostic accuracy, refine treatment approaches, and deepen our understanding of its underlying mechanisms to better support individuals grappling with this pervasive syndrome.
 
@@ -198,10 +198,9 @@ $~$
 #### Displaying the `pcos` data:
 ```{r, echo=FALSE, kable.opts=list(caption="data frame is now printed using `kable`.")}
 # display the `pcos` dataset
-
 pcos %>% 
-kable(format = "html", col.names = colnames(pcos)) %>%
-  kable_styling() %>%
+  kable(caption = "<font color=#000000><b>Table 1.</b>`pcos` data </font>", format = "html", col.names = colnames(pcos)) %>%
+  kable_styling(bootstrap_options = c("hover", "condensed"), font_size = 13) %>%
   kableExtra::scroll_box(width = "100%", height = "400px")
 ```
 $~$
@@ -211,10 +210,9 @@ $~$
 #### Displaying the `pcos2` data:
 ```{r, echo=FALSE, kable.opts=list(caption="data frame is now printed using `kable`.")}
 # display the `pcos2` dataset
-
 pcos2 %>% 
-kable(format = "html", col.names = colnames(pcos2)) %>%
-  kable_styling() %>%
+kable(caption = "<font color=#000000><b>Table 2.</b>`pcos2` data </font>", format = "html", col.names = colnames(pcos2)) %>%
+  kable_styling(bootstrap_options = c("hover", "condensed"), font_size = 13) %>%
   kableExtra::scroll_box(width = "100%", height = "400px")
 ```
 
@@ -271,7 +269,7 @@ Upon visual inspection, no distinct pattern or discernible shape emerges from th
 ```{r, fig.height = 10, fig.width = 10, fig.align='center', warning=FALSE, echo=FALSE, message=FALSE}
 DataExplorer::plot_histogram(
   geom_histogram_args = list(alpha = 1, fill = "#a86800"),
-  title = "Fig. 1 - Histogram of `pcos2` data",
+  title = "Fig. 2 - Histogram of `pcos2` data",
    data = pcos2,
          ggtheme=theme_ipsum())
 ```
@@ -284,13 +282,14 @@ $~$
 
 ### Data Preparation:
 
-My data preparation primarily involves column renaming and addressing missing values. This includes handling missing values by employing mean, median, or mode replacement strategies for columns like `Marriage Status (Yrs)` and `Fast Food (Y/N)`. Additionally, for columns such as `BMI`, `FSH.LH`, and `Waist.Hip.Ratio`, I will compute overall values. Specific columns will be converted to the metric system, and redundant or unnecessary columns will be removed. These steps aim to streamline data management before merging the two datasets.
+My data preparation primarily involves column renaming and addressing missing values. This includes handling missing values by employing mean, median, or mode replacement strategies for columns like `	Marraige.Status..Yrs.` and `Fast.food..Y.N.`. Additionally, for columns such as `BMI`, `FSH.LH`, and `Waist.Hip.Ratio`, I will compute overall values. Specific columns will be converted to the metric system, and redundant or unnecessary columns will be removed. These steps aim to streamline data management before merging the two datasets.
 
 $~$
 
 Prior to commencing the cleaning process, I standardized the datasets to numeric format due to variations in the class of certain variables.
 
 ```{r, echo=FALSE, warning=FALSE}
+# change variables to numeric
 pcos <- mutate_all(pcos, function(x) as.numeric(as.character(x)))
 pcos2 <- mutate_all(pcos2, function(x) as.numeric(as.character(x)))
 ```
@@ -381,15 +380,16 @@ After making the first part of addressing the column names, the results are seen
 ```{r, echo=FALSE, kable.opts=list(caption="data frame is now printed using `kable`.")}
 # merge data sets
 pcos_data <- merge(pcos, pcos2,  by=c("Sl.No"))
+# display the merged dataset
 pcos_data %>% 
-kable(format = "html", col.names = colnames(pcos_data)) %>%
-  kable_styling() %>%
+kable(caption = "<font color=#000000><b>Table 3.</b>`pcos_data` merged data </font>", format = "html", col.names = colnames(pcos_data)) %>%
+  kable_styling(bootstrap_options = c("hover", "condensed"), font_size = 13) %>%
   kableExtra::scroll_box(width = "100%", height = "400px")
 ```
 
 $~$
 
-In the second part, I addressed missing values by initially converting 'Height' from centimeters to meters, computing 'BMI,' 'Waist-hip ratio,' and 'FSH/LH.' Following a thorough assessment of the dataset, I opted to substitute missing values in 'Marriage_Status(yrs),' 'AMH(ng/mL),' and 'Fast_food' with the median value as it didn't significantly affect the data's distribution.
+In the second part, I addressed missing values by initially converting `Height` from centimeters to meters, computing `BMI`, `Waist_Hip_Ratio`, and `FSH/LH`. Following a thorough assessment of the dataset, I opted to substitute missing values in `Married_yrs`, `AMH(ng/mL)`, and `Fast_food` with the median value as it didn't significantly affect the data's distribution.
 
 
 ```{r, echo=FALSE, warning=FALSE}
@@ -436,9 +436,10 @@ $~$
 
 #### The final results are seen in `pcos_cleaned` below:
 ```{r,echo=FALSE}
+# display results of cleaned pcos
 pcos_cleaned %>% 
-kable(format = "html", col.names = colnames(pcos_cleaned)) %>%
-  kable_styling() %>%
+kable(caption = "<font color=#000000><b>Table 4.</b>`pcos_cleaned` dataset </font>", format = "html", col.names = colnames(pcos_cleaned)) %>%
+  kable_styling(bootstrap_options = c("hover", "condensed"), font_size = 13) %>%
   kableExtra::scroll_box(width = "100%", height = "400px")
 ```
 
@@ -460,9 +461,9 @@ The correlation plot below is measuring the degree of linear relationship within
 
 Some notable correlations are as follows:
 
-* Positive correlations between: `Weight` and `BMI`, `Married_yrs` and `Age_yrs`, and `Follicle_NoL`, `Follicle_No)` and `PCOS` to name a few.
+* Positive correlations between: `BMI` and `Weight`, `Weight_gain`, `Hair_growth`, `Skin_darkening`and `PCOS` and `Follicle_NoL`, `Follicle_NoR`, and `PCOS` to name a few.
 
-* Negative correlations between: `Hip` and `Waist-Hip_Ratio`, `AMH_ngmL` and `Age_yrs`, and `Cycle_RI` and  `Follicle_NoR`.
+* Negative correlations between: `Waist_Hip_Ratio` and `Hip`, `AMH_ngmL` and `Age_yrs`, and `Follicle_NoR`, `Follicle_NoL` and`Age_yrs`.
 
 ```{r, fig.height=10, fig.width=10, warning=FALSE, echo=FALSE, message=FALSE}
 # Selecting only the numerical variables for correlation
@@ -502,11 +503,87 @@ $~$
 
 #### Further visualizations:
 
-Before diving into the model-building phase of this project, let's further visualize the variables with a series of scatter plots and bar charts.
+Before diving into the model-building phase of this project, let's further visualize the variables with a series of scatterplots, histograms and bar charts.
+
+* There is a wide range of distribution between the age of these women most falling between 23 to 38 years old. Similarly, weight also has a wide range of distribution.
+
+* Most of the women in this study are between 1.5 - 1.6 meters tall (4’9” - 5’2”).
+
+* The distribution of years married also varies where the majority of the women fall between the first 10 years.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=8, fig.width=15, fig.align='center'}
+
+# Histogram of Age distribution 
+p1 <- pcos_cleaned %>%
+  ggplot(aes(x = as.factor(`Age_yrs`))) +
+  geom_histogram(stat = "count", fill = "#F39C12", color = "#e9ecef", alpha = 0.9) +
+  geom_text(stat = "count", aes(label = ..count..), position = position_dodge(width = 1), vjust = -0.5, color = "black") +
+  labs(title = "Age Distribution", x = "Age (years)", y = "Count") +
+  theme_ipsum() +
+  theme(
+    plot.title = element_text(size = 10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
+  )
+
+# Histogram of Weight distribution
+p2 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`Weight`))) +
+  geom_histogram(stat = "count", fill = "#FF5733", color = "#e9ecef", alpha = 0.9) +
+  geom_text(stat = "count", aes(label = ..count..), position = position_dodge(width = 1), vjust = -0.5, color = "black") +
+    labs(title="Weight Distribution", x ="Weight (kg)", y = "Count") +
+    theme_ipsum() +
+      theme(
+        plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
+    )
+
+# Histogram of years married distribution
+p3 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`Married_yrs`))) +
+    geom_histogram(stat="count", show.legend = FALSE, fill = "#C70039", color = "#e9ecef", alpha=0.9) +
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    labs(title="Years Married Distribution", x ="Married (yrs)", y = "count") +
+    theme_ipsum() +
+      theme(
+        plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
+    )
+
+# plot all histograms
+ggp_all <- (p1 + p2 + p3) +    # Create grid of plots with title
+  plot_annotation(title = "Fig. 6 - Scatterplot of Biometric measures Variables") & 
+  theme(plot.title = element_text(hjust = 0.5))
+ggp_all 
+```
+
+$~$
+
+Various physiological and hormonal patterns within the dataset and related to PCOS show that: 
+
+* The age and weight of the women are distributed evenly throughout as opposed to being clustered in a certain age and weight group.
+
+* Hip to waist counts increase for those with and without PCOS.
+
+* Cycle length seems to be very consistent regardless of PCOS diagnosis.
+
+* Women with PCOS experience more irregular periods with a few with no PCOS do as well.
+
+* With or without PCOS women’s BMI fluctuates in women of all ages.
+
+* The distribution of number of follicles is greater for those women without PCOS.
+
+* The distribution of size in follicles left or right don't differ as greatly as I thought for women with and without PCOS.
+
+* The variance in endometrial thickness between women with PCOS (thinner) and those without PCOS (thicker) evolves as the menstrual cycle progresses. This discrepancy arises due to hormonal imbalances. In women affected by PCOS, the absence of regular menstrual cycles leads to an unaltered endometrial lining, contrasting with the changes observed in women without the condition.
+
+* Pregnancy hormones are clustered with the exceptions of some outliers which were initially noted.
+
+* Blood pressure levels, Pulse rate and Respiration rate for women with and without PCOS are in normal range.
+
+* The quantity of eggs and the development of follicles show similar patterns between women self-reporting PCOS and those without, yet there is no discernible correlation between them.
 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=12, fig.width=12, fig.align='center'}
-p1 <- pcos_cleaned %>% 
+
+# Scatterplot of Age and Weight
+p4 <- pcos_cleaned %>% 
   ggplot(aes(x=`Age_yrs`, y=`Weight`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -519,7 +596,8 @@ p1 <- pcos_cleaned %>%
       plot.title = element_text(size=10)
     )
 
-p2 <- pcos_cleaned %>% 
+# Scatterplot of Hip and Waist
+p5 <- pcos_cleaned %>% 
   ggplot(aes(x=`Hip`, y=`Waist`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -532,20 +610,8 @@ p2 <- pcos_cleaned %>%
       plot.title = element_text(size=10)
     )
 
-p3 <- pcos_cleaned %>% 
-  ggplot(aes(x=`Waist_Hip_Ratio`, y=`RBS_mgdl`, color=as.factor(`PCOS`))) + 
-    geom_point() +
-    geom_smooth(method="lm", se=FALSE) +
-    scale_colour_discrete("PCOS", labels = c("No", 
-    "Yes")) +
-  labs(title="Relationship between Waist-Hip ration and Glucose",
-        x ="Waist-Hip Ratio", y = "RBS (mg/dl)") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p4 <- pcos_cleaned %>% 
+# Scatterplot of Length of Cycle and Age
+p6 <- pcos_cleaned %>% 
 ggplot(aes(x=`Age_yrs`, y=`Cycle_length_days`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -558,7 +624,8 @@ ggplot(aes(x=`Age_yrs`, y=`Cycle_length_days`, color=as.factor(`PCOS`))) +
       plot.title = element_text(size=10)
     )
 
-p5 <- pcos_cleaned %>% 
+# Scatterplot of Type of Cycle and Age
+p7 <- pcos_cleaned %>% 
 ggplot(aes(x=`Age_yrs`, y=`Cycle_RI`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -571,7 +638,8 @@ ggplot(aes(x=`Age_yrs`, y=`Cycle_RI`, color=as.factor(`PCOS`))) +
       plot.title = element_text(size=10)
     )
 
-p6 <- pcos_cleaned %>% 
+# Scatterplot of BMI and Age
+p8 <- pcos_cleaned %>% 
 ggplot(aes(x=`Age_yrs`, y=BMI, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -584,295 +652,8 @@ ggplot(aes(x=`Age_yrs`, y=BMI, color=as.factor(`PCOS`))) +
       plot.title = element_text(size=10)
     )
 
-p7 <- pcos_cleaned %>% 
-ggplot(aes(x=`Follicle_NoR`, y=`Follicle_NoL`, color=as.factor(`PCOS`))) + 
-    geom_point() +
-    geom_smooth(method="lm", se=FALSE) +
-    scale_colour_discrete("PCOS", labels = c("No", 
-    "Yes")) +
-  labs(title="Number of Follicles",
-        x ="Follicles Right", y = "Follicles Left") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p8 <- pcos_cleaned %>% 
-ggplot(aes(x=`Avg_F_sizeR_mm`, y=`Avg_F_sizeL_mm`, color=as.factor(`PCOS`))) + 
-    geom_point() +
-    geom_smooth(method="lm", se=FALSE) +
-    scale_colour_discrete("PCOS", labels = c("No", 
-    "Yes")) +
-  labs(title="Follicle size's",
-        x ="Follicle size right", y = "Follicle size left") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
+# Scatterplot of number of follicles in left and right ovaries and PCOS 
 p9 <- pcos_cleaned %>% 
-ggplot(aes(x=`Endometrium_mm`, y=`Cycle_length_days`, color=as.factor(`PCOS`))) + 
-    geom_point() +
-    geom_smooth(method="lm", se=FALSE) +
-    scale_colour_discrete("PCOS", labels = c("No", 
-    "Yes")) +
-  labs(title="Endometrium and length of cycle(days)",
-        x ="Endometrium(mm)", y = "Cycle Length(days)") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-ggp_all <- (p1 + p2 + p3) / (p4 + p5 + p6) / (p7 + p8 + p9) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 6 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
-  theme(plot.title = element_text(hjust = 0.5))
-ggp_all  
-
-# displaying the histograms
-# par(mfrow = c(3, 3))
-# grid.arrange(p1,p2,p3,p4,p5,p6,p7,p8,p9)
-
-```
-
-
-
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=12, fig.width=12, fig.align='center'}
-
-p10 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`PCOS`), fill = as.factor(`PCOS`))) +
-    geom_bar(position = "dodge") + 
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
-    scale_x_discrete(labels=c('No', 'Yes')) +
-    labs(title="PCOS", x ="PCOS(Yes or No)", y = "count") +
-   theme_ipsum() +
-      theme(
-        plot.title = element_text(size=10)
-      )
-
-p11 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(Pregnant), fill = as.factor(Pregnant))) +
-    geom_bar(position = "dodge") + 
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    scale_fill_discrete(name = "Pregnant", labels = c("No", "Yes")) +
-    scale_x_discrete(labels=c('No', 'Yes')) +
-    labs(title="Pregnant", x ="Pregnant(Yes or No)", y = "count") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p12 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(Weight_gain), fill = as.factor(Weight_gain))) +
-    geom_bar(position = "dodge") + 
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    scale_fill_discrete(name = "Weight Gain", labels = c("No", "Yes")) +
-    scale_x_discrete(labels=c('No', 'Yes')) +
-    labs(title="Weight Gain", x ="Weight Gain (Yes or No)", y = "count") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p13 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(Hair_growth), fill = as.factor(Hair_growth))) +
-    geom_bar(position = "dodge") + 
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    scale_fill_discrete(name = "Hair Growth", labels = c("No", "Yes")) +
-    scale_x_discrete(labels=c('No', 'Yes')) +
-    labs(title="Hair Growth", x ="Hair Growth(Yes or No)", y = "count") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p14 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(Skin_darkening), fill = as.factor(Skin_darkening))) +
-    geom_bar(position = "dodge") + 
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    scale_fill_discrete(name = "Skin Darkening", labels = c("No", "Yes")) +
-    scale_x_discrete(labels=c('No', 'Yes')) +
-    labs(title="Skin Darkening", x ="Skin Darkening (Yes or No)", y = "count") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p15 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(Hair_loss), fill = as.factor(Hair_loss))) +
-    geom_bar(position = "dodge") + 
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    scale_fill_discrete(name = "Hair Loss", labels = c("No", "Yes")) +
-    scale_x_discrete(labels=c('No', 'Yes')) +
-    labs(title="Hair Loss", x ="Hair Loss(Yes or No)", y = "count") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p16 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(Pimples), fill = as.factor(Pimples))) +
-    geom_bar(position = "dodge") + 
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    scale_fill_discrete(name = "Pimples", labels = c("No", "Yes")) +
-    scale_x_discrete(labels=c('No', 'Yes')) +
-    labs(title="Pimples", x ="Pimples(Yes or No)", y = "count") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p17 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(Fast_food), fill = as.factor(Fast_food))) +
-    geom_bar(position = "dodge") + 
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    scale_fill_discrete(name = "Fast Food", labels = c("No", "Yes")) +
-    scale_x_discrete(labels=c('No', 'Yes')) +
-    labs(title="Fast Food", x ="Fast Food(Yes or No)", y = "count") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p18 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(Reg_Exercise), fill = as.factor(Reg_Exercise))) +
-    geom_bar(position = "dodge") + 
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    scale_fill_discrete(name = "Regular Exercise", labels = c("No", "Yes")) +
-    scale_x_discrete(labels=c('No', 'Yes')) +
-    labs(title="Regularly Exercise", x ="Regular Exercise(Yes or No)", y = "count") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-ggp_all2 <- (p10 + p11 + p12) / (p13 + p14 + p15) / (p16 + p17 + p18) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 7 - Bar charts of Yes or No variables") & 
-  theme(plot.title = element_text(hjust = 0.5))
-ggp_all2 
-
-# displaying the histograms
-# par(mfrow = c(3, 3))
-# grid.arrange(p10,p11,p12,p13,p14,p15,p16,p17,p18)
-```
-
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=12, fig.width=12, fig.align='center'}
-p19 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(Blood_Group), fill = as.factor(Blood_Group))) +
-    geom_bar(show.legend = FALSE) +
-  geom_text(aes(label = ..count..), stat = "count", vjust = 1.5, colour = "black") +
-  labs(title="Blood Groups",
-        x ="Blood Groups", y = "count") +
-  scale_x_discrete(labels=c('A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-')) +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p20 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Age_yrs`))) +
-    geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-  labs(title="Age range", x ="Age(yrs)", y = "count") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p21 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Weight`))) +
-    geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    labs(title="Weight range", x ="Weight(kg)", y = "count") +
-    theme_ipsum() +
-      theme(
-        plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
-    )
-
-p22 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Height`))) +
-    geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    labs(title="Height range", x ="Height (m)", y = "count") +
-    theme_ipsum() +
-      theme(
-        plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=10)
-    )
-
-p23 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Married_yrs`))) +
-    geom_histogram(stat="count", show.legend = FALSE, fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
-    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    labs(title="Years married range", x ="Married (yrs)", y = "count") +
-    theme_ipsum() +
-      theme(
-        plot.title = element_text(size=10)
-    )
-
-p24 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`PRG_ngmL`))) +
-  geom_histogram(stat="count", show.legend = FALSE, , fill = "#69b3a2", color = "#e9ecef", alpha=0.9) +
-  labs(title="PRG range", x ="PRG(ng/mL)", y = "count") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
-    )
-
-ggp_all3 <- (p19 + p20 + p21) / (p22 + p23 + p24) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 8 - Scatterplot of Yes or No variables") & 
-  theme(plot.title = element_text(hjust = 0.5))
-ggp_all3 
-
-# displaying the histograms
-# par(mfrow = c(2, 3))
-# grid.arrange(p19,p20,p21,p22,p23,p24)
-```
-
-
-
-```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=12, message=FALSE}
-p25 <- pcos_cleaned %>% 
-ggplot(aes(x=`Age_yrs`, y=`Cycle_length_days`, color=as.factor(`PCOS`))) + 
-    geom_point() +
-    geom_smooth(method="lm", se=FALSE) +
-    scale_colour_discrete("PCOS", labels = c("No", 
-    "Yes")) +
-  labs(title="Length of cycle based on Age",
-        x ="Age(yrs)", y = "Cycle Length(days)") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p26 <- pcos_cleaned %>% 
-ggplot(aes(x=`Age_yrs`, y=`Cycle_RI`, color=as.factor(`PCOS`))) + 
-    geom_point() +
-    geom_smooth(method="lm", se=FALSE) +
-    scale_colour_discrete("PCOS", labels = c("No", 
-    "Yes")) +
-  labs(title="Type of cycle based on Age",
-        x ="Age(yrs)", y = "Cycle(R/I)") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p27 <- pcos_cleaned %>% 
-ggplot(aes(x=`Age_yrs`, y=`BMI`, color=as.factor(`PCOS`))) + 
-    geom_point() +
-    geom_smooth(method="lm", se=FALSE) +
-    scale_colour_discrete("PCOS", labels = c("No", 
-    "Yes")) +
-  labs(title="BMI based on Age",
-        x ="Age(yrs)", y = "BMI") +
-  theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10)
-    )
-
-p28 <- pcos_cleaned %>% 
 ggplot(aes(x=`Follicle_NoR`, y=`Follicle_NoL`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -885,7 +666,8 @@ ggplot(aes(x=`Follicle_NoR`, y=`Follicle_NoL`, color=as.factor(`PCOS`))) +
       plot.title = element_text(size=10)
     )
 
-p29 <- pcos_cleaned %>% 
+# Scatterplot of follicle size and PCOS
+p10 <- pcos_cleaned %>% 
 ggplot(aes(x=`Avg_F_sizeR_mm`, y=`Avg_F_sizeL_mm`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -898,7 +680,8 @@ ggplot(aes(x=`Avg_F_sizeR_mm`, y=`Avg_F_sizeL_mm`, color=as.factor(`PCOS`))) +
       plot.title = element_text(size=10)
     )
 
-p30 <- pcos_cleaned %>% 
+# Scatterplot of Endometrium and Length of Cycles
+p11 <- pcos_cleaned %>% 
 ggplot(aes(x=`Endometrium_mm`, y=`Cycle_length_days`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -911,22 +694,8 @@ ggplot(aes(x=`Endometrium_mm`, y=`Cycle_length_days`, color=as.factor(`PCOS`))) 
       plot.title = element_text(size=10)
     )
 
-ggp_all4 <- (p25 + p26 + p27) / (p28 + p29 + p30) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 9 - Scatterplot of variables with `PCOS (Y/N)` as factor") & 
-  theme(plot.title = element_text(hjust = 0.5))
-ggp_all4 
-
-
-# displaying the histograms
-# par(mfrow = c(3, 3))
-# grid.arrange(p25,p26,p27,p28,p29,p30)
-```
-
-$~$
-
-
-```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=12, message=FALSE}
-p31 <- pcos_cleaned %>% 
+# Scatterplot of pregnancy hormone levels
+p12 <- pcos_cleaned %>% 
 ggplot(aes(x=`IbetaHCG_mIUmL`, y=`IIbetaHCG_mIUmL`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -939,29 +708,8 @@ ggplot(aes(x=`IbetaHCG_mIUmL`, y=`IIbetaHCG_mIUmL`, color=as.factor(`PCOS`))) +
       plot.title = element_text(size=10)
     )
 
-p32 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Vit_D3_ngmL`), fill = as.factor(`PCOS`))) +
-    geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    ggtitle("Vitamin D3 levels with PCOS") +
-    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
-    theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
-    )
-
-p33 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`FSH_LH`), fill = as.factor(`PCOS`))) +
-    geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    ggtitle("FSH/LH levels with PCOS") +
-    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
-    theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
-    )
-
-p34 <- pcos_cleaned %>% 
+# Scatterplot of blood pressure levels against PCOS
+p13 <- pcos_cleaned %>% 
 ggplot(aes(x=`BP_Diastolic_mmHg`, y=`BP_Systolic_mmHg`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -974,7 +722,8 @@ ggplot(aes(x=`BP_Diastolic_mmHg`, y=`BP_Systolic_mmHg`, color=as.factor(`PCOS`))
       plot.title = element_text(size=10)
     )
 
-p35 <- pcos_cleaned %>% 
+# Scatterplot of Respiration rate and Pulse rate against PCOS 
+p14 <- pcos_cleaned %>% 
 ggplot(aes(x=`RR_breaths_min`, y=`Pulse_rate_bpm`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -987,7 +736,8 @@ ggplot(aes(x=`RR_breaths_min`, y=`Pulse_rate_bpm`, color=as.factor(`PCOS`))) +
       plot.title = element_text(size=10)
     )
 
-p36 <- pcos_cleaned %>% 
+# Scatterplot on Ovarian reserve against PCOS
+p15 <- pcos_cleaned %>% 
 ggplot(aes(x=`AMH_ngmL`, y=`FSH_LH`, color=as.factor(`PCOS`))) + 
     geom_point() +
     geom_smooth(method="lm", se=FALSE) +
@@ -1000,64 +750,191 @@ ggplot(aes(x=`AMH_ngmL`, y=`FSH_LH`, color=as.factor(`PCOS`))) +
       plot.title = element_text(size=10)
     )
 
-p37 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`TSH_mIUL`), fill = as.factor(`PCOS`))) +
-    geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    ggtitle("TSH (mIU/L) levels with PCOS") +
-    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
-    theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
-    )
-
-p38 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`Hb_gdl`), fill = as.factor(`PCOS`))) +
-    geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    ggtitle("Hb(g/dl) levels with PCOS") +
-    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
-    theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
-    )
-
-p39 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`PRL_ngmL`), fill = as.factor(`PCOS`))) +
-    geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    ggtitle("PRL (ng/mL) levels with PCOS") +
-    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
-    theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
-    )
-
-p40 <- pcos_cleaned %>% 
-  ggplot(aes(x = as.factor(`RBS_mgdl`), fill = as.factor(`PCOS`))) +
-    geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
-    ggtitle("RBS (mg/dl) levels with PCOS") +
-    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
-    theme_ipsum() +
-    theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
-    )
-
-ggp_all5 <- (p10 + p11 + p12) / (p13 + p14 + p15) / (p16 + p17 + p18) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 10 - Bar charts of Yes or No variables") & 
+# plot all scatterplots
+ggp_all2 <- (p4 + p5 + p6) / (p7 + p8 + p9) / (p10 + p11 + p12) / (p13 + p14 + p15) +    # Create grid of plots with title
+  plot_annotation(title = "Fig. 7 - Scatterplot of variables with PCOS (Y/N) as factor") & 
   theme(plot.title = element_text(hjust = 0.5))
-ggp_all5 
-
-# displaying the histograms
-# par(mfrow = c(4, 3))
-# grid.arrange(p31,p32,p33,p34,p35,p36,p37,p38,p39,p40)
+ggp_all2  
 ```
 
 $~$
 
-```{r, echo=FALSE, warning=FALSE, fig.height=12, fig.width=14, message=FALSE}
-p41 <- pcos_cleaned %>% 
+Out of 541 women:
+
+* 32.72% reported to have PCOS
+
+* 38.08% of women reported to being pregnant
+
+* 37.71% reported to experience weight gain
+
+* 27.36% reported to experience hair growth
+
+* 30.68% experience skin darkening
+
+* 45.29% reported to experience hair loss
+
+* 48.98% reported to experience pimples
+
+* 51.57% reported to have fast food
+
+* 24.77% reported to exercise regularly
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=22, fig.width=18, fig.align='center'}
+
+# barchart of PCOS variable
+p16 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`PCOS`), fill = as.factor(`PCOS`))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="PCOS", x ="PCOS(Yes or No)", y = "count") +
+   theme_ipsum() +
+      theme(
+        plot.title = element_text(size=10)
+      )
+
+# barchart of Pregnant variable
+p17 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Pregnant), fill = as.factor(Pregnant))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Pregnant", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Pregnant", x ="Pregnant(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+# barchart of Weight gain variable
+p18 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Weight_gain), fill = as.factor(Weight_gain))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Weight Gain", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Weight Gain", x ="Weight Gain (Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+# barchart of Hair growth variable
+p19 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Hair_growth), fill = as.factor(Hair_growth))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Hair Growth", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Hair Growth", x ="Hair Growth(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+# barchart of Skin darkening variable
+p20 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Skin_darkening), fill = as.factor(Skin_darkening))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Skin Darkening", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Skin Darkening", x ="Skin Darkening (Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+# barchart of Hair loss variable
+p21 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Hair_loss), fill = as.factor(Hair_loss))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Hair Loss", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Hair Loss", x ="Hair Loss(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+# barchart of Pimples variable
+p22 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Pimples), fill = as.factor(Pimples))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Pimples", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Pimples", x ="Pimples(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+# barchart of Fast food variable
+p23 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Fast_food), fill = as.factor(Fast_food))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Fast Food", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Fast Food", x ="Fast Food(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+# barchart of Regularly Exercise variable
+p24 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(Reg_Exercise), fill = as.factor(Reg_Exercise))) +
+    geom_bar(position = "dodge") + 
+    geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    scale_fill_discrete(name = "Regular Exercise", labels = c("No", "Yes")) +
+    scale_x_discrete(labels=c('No', 'Yes')) +
+    labs(title="Regularly Exercise", x ="Regular Exercise(Yes or No)", y = "count") +
+  theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10)
+    )
+
+# plot all barcharts
+ggp_all3 <- (p16 + p17 + p18) / (p19 + p20 + p21) / (p22 + p23 + p24) +    # Create grid of plots with title
+  plot_annotation(title = "Fig. 8 - Bar charts of Bloodwork variables") & 
+  theme(plot.title = element_text(hjust = 0.5))
+ggp_all3 
+```
+
+$~$
+
+Taking into account the presence of PCOS within the study:
+
+* There's prevalence of O+, B+, and A+ blood types among the majority of women involved. Furthermore, women possessing blood types A+, B+, and O+ reported a higher incidence of PCOS compared to those with blood types A-, B-, O-, AB+, and AB-.
+
+* Being that PCOS and infertility are linked, there are 11.83% of women who reported to being pregnant with PCOS.
+
+* 22.37% of women reported to experience weight gain with PCOS.
+
+* 18.67% of women reported to experience hair growth with PCOS.
+
+* 20.33% of women reported to experience skin darkening with PCOS.
+
+* 18.85% of women reported to experience hair loss with PCOS.
+
+* 22.74% of women reported to experience pimples with PCOS.
+
+* 25.13% of women reported to consume fast food with PCOS.
+
+* 9.43% of women reported to regularly exercise with PCOS.
+
+* Not surprised to see how fluctuated the cycle length is especially for women without PCOS since they tend to have a more regular cycle.
+
+* Abortions were also included in this study but there's no evidence that it's influenced by PCOS; more women without PCOS experience 1 or more abortions.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=22, fig.width=18, fig.align='center'}
+
+# barchart of Blood Group variable against PCOS 
+p25 <- pcos_cleaned %>% 
   ggplot(aes(x = Blood_Group, fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
@@ -1068,7 +945,8 @@ p41 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
-p42 <- pcos_cleaned %>% 
+# barchart of Pregnant variable against PCOS
+p26 <- pcos_cleaned %>% 
   ggplot(aes(x = as.factor(Pregnant), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
@@ -1080,7 +958,8 @@ p42 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
-p43 <- pcos_cleaned %>%
+# barchart of Weight gain variable against PCOS
+p27 <- pcos_cleaned %>%
   ggplot(aes(x = as.factor(Weight_gain), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
@@ -1092,7 +971,8 @@ p43 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
-p44 <- pcos_cleaned %>%
+# barchart of Hair growth variable against PCOS
+p28 <- pcos_cleaned %>%
   ggplot(aes(x = as.factor(Hair_growth), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
@@ -1104,7 +984,8 @@ p44 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
-p45 <- pcos_cleaned %>%
+# barchart of Skin darkening variable against PCOS
+p29 <- pcos_cleaned %>%
   ggplot(aes(x = as.factor(Skin_darkening), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
@@ -1116,7 +997,8 @@ p45 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
-p46 <- pcos_cleaned %>%
+# barchart of Hair loss variable against PCOS
+p30 <- pcos_cleaned %>%
   ggplot(aes(x = as.factor(Hair_loss), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
@@ -1128,7 +1010,8 @@ p46 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
-p47 <- pcos_cleaned %>%
+# barchart of Pimples variable against PCOS
+p31 <- pcos_cleaned %>%
   ggplot(aes(x = as.factor(Pimples), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
@@ -1140,7 +1023,8 @@ p47 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
-p48 <- pcos_cleaned %>%
+# barchart of Fast food variable against PCOS
+p32 <- pcos_cleaned %>%
   ggplot(aes(x = as.factor(Fast_food), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
@@ -1152,7 +1036,8 @@ p48 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
-p49 <- pcos_cleaned %>%
+# barchart of Reg. Exercise variable against PCOS
+p33 <- pcos_cleaned %>%
   ggplot(aes(x = as.factor(Reg_Exercise), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
@@ -1164,7 +1049,8 @@ p49 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
-p50 <- pcos_cleaned %>% 
+# barchart of Length of Cycle variable against PCOS
+p34 <- pcos_cleaned %>% 
   ggplot(aes(x = `Cycle_length_days`, fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
@@ -1175,7 +1061,8 @@ p50 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
-p51 <- pcos_cleaned %>% 
+# barchart of Number of abortions variable against PCOS
+p35 <- pcos_cleaned %>% 
   ggplot(aes(x = No_of_abortions, fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
     ggtitle("Number of abortions with PCOS") +
@@ -1185,14 +1072,121 @@ p51 <- pcos_cleaned %>%
       plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
     )
 
-ggp_all6 <- (p10 + p11 + p12) / (p13 + p14 + p15) / (p16 + p17 + p18) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 11 - Bar charts of Yes or No variables` as factor") & 
+# plot all barcharts
+ggp_all4 <- (p25 + p26 + p27) / (p28 + p29 + p30) / (p31 + p32 + p33) / (p34 + p35) +    # Create grid of plots with title
+  plot_annotation(title = "Fig. 9 - Bar charts of yes or no variables") & 
   theme(plot.title = element_text(hjust = 0.5))
-ggp_all6
+ggp_all4 
+```
 
-# displaying the histograms
-# par(mfrow = c(4, 3))
-# grid.arrange(p41,p42,p43,p44,p45,p46,p47,p48,p49,p50,p51)
+$~$
+
+Within hormonal markers: 
+
+* Vitamin D3 levels are spread out for those who reported with or without PCOS.
+
+* FSH/LH levels are right skewed for those who reported with or without PCOS.
+
+* TSH levels are also spread out for women who reported to have PCOS and those who don’t.
+
+* Hemoglobin levels seem to be higher for those who reported to have PCOS.
+
+* PRL levels (prolactin in the blood) are consistent at 1 or 2 for those with or without PCOS.
+
+* RBS (random glucose) is fairly distributed with those with and without PCOS.
+
+```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=12, message=FALSE}
+
+# Barchart for Vitamin D3 levels with PCOS
+p36 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`Vit_D3_ngmL`), fill = as.factor(`PCOS`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Vitamin D3 levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+# Barchart for FSH/LH levels with PCOS 
+p37 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`FSH_LH`), fill = as.factor(`PCOS`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("FSH/LH levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+
+# Barchart for Thyroid Hormone levels with PCOS
+p38 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`TSH_mIUmL`), fill = as.factor(`PCOS`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Thyroid Hormone levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+# Barchart of hemoglobin levels with PCOS
+p39 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`Hb_gdl`), fill = as.factor(`PCOS`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Hemoglobin levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+# Barchart of Prolactin levels with PCOS
+p40 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`PRL_ngmL`), fill = as.factor(`PCOS`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Prolactin levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+# Barchart of Progesterone levels with PCOS
+p41 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`PRG_ngmL`), fill = as.factor(`PCOS`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Progesterone levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+# Barchart of Glucose levels with PCOS
+p42 <- pcos_cleaned %>% 
+  ggplot(aes(x = as.factor(`RBS_mgdl`), fill = as.factor(`PCOS`))) +
+    geom_bar(position = "dodge") +
+    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
+    ggtitle("Glucose levels with PCOS") +
+    scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45, size = 2)
+    )
+
+# plot barcharts
+ggp_all5 <- (p36 + p37 + p38 + p39) / (p40 + p41 + p42)  +    # Create grid of plots with title
+  plot_annotation(title = "Fig. 10 - Bar charts of Biometrics Measures including PCOS (Y/N) as factor") & 
+  theme(plot.title = element_text(hjust = 0.5))
+ggp_all5 
 ```
 
 $~$
@@ -1239,7 +1233,7 @@ The initial decision tree constructed is based on `PCOS` against the entire data
 rpart_model <- rpart(`PCOS` ~ ., method = "class", data = train)
 
 # display the decision tree
-prp(rpart_model, main = "Fig. 12 - Decision Tree with entire dataset", extra=1, faclen=0,  nn=T, box.palette="Blues")
+prp(rpart_model, main = "Fig. 11 - Decision Tree with entire dataset", extra=1, faclen=0,  nn=T, box.palette="Blues")
 ```
 
 $~$
@@ -1310,16 +1304,16 @@ pcos_cleaned2 <- pcos_cleaned %>%
 # create some random number for reproduction
 set.seed(28)
 
-# Cross Validation Set-up
+# Second Cross Validation Set-up
 inTrain2 <- createDataPartition(pcos_cleaned2$`PCOS`, p=.75, list = F)
 train2 <- pcos_cleaned2[inTrain2,]
 valid2 <- pcos_cleaned2[-inTrain2,]
 
-# create the decision tree
+# create the second decision tree
 rpart_model2 <- rpart(`PCOS` ~ ., method = "class", data = train2)
 
 # display the decision tree
-prp(rpart_model2, main = "Fig. 13 - Second Decision Tree with 6 variables", extra=1, faclen=0,  nn=T, box.palette="Blues")
+prp(rpart_model2, main = "Fig. 12 - Second Decision Tree with 6 variables", extra=1, faclen=0,  nn=T, box.palette="Blues")
 ```
 
 $~$
@@ -1338,7 +1332,7 @@ The model seems to perform well in this dataset, with high sensitivity and speci
 # creating our prediction
 rpart_result2 <- predict(rpart_model2, newdata = valid2[, !colnames(valid2) %in% "PCOS"], type = 'class')
 
-# creating the third confusion matrix
+# creating the second confusion matrix
 confusionMatrix(rpart_result2, as.factor(valid2$`PCOS`))
 ```
 
@@ -1364,7 +1358,7 @@ $~$
 
 #### Random Forest (randomForest):
 
-The second model we create a random forest model for the entire dataset. Following similar steps as the decision tree, the model was trained using the entire dataset. The model's performance, as indicated by the confusion matrix, demonstrates a limited accuracy and predictive power. The Kappa statistic reflects weak agreement, and the sensitivity and specificity are relatively imbalanced. This suggests that the model might require further refinement or alternative approaches to improve its predictive capability.
+The third model created is a random forest model for the entire dataset. Following similar steps as the decision tree, the model was trained using the entire dataset. The model's performance, as indicated by the confusion matrix, demonstrates a limited accuracy and predictive power. The Kappa statistic reflects weak agreement, and the sensitivity and specificity are relatively imbalanced. This suggests that the model might require further refinement or alternative approaches to improve its predictive capability.
 
 ```{r,echo=FALSE}
 # create some random numbers for reproduction
@@ -1384,10 +1378,10 @@ levels(rf_valid$PCOS)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
-# Convert PCOS to factor in svm_train
+# Convert PCOS to factor in rf_train
 rf_train$PCOS <- factor(rf_train$PCOS)
 
-# Convert PCOS to factor in svm_valid
+# Convert PCOS to factor in rf_valid
 rf_valid$PCOS <- factor(rf_valid$PCOS)
 ```
 
@@ -1398,7 +1392,7 @@ levels(rf_valid$PCOS)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
-# explicitly set the levels to match the levels in svm_train.
+# explicitly set the levels to match the levels in rf_train.
 rf_valid$PCOS <- factor(rf_valid$PCOS, levels = levels(rf_train$PCOS))
 levels(rf_valid$PCOS)
 ```
@@ -1433,7 +1427,7 @@ $~$
 
 The plot below demonstrates the variable importance of the entire dataset. `Follicle_NoR`, `FollicleNoL` and `Hair_growth` are the top 3 variables that play a significant role in the classification of PCOS presence.
 ```{r, echo=FALSE, fig.height=8}
-# plot for rf_model
+# plot for rf_model fig 13
 varImpPlot(rf_model)
 ```
 
@@ -1461,7 +1455,7 @@ The second random forest model was created using the 6 variables `Follicle_NoL`,
 # create some random numbers for reproduction
 set.seed(78)
 
-# Cross Validation Set-up
+# Second RF Cross Validation Set-up
 rf_inTrain2 <- createDataPartition(pcos_cleaned2$`PCOS`, p=.75, list = F)
 rf_train2 <- pcos_cleaned2[rf_inTrain2,]
 rf_valid2 <- pcos_cleaned2[-rf_inTrain2,]
@@ -1474,10 +1468,10 @@ levels(rf_valid2$PCOS)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
-# Convert PCOS to factor in svm_train
+# Convert PCOS to factor in rf_train
 rf_train2$PCOS <- factor(rf_train2$PCOS)
 
-# Convert PCOS to factor in svm_valid
+# Convert PCOS to factor in rf_valid
 rf_valid2$PCOS <- factor(rf_valid2$PCOS)
 ```
 
@@ -1488,13 +1482,13 @@ levels(rf_valid2$PCOS)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
-# explicitly set the levels to match the levels in svm_train.
+# explicitly set the levels to match the levels in rf_train.
 rf_valid2$PCOS <- factor(rf_valid2$PCOS, levels = levels(rf_train2$PCOS))
 levels(rf_valid2$PCOS)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
-# # Check the length of svm_result and svm_valid$PCOS
+# # Check the length of rf_result and rf_valid$PCOS
 # length_rf_result2 <- length(rf_result2)
 # length_rf_valid2 <- length(rf_valid2$PCOS)
 # 
@@ -1541,7 +1535,7 @@ $~$
 From the random forest model we created, we can create a variable importance plot which shows each variable and how important it is in classifying the data. From the plot below we note that `Follicle_NoR` and `Follicle_NoL` are among the top variables that play a significant role in the classification of having or not having PCOS .
 
 ```{r, echo=FALSE}
-# plot for the second rf_model
+# plot for the second rf_model fig 14
 varImpPlot(rf_model2)
 ```
 
@@ -1555,7 +1549,7 @@ varImp(rf_model2) %>% kable()
 
 $~$
 
-Lastly, I checked against the validation data the accuracy of the second model with the results of 90.37% accuracy.
+Lastly, I checked against the validation data the accuracy of the second model with the results of 90.37% accuracy which surpasses the first random forest model.
 
 ```{r, echo=FALSE}
 # Extract accuracy from the confusion matrix for the rf_model2
@@ -1567,7 +1561,7 @@ $~$
 
 #### Gradient Boosting Machines (xgboost or gbm):
 
-The first gbm model is created using the entire dataset with the target variable `PCOS`. 
+The fifth model is the start of the Gradient Boosting Machines model which is created using the entire dataset with the target variable `PCOS`. 
 
 In a GBM model, the "rel.inf" typically denotes the relative importance of each feature in predicting the target variable. `Follicle_NoR` is identified as the most crucial variable in the model, followed by others that contribute to a lesser extent.
 
@@ -1581,7 +1575,7 @@ gbm_model <- gbm(`PCOS` ~ ., data = train, distribution = "bernoulli", n.trees =
 # Print the summary of the trained model
 summary(gbm_model)
 
-# Predict on the validation dataset (assuming 'valid' contains your validation dataset)
+# Predict on the validation dataset (assuming 'valid' contains your validation dataset) fig 15
 gbm_pred <- predict(gbm_model, newdata = valid, type = "response")
 ```
 
@@ -1613,7 +1607,7 @@ $~$
 
 The second GBM is based off the variables: `Follicle_NoL`, `Follicle_NoR`, `Hair_growth`, `Skin_darkening`, `Weight_gain` and the target variable `PCOS`. The results are below:
 
-Similar to before: `Follicle_NoR` is identified as the most crucial variable in the model, with the increased rel.inf of 65.135909 followed by others that contribute to a lesser extent.
+Similar to before: `Follicle_NoR` is identified as the most crucial variable in the model but with the decrease rel.inf of 55.111884.
 
 ```{r, echo=FALSE}
 # creating the second dataset from the original
@@ -1634,7 +1628,7 @@ gbm_model2 <- gbm(`PCOS` ~ ., data = train3, distribution = "bernoulli", n.trees
 # Print the summary of the trained model
 summary(gbm_model2)
 
-# Predict on the validation dataset (assuming 'valid' contains your validation dataset)
+# Predict on the validation dataset (assuming 'valid' contains your validation dataset) fig 16
 gbm_pred2 <- predict(gbm_model2, newdata = valid3, type = "response")
 ```
 
@@ -1652,7 +1646,7 @@ confusionMatrix(data = factor(predicted_classes2), reference = factor(valid3$`PC
 
 $~$
 
-The accuracy observed in this subsequent GBM model is slightly reduced compared to the initial one, achieving an 88.15% accuracy rate.
+The accuracy observed in this GBM model is slightly reduced compared to the initial one, achieving an 88.15% accuracy rate.
 ```{r, echo=FALSE}
 # Calculate accuracy
 gbm_accuracy2 <- sum(predicted_classes2 == valid3$`PCOS`) / length(valid3$`PCOS`)
@@ -1664,13 +1658,14 @@ $~$
 
 #### Support Vector Machines (e1071):
 
-To start the SVM algorithm, we follow similar criteria to the decision tree and random forest model by setting up the cross validation set-up, create the prediction and confusion matrix and lastly it's accuracy. Results are below:
+To start the SVM algorithm and following the similar criteria as the previous models by setting up the cross validation set-up, create the prediction, confusion matrix and lastly it's accuracy.
 
 ```{r, echo=FALSE, include=FALSE}
 # check the levels of PCOS using levels() 
 levels(train$PCOS)
 levels(valid$PCOS)
 ```
+
 ```{r, echo=FALSE, include=FALSE}
 # Convert PCOS to factor in svm_train
 train$PCOS <- factor(train$PCOS)
@@ -1707,6 +1702,7 @@ levels(valid$PCOS)
 # print(length_svm_result)
 # print(length_svm_valid)
 ```
+
 $~$
 
 The confusion matrix below shows sensitivity (true positive rate) for class 0 is high at 95.74%, indicating the model's effectiveness in identifying instances of class 0. Specificity for class 1 is 80.49%, which is reasonably good. The balanced accuracy, which considers both sensitivity and specificity, is at 88.12%, demonstrating a good overall performance in distinguishing between both classes. Overall, based on these metrics, the confusion matrix generally portrays a good performance of the model.
@@ -1729,6 +1725,7 @@ $~$
 
 Within the SVM, there were 98 instances have been predicted as class 0 and 37 instances have been predicted as class 1.
 ```{r, echo=FALSE, error=TRUE}
+# summary of svm_result
 summary(svm_result)
 ```
 
@@ -1764,10 +1761,10 @@ levels(svm_valid2$PCOS)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
-# Convert PCOS to factor in svm_train
+# Convert PCOS to factor in svm_train2
 svm_train2$PCOS <- factor(svm_train2$PCOS)
 
-# Convert PCOS to factor in svm_valid
+# Convert PCOS to factor in svm_valid2
 svm_valid2$PCOS <- factor(svm_valid2$PCOS)
 ```
 
@@ -1779,7 +1776,7 @@ levels(svm_valid2$PCOS)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
-# explicitly set the levels to match the levels in svm_train.
+# explicitly set the levels to match the levels in svm_train2
 valid$PCOS <- factor(svm_valid2$PCOS, levels = levels(svm_train2$PCOS))
 levels(svm_valid2$PCOS)
 ```
@@ -1798,18 +1795,19 @@ $~$
 
 The confusion matrix for the second SVM suggest that the model performs well in classifying instances, demonstrating high accuracy, sensitivity, specificity, and precision for the predicted classes. The Kappa statistic also indicates substantial agreement between the actual and predicted classes.
 ```{r, echo=FALSE, error = TRUE}
-# SVM
+# Second SVM
 svm_model2 <- svm(PCOS ~ Follicle_NoR + Follicle_NoL + Weight_gain + Skin_darkening + Hair_growth, svm_train2)
 
 # create prediction
 svm_result2 <- predict(svm_model2, newdata = svm_valid2)
 
-# confusion matrix for svm
+# confusion matrix for svm_valid2
 confusionMatrix(svm_result2, svm_valid2$PCOS)
 ```
 
 
 ```{r, echo=FALSE, error=TRUE}
+# summary
 summary(svm_result2)
 ```
 
@@ -1827,7 +1825,7 @@ $~$
 
 #### Neural Networks (neuralnet):
 
-Utilizing the neuralnet package in R I created the neural network models. The neural network is constructed to predict the target variable `PCOS` using all available predictors. The model is then trained using the training dataset using hidden argument that help specify the architecture of the neural network. These included setting up two hidden layers with 12 and 8 neurons, respectively. The stepmax parameter determines the maximum number of iterations allowed during training, here set to 20000 to ensure the model has enough iterations to learn from the data and optimize its parameters.
+Utilizing the `neuralnet` package in R I created the neural network models. The neural network is constructed to predict the target variable `PCOS` using all available predictors. The model is then trained using the training dataset using hidden argument that help specify the architecture of the neural network. These included setting up two hidden layers with 12 and 8 neurons, respectively. The stepmax parameter determines the maximum number of iterations allowed during training, here set to 20000 to ensure the model has enough iterations to learn from the data and optimize its parameters.
 
 For context, neural network plots are composed of:
 
@@ -1867,7 +1865,7 @@ nn_model <- neuralnet(`PCOS`~.,
 
 Although not displayed when knitting, the plot produced is seen below:
 
-![Fig. 14 - Neural Network 1](/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/Fig.15-Neural_Network_1.png)
+![Fig. 17 - Neural Network 1](/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/Fig.15-Neural_Network_1.png)
 
 ```{r, echo=FALSE, fig.width=18, fig.height=12, fig.align='center', include=FALSE, error=TRUE}
 # create the plot based on the model above
@@ -1916,7 +1914,7 @@ For the second neural network model I am also using the `neuralnet` package. Sim
 # set a seed for reproducibility purposes
 set.seed(13)
 
-# create the model
+# create the second model
 nn_model2 <-  neuralnet(`PCOS`~Follicle_NoL + Follicle_NoR + Hair_growth + Skin_darkening + Weight_gain,
                         data=train2,
                         hidden=c(2,1),
@@ -1938,7 +1936,7 @@ In the context of a `neuralnet` plot displaying an error of 13.733636 and steps 
 ```{r, echo=FALSE}
 # create the plot based on the model above
 plot(nn_model2, rep = "best", main="")
-grid::grid.text("Fig. 15 - Neural Network", x = .5, y = .2)
+grid::grid.text("Fig. 18 -  Second Neural Network", x = .5, y = .2)
 ```
 
 $~$
@@ -2043,21 +2041,38 @@ knn_accuracy2 <- mean(knn_model2 == valid4$`PCOS`)
 knn_accuracy2
 ```
 
-
 $~$
 
 ### Model Comparison:
 
 Lastly, let's do a model comparison. Overall the top 5 models with the highest accuracies were: Decision Tree (second model), SVM (second and first model), Random Forest (second model), and Gradient Boost Machine (first model).
 
+Decision Tree 2 and SVM 2: Both Decision Tree 2 and SVM 2 achieved similar high accuracies of approximately 91.85%. This implies that these models were quite successful in making accurate predictions for PCOS diagnosis based on the given data and features.
+
+SVM 1:SVM 1 achieved a slightly lower accuracy compared to Decision Tree 2 and SVM 2 but still performed reasonably well at approximately 91.11%. It remains effective in predicting PCOS diagnosis but might be slightly less accurate than the aforementioned models.
+
+Random Forest 2: The Random Forest model achieved an accuracy of around 90.37%, indicating its capability to correctly classify PCOS and non-PCOS cases with slightly less accuracy than SVM 1 and Decision Tree 2.
+
+Gradient Boost Machines 1 and k-Nearest 2: Both Gradient Boost Machines 1 and k-Nearest 2 models obtained accuracies around 88.15%, which, while lower than the previous models, still demonstrate a moderate ability to predict PCOS diagnosis based on the provided features.
+
+Overall, these accuracies suggest that Decision Tree 2, SVM 2, SVM 1, and Random Forest 2 performed relatively better in distinguishing between PCOS and non-PCOS cases in this dataset, while Gradient Boost Machines 1 and k-Nearest 2 showed somewhat lower but still reasonably acceptable prediction accuracies.
+
 
 ```{r, echo=FALSE}
 # Compare models
 model_names <- c("Decision Tree 1","Decision Tree 2", "Random Forest 1", "Random Forest 2", "Gradient Boost Machines 1", "Gradient Boost Machines 2" ,"SVM 1", "SVM 2", "Neural Network 1", "Neural Network 2", "k-Nearest 1", "k-Nearest 2")
 accuracies <- c(0.8592593, 0.9185185, 0.6148148, 0.9037037, 0.8814815, 0.6222222, 0.9111111, 0.9185185, 0.3037037, 0.3037037, 0.7111111, 0.8814815)
+
+# place accuracies in data frame
 results <- data.frame(Model = model_names, Accuracy = accuracies)
+
+# order in descending order
 results <- results[order(results$Accuracy, decreasing = TRUE), ]
-head(results)
+
+# Display the results
+kable(results, caption = "<font color=#000000><b>Table 5. </b>Model Comparison </font>", format = "html") %>%
+  kable_styling(bootstrap_options = c("hover", "condensed"), font_size = 13) %>%
+  kableExtra::scroll_box(width = "100%", height = "400px")
 ```
 
 $~$
@@ -2068,13 +2083,15 @@ I anticipated answering the following questions with my data:
 
 1.	Are there commonalities women with and without PCOS have that can be easily dismissed as normal?
 
+  * Some shared patterns identified through analysis included Body Mass Index (BMI), vital signs, anthropometric measures, and specific hormone levels, yet within this dataset, insufficient evidence exists to conclusively dismiss these as unrelated to Polycystic Ovary Syndrome (PCOS).
+
 2.	Are there differences for women of different race/ethnic background when it comes to having PCOS? What about women without PCOS?
 
   * These accuracies don't directly address racial or ethnic differences. Further analysis involving feature exploration or specific subgroup analysis using demographic data might unveil associations or variations among different racial/ethnic groups in PCOS prevalence or features.
 
 3.	What is the likelihood of a woman developing PCOS based on her age, ethnicity, and BMI history?
 
-  * While machine learning models can predict, the accuracies from my models don't explicitly indicate predictions on likelihood. Specific models with feature importance or coefficients might offer insights into how age, ethnicity, and BMI contribute to predicting PCOS likelihood.
+  * The accuracies do not explicitly signify predictions regarding probability due to the lack of diverse ethnic backgrounds in the collected records. Moreover, age and BMI were not influential variables across most of the created models in this dataset.. Specific models with feature importance or coefficients might offer insights into how age, ethnicity, and BMI contribute to predicting PCOS likelihood.
 
 4.	Can we predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on their medical history, hormone levels, and lifestyle factors?
 
@@ -2091,6 +2108,19 @@ I anticipated answering the following questions with my data:
 $~$
 
 ### References:
+
+1.	Bulsara, J., Patel, P., Soni, A., &amp; Acharya, S. (2021, February 10). A review: Brief insight into polycystic ovarian syndrome. Endocrine and Metabolic Science. Retrieved February 23, 2023, from https://www.sciencedirect.com 
+
+2.	World female population, 1960-2022. Knoema. (2022). Retrieved February 24, 2023, from https://knoema.com. 
+
+3.	MarchofDimes. (2022). Population of women 15-44 years by age: United States, 2020. March of Dimes | PeriStats. Retrieved February 24, 2023, from https://www.marchofdimes.org
+
+4.	Engmann, L., Jin, S., Sun, F., Legro, R. S., Polotsky, A. J., Hansen, K. R., Coutifaris, C., Diamond, M. P., Eisenberg, E., Zhang, H., Santoro, N., & Reproductive Medicine Network (2017). Racial and ethnic differences in the polycystic ovary syndrome metabolic phenotype. American journal of obstetrics and gynecology, 216(5), 493.e1–493.e13. https://doi.org
+
+5.	Fehring, Richard J., "Menstrual Cycle Data" (2012). Randomized Comparison of Two Internet-Supported Methods of Natural Family Planning. 7.
+https://epublications.marquette.edu
+
+6.	Khan, M. J., Ullah, A., & Basit, S. (2019). Genetic Basis of Polycystic Ovary Syndrome (PCOS): Current Perspectives. The application of clinical genetics, 12, 249–260. https://doi.org/
 
 
 
