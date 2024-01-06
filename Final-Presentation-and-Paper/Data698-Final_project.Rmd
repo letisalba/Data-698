@@ -1272,6 +1272,14 @@ rpart_result <- predict(rpart_model, newdata = valid[, !colnames(valid) %in% "PC
 # confusion matrix
 confusionMatrix(rpart_result, as.factor(valid$`PCOS`))
 ```
+$~$
+
+```{r}
+precision(rpart_result,as.factor(valid$`PCOS`))
+recall(rpart_result, as.factor(valid$`PCOS`))
+F_meas(rpart_result, as.factor(valid$`PCOS`))
+```
+
 
 $~$
 
@@ -1428,7 +1436,7 @@ $~$
 The plot below demonstrates the variable importance of the entire dataset. `Follicle_NoR`, `FollicleNoL` and `Hair_growth` are the top 3 variables that play a significant role in the classification of PCOS presence.
 ```{r, echo=FALSE, fig.height=8}
 # plot for rf_model fig 13
-varImpPlot(rf_model)
+varImpPlot(rf_model, main="Fig. 13 - Feature importance of first random forest model")
 ```
 
 Numerically, we can see the same result below:
@@ -1536,7 +1544,7 @@ From the random forest model we created, we can create a variable importance plo
 
 ```{r, echo=FALSE}
 # plot for the second rf_model fig 14
-varImpPlot(rf_model2)
+varImpPlot(rf_model2, main="Fig. 14 - Feature importance of second random forest model")
 ```
 
 $~$
@@ -1891,7 +1899,6 @@ unlist()
 # print the table
 table(valid$`PCOS`, prediction_label)
 ```
-
 
 $~$
 
