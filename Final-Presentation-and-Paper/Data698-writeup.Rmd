@@ -1,7 +1,8 @@
 ---
 title: 'Using Machine Learning Algorithms to Predict the likelihood of Polycystic Ovarian Syndrome based on Demographic, Clinical and Lifestyle Factors'
-author: "Leticia Salazar"
-date: "May 16, 2023"
+subtitle: 'CUNY SPS Data 698 - Analytics Masters Research Project'
+author: 'Leticia Salazar'
+date: 'May 16, 2023'
 output:
   pdf_document:
     latex_engine: xelatex
@@ -15,30 +16,26 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, tidy.opts=list(width.cutoff=60),tidy=TRUE)
+knitr::opts_chunk$set(echo = TRUE, tidy.opts=list(width.cutoff=60))
 ```
 
-$~$
+\newpage
 
 ## Abstract:
 
-Polycystic Ovarian Syndrome (PCOS) stands as a prevalent endocrine disorder affecting women of reproductive age worldwide, presenting a confluence of hormonal imbalances, reproductive irregularities, and potential metabolic complications. Characterized by irregular menstrual cycles, hyperandrogenism, and polycystic ovaries, PCOS poses multifaceted challenges that extend beyond reproductive health, encompassing metabolic disturbances and psychological implications.This multifaceted syndrome, influenced by intricate interactions among genetic predispositions, hormonal imbalances, and environmental elements, presents with diverse manifestations among those affected. The clinical landscape of PCOS often requires a comprehensive, multidisciplinary approach, incorporating lifestyle modifications, pharmacological interventions, and personalized treatments to address symptoms and reduce associated health risks. Despite ongoing research efforts, unraveling the exact cause and identifying the most effective management approaches for PCOS remains an evolving field of investigation within modern medicine. This research project aims to investigate the current studies on PCOS diagnosis, assessing the effectiveness of various machine learning algorithms including Decision Tree (rpart), Random Forest (randomForest), Gradient Boosting Machines (xgboost or gbm), Support Vector Machines (SVM; e1071), Neural Networks (neuralnet), and K-Nearest Neighbors (knn or class). From my analysis, it was concluded that the accuracies of Decision Tree 2 - , SVM 2, SVM 1, and Random Forest 2 performed relatively better in distinguishing between PCOS and non-PCOS cases in this dataset, while Gradient Boost Machines 1 and k-Nearest 2 demonstrated slightly reduced yet still sufficiently acceptable predictive accuracies.
-
-$~$
+Polycystic Ovarian Syndrome (PCOS) stands as a prevalent endocrine disorder affecting women of reproductive age worldwide, presenting a confluence of hormonal imbalances, reproductive irregularities, and potential metabolic complications. Characterized by irregular menstrual cycles, hyperandrogenism, and polycystic ovaries, PCOS poses multifaceted challenges that extend beyond reproductive health, encompassing metabolic disturbances and psychological implications.This multifaceted syndrome, influenced by intricate interactions among genetic predispositions, hormonal imbalances, and environmental elements, presents with diverse manifestations among those affected. The clinical landscape of PCOS often requires a comprehensive, multidisciplinary approach, incorporating lifestyle modifications, pharmacological interventions, and personalized treatments to address symptoms and reduce associated health risks. Despite ongoing research efforts, unraveling the exact cause and identifying the most effective management approaches for PCOS remains an evolving field of investigation within modern medicine. This research project aims to investigate the current studies on PCOS diagnosis, assessing the effectiveness of various machine learning algorithms including Decision Tree (rpart), Random Forest (randomForest), Gradient Boosting Machines (xgboost or gbm), Support Vector Machines (SVM; e1071), Neural Networks (neuralnet), and K-Nearest Neighbors (knn or class). From my analysis, it was concluded that the accuracies of Decision Tree 2, SVM 2, SVM 1, and Random Forest 2 performed relatively better in distinguishing between PCOS and non-PCOS cases in this dataset, while Gradient Boost Machines 1 and k-Nearest 2 demonstrated slightly reduced yet still sufficiently acceptable predictive accuracies.
 
 ## Key words:
 
-Polycystic Ovarian Syndrome, PCOS, Machine Learning, Decision Tree, Random Forest, Gradient Boosting, Super Vector Machine, Neural Networks, K-Nearest Neighbors
-
-$~$
+Polycystic Ovarian Syndrome, PCOS, Women's Health, Machine Learning Algorithms, Predictive Modeling
 
 ## The Problem:
 
-Polycystic Ovarian Syndrome (PCOS) is a hormonal imbalance disorder affecting women of reproductive age. Determining the precise global count of women affected by PCOS poses challenges due to many cases remaining undiagnosed. However, the World Health Organization (WHO) estimates that approximately 3.4% of women are affected [1]. While this percentage might seem relatively small, considering that women constitute 49.7% of today’s population [2], nearly 13% of them fall within the reproductive age bracket [3]. This data suggests that approximately 17.5 million women report suffering from PCOS. Beyond the physical and emotional toll PCOS exacts, it also disrupts ovarian function, leading to challenges in maintaining a healthy menstrual cycle and can result in the formation of cysts, ultimately impacting fertility. It's important to note that the prevalence of PCOS varies by region and ethnic groups, with some studies suggesting higher rates of PCOS in certain populations [4]. Early identification of risk factors associated with PCOS can assist in timely interventions and lifestyle adjustments. Tailoring suggestions or treatments based on individualized risk profiles has the potential to enhance patient outcomes. Employing predictive models can play a pivotal role in increasing awareness regarding PCOS risk factors and preventive measures. However, limitations may exist in accessing comprehensive and varied datasets containing accurate demographic, clinical, and lifestyle data. It is crucial to ensure the model's transparency and interpretability to facilitate well-informed decisions and recommendations. Additionally, it's imperative that the model demonstrates proficiency across diverse demographic groups and populations. Addressing these challenges involves the development of a robust predictive model using machine learning techniques. Such an endeavor holds the promise of significantly contributing to the identification of individuals at risk of PCOS, thereby enabling early interventions and guiding personalized healthcare strategies for improved management of the condition. This project will investigate publicly available datasets that will be used to develop machine learning models that predicts the probability or risk of an individual having or developing PCOS based on demographic information (age, ethnicity, geographical location), clinical data (hormonal levels, BMI, menstrual irregularities), and lifestyle factors (dietary habits, exercise routine, stress levels).
+Polycystic Ovarian Syndrome (PCOS) is a hormonal imbalance disorder affecting women of reproductive age. Determining the precise global count of women affected by PCOS poses challenges due to many cases remaining undiagnosed. However, the World Health Organization (WHO) estimates that approximately 3.4% of women are affected [WHO, 2023]. While this percentage might seem relatively small, considering that women constitute 49.7% of today’s population [Knoema, 2022], nearly 13% of them fall within the reproductive age bracket [MarchofDimes, 2022]. This data suggests that approximately 17.5 million women report suffering from PCOS. Beyond the physical and emotional toll PCOS exacts, it also disrupts ovarian function, leading to challenges in maintaining a healthy menstrual cycle and can result in the formation of cysts, ultimately impacting fertility. It's important to note that the prevalence of PCOS varies by region and ethnic groups, with some studies suggesting higher rates of PCOS in certain populations [Engmann, 2017]. Early identification of risk factors associated with PCOS can assist in timely interventions and lifestyle adjustments. Tailoring suggestions or treatments based on individualized risk profiles has the potential to enhance patient outcomes. Employing predictive models can play a pivotal role in increasing awareness regarding PCOS risk factors and preventive measures. However, limitations may exist in accessing comprehensive and varied datasets containing accurate demographic, clinical, and lifestyle data [Thakre, 2020]. Addressing these challenges involves the development of a robust predictive model using machine learning techniques. Such an endeavor holds the promise of significantly contributing to the identification of individuals at risk of PCOS, thereby enabling early interventions and guiding personalized healthcare strategies for improved management of the condition. This project will investigate publicly available datasets that will be used to develop machine learning models that predicts the probability or risk of an individual having or developing PCOS based on demographic information (age, ethnicity, geographical location), clinical data (hormonal levels, BMI, menstrual irregularities), and lifestyle factors (dietary habits, exercise routine, stress levels).
 
-$~$
+\newpage
 
-### Objectives:
+## Objectives:
 
 Construct predictive models using machine learning techniques that utilize a dataset comprising demographic, clinical, and lifestyle variables as features and PCOS diagnosis as the target variable. Machine learning algorithms have shown promise in advancing our understanding of the disease and improving its diagnosis and treatment. 
 
@@ -56,11 +53,10 @@ I anticipate answering the following questions with my data:
 
 6.	Can we predict the long-term health outcomes and quality of life of women with PCOS based on their age, lifestyle factors, hormone levels, and treatment history?
 
-$~$
 
 ## Literature Review:
 
-For this project, my emphasis was on discovering literature reviews that validate the relevance of the dataset utilized alongside the chosen machine learning algorithms. In pursuit of this goal, I've come across various articles that make reference to the Kaggle dataset. These articles investigate studies associated with PCOS, presenting findings aimed at providing a deeper comprehension of the dataset I'm analyzing.
+For this project, my emphasis was on discovering literature reviews that validate the relevance of the dataset utilized alongside the chosen machine learning algorithms. In pursuit of this goal, I've come across various articles that make reference to the dataset [Kottarathil, 2020]. These articles investigate studies associated with PCOS, presenting findings aimed at providing a deeper comprehension of the dataset I'm analyzing.
 
 The literature reviews collectively delve into various aspects of Polycystic Ovarian Syndrome (PCOS), employing diverse methodologies and approaches for diagnosis, classification, understanding clinical manifestations, and proposing potential treatments. Researchers across these studies have primarily utilized data mining, machine learning, and clinical investigations to address the complexity of PCOS. Below are the key characteristics, achievements, advantages, and drawbacks across these reviews:
 
@@ -68,18 +64,16 @@ The literature reviews collectively delve into various aspects of Polycystic Ova
 Multiple studies emphasize the use of machine learning algorithms, such as Naïve Bayes, Decision Trees, Artificial Neural Networks, Support Vector Machines, and ensemble methods, for PCOS diagnosis. They explore the accuracy and predictive power of these models using diverse datasets, including clinical, lifestyle, and physiological parameters. Investigations into clinical parameters and anthropometric measures aim to identify potential predictors or indicators of PCOS, such as hormonal imbalances, insulin resistance, metabolic traits, obesity, and associated risks like infertility and cardiovascular issues. Studies examine the diverse clinical presentations and phenotypic variations within PCOS, shedding light on how different subgroups may manifest the syndrome and respond to various treatments.
 
 ##### Achievements:
-Machine learning models, particularly those utilizing Convolutional Neural Networks (CNNs) and ensemble methods, have shown high accuracy in diagnosing PCOS. These models effectively utilize diverse datasets, ranging from ultrasound images to clinical parameters. Research has identified several potential predictive factors for PCOS, including hormonal markers, lifestyle attributes, and metabolic indicators, offering insights into early detection and tailored treatment strategies. Studies evaluating PCOS awareness among women have highlighted the importance of education and awareness campaigns in enhancing understanding and facilitating early diagnosis.
+Machine learning models, particularly those utilizing Convolutional Neural Networks (CNNs) and ensemble methods, have shown high accuracy in diagnosing PCOS. The findings revealed that CNN models performed best, achieving accuracies ranging from 85% to 98.12% in different studies [Anda, 2022]. These models effectively utilize diverse datasets, ranging from ultrasound images to clinical parameters. Research has identified several potential predictive factors for PCOS, including hormonal markers, lifestyle attributes, and metabolic indicators, offering insights into early detection and tailored treatment strategies. The study done by Aggarwal, S., & Pandey, K. (2023) used supervised learning algorithms (like random forest, gradient boosting) to assess performance metrics, indicating that these crucial features offer high accuracy in identifying PCOS. Unsupervised learning (K-means clustering) corroborates these findings, suggesting that these key features are pivotal for PCOS analysis. In another study, Tiwari (2022) uses machine learning to screen PCOS patients based on non-invasive parameters. It employed various algorithms like SVM, Decision Trees, Random Forest, etc., for classification, finding that Random Forest achieved the highest accuracy of 93.25%. Overall,studies evaluating PCOS awareness among women have highlighted the importance of education and awareness campaigns in enhancing understanding and facilitating early diagnosis.
 
 ##### Advantages:
 Machine learning algorithms offer promising accuracy rates, particularly CNNs and ensemble models, in diagnosing PCOS using various non-invasive parameters. Understanding phenotypic variations aids in tailoring treatments based on specific subgroups, potentially improving patient outcomes and management. Efforts toward identifying early markers or predictive factors can facilitate early intervention and lifestyle modifications, mitigating long-term health risks associated with PCOS.
 
 ##### Drawbacks and Recommendations:
-Some studies may suffer from limited sample sizes or datasets, impacting the generalizability of findings. Larger and more diverse datasets are recommended for robust model development and validation. While certain machine learning models showcase high accuracy, the variability in dataset characteristics and preprocessing methods could influence their effectiveness across different populations or settings. The multifaceted nature of PCOS, influenced by both genetic and environmental factors, presents challenges in pinpointing a singular cause or standard diagnostic criteria.
+Some studies may suffer from limited sample sizes or datasets, impacting the generalizability of findings. Larger and more diverse datasets are recommended for robust model development and validation [Goodarzi, 2015]. While certain machine learning models showcase high accuracy, the variability in dataset characteristics and preprocessing methods could influence their effectiveness across different populations or settings [Tiwari, 2022]. The multifaceted nature of PCOS, influenced by both genetic and environmental factors, presents challenges in pinpointing a singular cause or standard diagnostic criteria.
 
 The collective body of literature reviews signifies advancements in PCOS diagnosis, understanding clinical manifestations, and potential avenues for tailored treatments. The use of machine learning models, especially those employing CNNs and ensemble methods, showcases significant promise in accurate PCOS diagnosis based on non-invasive parameters. However, further research is necessary, emphasizing larger and more diverse datasets, refined models, and a multidisciplinary approach to fully comprehend the complexity of PCOS and enhance diagnostic and treatment strategies.
 
-
-$~$
 
 ## Dataset:
 
@@ -163,51 +157,25 @@ Variables                               Description
 "Avg..F.size..R...mm."                  average size of follicles in right ovary measured in millimeters (mm)  
 "Endometrium..mm."                      size of the endometrial thickness in millimeters (mm)
 
-$~$
-
 ## Methodology:
 
+Upon importing the data into R, I conducted an assessment to gain a comprehensive understanding of the dataset. The exploration revealed a necessity for substantial data preparation before commencing model construction. Utilizing the `skimr` library, I generated concise summaries for both datasets, which indicated the presence of character and numeric column types without any missing values. Employing the `Data Explorer` library, histograms were created to examine the distribution of variables in both datasets. However, these distributions did not display any discernible patterns or distinct shapes.
 
-Data Collection and Preparation: Gather and preprocess a comprehensive dataset containing demographic details, clinical measurements (hormone levels, BMI, menstrual history), and lifestyle information (diet, exercise, stress levels) from the given population.
+The data preparation phase involved standardizing the `pcos` and `pcos2` datasets as numeric due to variations in variable classes. While confirming the absence of missing data, it was identified that `pcos2` contained a few variables with missing values. Upon obtaining a comprehensive overview of both datasets, the procedure involved eliminating unnecessary columns, renaming columns for enhanced readability, and merging the datasets. Additionally, transformations were applied, converting `Height` from centimeters to meters, `Hip` and `Waist` from inches to centimeters. Subsequently, missing values in columns such as `BMI`, `Waist_Hip_Ratio`, and `FSH/LH` were computed and replaced. For `Married_yrs`, `AMH_ngmL`, and `Fast_food`, the missing values were substituted with the median values, as these replacements did not significantly impact the data distribution. Detecting outliers was crucial and accomplished through boxplots for visual representation. Despite their presence, I chose to retain these outliers, acknowledging their importance in representing natural variations within the population. Furthermore, additional visualizations were created to scrutinize trends within the refined `pcos_cleaned` dataset.
 
-Feature Selection and Engineering: Identify the most relevant features through exploratory analysis and feature engineering techniques, ensuring that the model focuses on key predictors for PCOS.
+Building the models involved the development of six distinct machine learning algorithms: Decision Trees, Random Forest, Gradient Boost Machines, Support Vector Machines, Neural Networks, and k-Nearest Neighbor. We initiate by dividing the dataset into training and validation subsets tailored for machine learning models. The training subset is utilized for model training, while the validation subset assesses its performance. Employing a 75:25 ratio strikes a balance, ensuring adequate data for effective model training and a sizable validation set for robust evaluation.
 
-Model Training and Evaluation: Train the machine learning model using appropriate algorithms Decision Tree, Random Forest, Gradient Boosting Machines, Support Vector Machines, Neural Networks, and K-Nearest Neighbors on a subset of the dataset, validate its performance using cross-validation techniques, and evaluate its accuracy, precision, recall, and F1-score.
+For each algorithm, the following procedures were executed:
 
-Prediction and Risk Assessment: Deploy the trained model to predict the likelihood or risk of PCOS in new, unseen data, providing valuable insights into individuals who might be predisposed to or already have the condition.
+1. Establish a cross-validation configuration, employing the `PCOS` variable as the target against the entire dataset. The split data designated `train` and `valid` labeled the training and testing subsets, respectively. Additionally, another cross-validation setup centered on the `PCOS` target variable, utilizing pivotal contributing variables: `Follicle_NoL`, `Follicle_NoR`, `Hair_growth`, `Skin_darkening`, and `Weight_gain`.
 
-Interpretation and Recommendations: Interpret the model's findings, analyze the significance of various factors contributing to the prediction, and offer recommendations or interventions based on identified risk factors to potentially prevent or manage PCOS.
+2. After the model creation using the `train` dataset, predictions were generated for the model utilizing the `valid` data. The output encompassed a confusion matrix and associated statistics affirming the predictive output for the target variable (`PCOS`). Moreover, this included metrics providing insights into the model's efficacy in classifying positive and negative cases accurately in binary classification.
 
-This project will investigate mainly publicly available datasets that will be used to create predictive models on markers in routine test results to make a diagnosis. Some variables that are included in these datasets are:
+3. Evaluate the individual contributions of each variable within the model and, if necessary, visualize their significance.
 
-*	Age
-*	Weight
-*	BMI
-*	Race/ethnicity
-*	Family history of PCOS
-*	Menstrual cycle irregularity
-*	Hormone levels (e.g., testosterone, LH, FSH)
-*	Insulin resistance
-*	Physical activity level
-*	Diet
+4. Retrieve the accuracy metric for subsequent comparison with other models.
 
-I will be using R (statistical performing language) to perform exploratory data analysis to process and analyze the data to check for structural errors and be able to create graphs and perform tests with minimal errors. Once the data is ready to use, I will be splitting the data into a training and test set to be able to use a machine learning algorithm such as logistic regression to create a predictive model. The predictive model will be based on markers (variables mentioned above) used to identify individuals who are at high risk for PCOS and target interventions to manage the condition.
-
-To answer my research question:
-* The datasets publicly available and the NICHD Dash looking to obtain all have PCOS and non-PCOS patients including demographic information, medical history, and laboratory tests. Preprocess the data by removing missing values, outliers, and redundant variables. Perform feature selection to identify the most informative variables for prediction.
-* Split the dataset into training, validation, and testing sets. The training set is used to train the machine learning algorithm, the validation set is used to tune hyperparameters and prevent overfitting, and the testing set is used to evaluate the performance of the final model.
-* Select an appropriate machine learning algorithm for the task at hand, such as logistic regression, decision trees, random forests, support vector machines, or neural networks. Train the algorithm on the training set using various techniques, such as cross-validation and regularization, to optimize its performance.
-* Evaluate the performance of the trained model on the validation set using various metrics, such as accuracy, precision, recall, F1 score, and area under the curve. Use feature importance analysis to identify the most influential variables for prediction.
-* Tune the hyperparameters of the machine learning algorithm using grid search, random search, or Bayesian optimization to improve its performance on the validation set.
-* Select the final model based on its performance on the validation set. Evaluate its performance on the testing set to assess its generalization ability.
-* Interpret the results of the machine learning algorithm using various techniques, such as decision trees, feature importance analysis, and partial dependence plots. Visualize the results using graphs, charts, and heatmaps to facilitate understanding and communication.
-* Deploy the trained model on new data and disseminate the findings through scientific publications, presentations, and online platforms.
-
-Note: this methodology plan is not exhaustive and may vary depending on the specific research question, dataset, and machine learning algorithm used.
-
-Note 2: data has already been collected, there is no need for me to gather participants, perform exams (such as bloodwork), use medical equipment to collect the data, perform surveys, have a location to perform a study, etc. I will be the sole person studying the data set and conducting the analysis.
-
-$~$
+The procedure was replicated for all six algorithms on two occasions: first, using the complete dataset, and second, utilizing the reduced dataset containing the highest contributing variables. The culmination of the project involved aggregating all accuracies obtained from the models to compare the performance of each model in differentiating between PCOS and non-PCOS cases across the datasets.
 
 ## Assumptions:
 
@@ -237,45 +205,132 @@ Early diagnosis and management of PCOS can lead to better health outcomes, impro
 
 Overall, I'll be able to explore the insights into PCOS pathophysiology, diagnosis, and treatment. Their use in PCOS research can lead to more personalized and effective care for patients with this complex disorder.
 
-
-$~$
-
 ## Experimentation and Results:
 
-$~$
+Once I started our data exploration process I uncovered the following:
+
+Overall the top 5 models with the highest accuracies were: Decision Tree (second model), SVM (second and first model), Random Forest (second model), and Gradient Boost Machine (first model).
+
+Both Decision Tree 2 and SVM 2 achieved similar high accuracies of approximately 91.85%. This implies that these models were quite successful in making accurate predictions for PCOS diagnosis based on the given data and features. SVM 1 achieved a slightly lower accuracy compared to Decision Tree 2 and SVM 2 but still performed reasonably well at approximately 91.11%. It remains effective in predicting PCOS diagnosis but might be slightly less accurate than the aforementioned models. The second Random Forest model achieved an accuracy of around 90.37%, indicating its capability to correctly classify PCOS and non-PCOS cases with slightly less accuracy than SVM 1 and Decision Tree 2. Both Gradient Boost Machines 1 and k-Nearest 2 models obtained accuracies around 88.15%, which, while lower than the previous models, still demonstrate a moderate ability to predict PCOS diagnosis based on the provided features.
+
+Overall, these accuracies suggest that Decision Tree 2, SVM 2, SVM 1, and Random Forest 2 performed relatively better in distinguishing between PCOS and non-PCOS cases in this dataset, while Gradient Boost Machines 1 and k-Nearest 2 showed somewhat lower but still reasonably acceptable prediction accuracies.
 
 ## Conclusion:
 
+My initial assumption was that while there’s limited information available in the medical field and even less data sets available to analyze, I have some concerns on being successful in predicting a PCOS diagnosis. I anticipated answering the following questions with my data:
 
-My initial assumption was that while there’s limited information available in the medical field and even less data sets available to analyze, I have some concerns on being successful in predicting a PCOS diagnosis. 
+1.	Are there commonalities women with and without PCOS have that can be easily dismissed as normal?
 
-$~$
+  * Some shared patterns identified through analysis included Body Mass Index (BMI), vital signs, anthropometric measures, and specific hormone levels, yet within this dataset, insufficient evidence exists to conclusively dismiss these as unrelated to Polycystic Ovary Syndrome (PCOS).
+
+2.	Are there differences for women of different race/ethnic background when it comes to having PCOS? What about women without PCOS?
+
+  * These accuracies don't directly address racial or ethnic differences. Further analysis involving feature exploration or specific subgroup analysis using demographic data might unveil associations or variations among different racial/ethnic groups in PCOS prevalence or features.
+
+3.	What is the likelihood of a woman developing PCOS based on her age, ethnicity, and BMI history?
+
+  * The accuracies do not explicitly signify predictions regarding probability due to the lack of diverse ethnic backgrounds in the collected records. Moreover, age and BMI were not influential variables across most of the created models in this dataset.. Specific models with feature importance or coefficients might offer insights into how age, ethnicity, and BMI contribute to predicting PCOS likelihood.
+
+4.	Can we predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on their medical history, hormone levels, and lifestyle factors?
+
+  * Machine learning models could help predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on available medical history, hormone levels, and lifestyle factors. For this a larger dataset would be needed in order to create specialized modeling to derive precise predictions.
+
+5.	Can we predict the likelihood of successful pregnancy outcomes in women with PCOS based on their age, weight, hormone levels, and treatment history?
+
+  * Similar to the above, machine learning models can potentially predict the likelihood of successful pregnancy outcomes in women with PCOS based on various factors like age, weight, hormone levels, and treatment history. A larger dataset, specific models or analyses could provide more detailed predictive insights.
+
+6.	Can we predict the long-term health outcomes and quality of life of women with PCOS based on their age, lifestyle factors, hormone levels, and treatment history?
+
+  * Machine learning models, when trained with extensive data including age, lifestyle factors, hormone levels, and treatment history, might offer predictive insights into long-term health outcomes and quality of life for women with PCOS. However, these models might need additional feature engineering and specialized analyses to offer accurate predictions.
+
+\newpage
 
 ## References:
 
-1.	Bulsara, J., Patel, P., Soni, A., &amp; Acharya, S. (2021, February 10). A review: Brief insight into polycystic ovarian syndrome. Endocrine and Metabolic Science. Retrieved February 23, 2023, from https://www.sciencedirect.com 
+1.	Aggarwal, S., & Pandey, K. (2023). Early identification of PCOS with commonly known diseases: Obesity, diabetes, high blood pressure, and heart disease using machine learning techniques. Expert Systems with Applications, 217, 119532. https://doi.org/10.1016/j.eswa.2023.119532
 
-2.	World female population, 1960-2022. Knoema. (2022). Retrieved February 24, 2023, from https://knoema.com. 
+2.	Anda, D., & Iyamah, E. (2022, December). Comparative analysis of artificial intelligence in the diagnosis of ... ResearchGate. Retrieved April 1, 2023, from https://www.researchgate.net/publication/366320486_Comparative_Analysis_of_Artificial_Intelligence_in_the_Diagnosis_of_Polycystic_Ovary_Syndrome 
 
-3.	MarchofDimes. (2022). Population of women 15-44 years by age: United States, 2020. March of Dimes | PeriStats. Retrieved February 24, 2023, from https://www.marchofdimes.org
+3.	Bartlett, E., & Erlich, L. (2015). Part 3: Dealing with Obstacles — Chapter 5: Polycystic Ovary Syndrome (PCOS). In Feed your fertility: Your guide to cultivating a healthy pregnancy with traditional Chinese medicine, real food, and holistic living (pp. 342–349). essay, Fair Winds Press. 
 
-4.	Engmann, L., Jin, S., Sun, F., Legro, R. S., Polotsky, A. J., Hansen, K. R., Coutifaris, C., Diamond, M. P., Eisenberg, E., Zhang, H., Santoro, N., & Reproductive Medicine Network (2017). Racial and ethnic differences in the polycystic ovary syndrome metabolic phenotype. American journal of obstetrics and gynecology, 216(5), 493.e1–493.e13. https://doi.org
-
-5.	Fehring, Richard J., "Menstrual Cycle Data" (2012). Randomized Comparison of Two Internet-Supported Methods of Natural Family Planning. 7.
-https://epublications.marquette.edu
-
-6.	Khan, M. J., Ullah, A., & Basit, S. (2019). Genetic Basis of Polycystic Ovary Syndrome (PCOS): Current Perspectives. The application of clinical genetics, 12, 249–260. https://doi.org/
+4.	Bulsara, J., Patel, P., Soni, A., &amp; Acharya, S. (2021, February 10). A review: Brief insight into polycystic ovarian syndrome. Endocrine and Metabolic Science. Retrieved February 23, 2023, from https://www.sciencedirect.com 
 
 
-$~$
+5.	ELawrence Engmann, Susan Jin, Fangbai Sun, Richard S. Legro, Alex J. Polotsky, Karl R. Hansen, Christos Coutifaris, Michael P. Diamond, Esther Eisenberg, Heping Zhang, Nanette Santoro, C. Bartlebaugh, W. Dodson, S. Estes, C. Gnatuk, J. Ober, R. Brzyski, C. Easton, A. Hernandez, M. Leija, D. Pierce, R. Robinson, A. Awonuga, L. Cedo, A. Cline, K. Collins, S. Krawetz, E. Puscheck, M. Singh, M. Yoscovits, K. Barnhart, K. Lecks, L. Martino, R. Marunich, P. Snyder, R. Alvero, A. Comfort, M. Crow, W. Schlaff, P. Casson, A. Hohmann, S. Mallette, G. Christman, D. Ohl, M. Ringbloom, J. Tang, G. Wright Bates, S. Mason, N. DiMaria, R. Usadi, R. Lucidi, M. Rhea, V. Baker, K. Turner, J. Trussell, D. DelBasso, H. Huang, Y. Li, R. Makuch, P. Patrizio, L. Sakai, L. Scahill, H. Taylor, T. Thomas, S. Tsang, Q. Yan, M. Zhang, D. Haisenleder, C. Lamar, L. DePaolo, D. Guzick, A. Herring, J. Bruce Redmond, M. Thomas, P. Turek, J. Wactawski-Wende, R. Rebar, P. Cato, V. Dukic, V. Lewis, P. Schlegel, F. Witter, Racial and ethnic differences in the polycystic ovary syndrome metabolic phenotype, American Journal of Obstetrics and Gynecology, Volume 216, Issue 5, 2017,Pages 493.e1-493.e13,ISSN 0002-9378, https://doi.org/10.1016/j.ajog.2017.01.003. (https://www.sciencedirect.com/science/article/pii/S0002937817301035)
+
+
+6.	Goodarzi, Carmina, E., & Azziz, R. (2015). DHEA, DHEAS and PCOS. The Journal of Steroid Biochemistry and Molecular Biology, 145, 213–225. https://doi.org/10.1016/j.jsbmb.2014.06.003
+
+7.	Hassan, Malik & Mirza, Tabasum. (2020). Comparative Analysis of Machine Learning Algorithms in Diagnosis of Polycystic Ovarian Syndrome. International Journal of Computer Applications. Volume 175. 10.5120/ijca2020920688.
+
+8.	Khan, M. J., Ullah, A., & Basit, S. (2019). Genetic Basis of Polycystic Ovary Syndrome (PCOS): Current Perspectives. The application of clinical genetics, 12, 249–260. https://doi.org/
+
+
+9.	Kambale, T., Sawaimul, K. D., & Prakash, S. (2023). A study of hormonal and anthropometric parameters in polycystic ovarian syndrome. Annals of African medicine, 22(1), 112–116. https://doi.org/10.4103/aam.aam_15_22
+
+10.	Kavitha, K., Tangudu, N., Sahu, S. R., Narayana, G. V. L., & Anusha, V. (2023). Detection of PCOS using Machine Learning Algorithms with Grid Search CV Optimization. International Journal of Engineering Trends and Technology, 71(7), 201-208. https://doi.org/10.14445/22315381/IJETT-V71I7P219
+
+11.	MarchofDimes. (2022). Population of women 15-44 years by age: United States, 2020. March of Dimes | PeriStats. Retrieved February 24, 2023, from https://www.marchofdimes.org
+
+
+12.	Patel, J., & Rai, S. (2018, September). Polycystic ovarian syndrome (PCOS) awareness among young women of central India. ResearchGate. Retrieved March 29, 2023, from https://www.researchgate.net/publication/327566794_Polycystic_ovarian_syndrome_PCOS_awareness_among_young_women_of_central_India 
+
+13.	Ramanand, S. J., Ghongane, B. B., Ramanand, J. B., Patwardhan, M. H., Ghanghas, R. R., & Jain, S. S. (2013, January). Clinical characteristics of polycystic ovary syndrome in Indian women. Indian journal of endocrinology and metabolism. Retrieved March 18, 2023, from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3659881/ 
+
+
+14.	S;, K. M. J. U. A. B. (2019). Genetic basis of polycystic ovary syndrome (PCOS): Current Perspectives. The application of clinical genetics. Retrieved March 18, 2023, from https://pubmed.ncbi.nlm.nih.gov/31920361/ 
+
+15.	S. Nasim, M. S. Almutairi, K. Munir, A. Raza and F. Younas, "A Novel Approach for Polycystic Ovary Syndrome Prediction Using Machine Learning in Bioinformatics," in IEEE Access, vol. 10, pp. 97610-97624, 2022, doi: 10.1109/ACCESS.2022.3205587.
+
+
+16.	Shetty, Disha & Chandrasekaran, Baskaran & Singh, ArulWatson & Oliverraj, Joseph. (2017). Exercise in polycystic ovarian syndrome: An evidence-based review. Saudi Journal of Sports Medicine. 17. 123. 10.4103/sjsm.sjsm_10_17.
+
+17.	 Tiwari, S., Kane, L., Koundal, D., Jain, A., Alhudhaif, A., Polat, K., Zaguia, A., Alenezi, F., & Althubiti, S. A. (2022). SPOSDS: A smart Polycystic Ovary Syndrome diagnostic system using machine learning. Expert Systems with Applications, 203, 117592. https://doi.org/10.1016/j.eswa.2022.117592
+
+18.	Thakre, V., Vedpathak, S., Thakre, K., & Sonawani, S. (2020, December). PCOcare: PCOS detection and prediction using machine learning algorithms. ResearchGate. Retrieved April 1, 2023, from https://www.researchgate.net/publication/348627784_PCOcare_PCOS_Detection_and_Prediction_using_Machine_Learning_Algorithms 
+
+19.	Thomas, Neetha. (2020). Prediction of polycystic ovarian syndrome with clinical dataset using a novel hybrid data mining classification technique. International journal of advanced research in engineering & technology. 11. 1872-1881,. 10.34218/IJARET.11.11.2020.174.
+
+
+20.	Vikas, B., Anuhya, B. S., Chilla, M., & Sarangi, S. (2018). A Critical Study of Polycystic Ovarian Syndrome (PCOS) Classification Techniques. International Journal of Computational Engineering & Management, 21(4), 1. Retrieved from http://www.ijcem.org/volume21/issue4/IJCEM_2104_01.pdf
+
+
+21.	Wijeyaratne, C. N., Seneviratne, R.deA., Dahanayake, S., Kumarapeli, V., Palipane, E., Kuruppu, N., Yapa, C., Seneviratne, R.deA., & Balen, A. H. (2011). Phenotype and metabolic profile of South Asian women with polycystic ovary syndrome (PCOS): results of a large database from a specialist Endocrine Clinic. Human reproduction (Oxford, England), 26(1), 202–213. https://doi.org/10.1093/humrep/deq310
+
+22.	World female population, 1960-2022. Knoema. (2022). Retrieved February 24, 2023, from https://knoema.com.
+
+
+23.	Wu, J., Chen, X.-Y., Zhang, H., Xiong, L.-D., Lei, H., & Deng, S.-H. (2019). Hyperparameter Optimization for Machine Learning Models Based on Bayesian Optimization. Journal of Electronic Science and Technology, 17(1), 26-40. https://doi.org/10.11989/JEST.1674-862X.80904120
+
+\newpage
 
 ## Appendices:
 
 ### Appendix A - Figures:
 
 ```{r,  out.width="80%", fig.align="center", warning=FALSE, message=FALSE, echo=FALSE}
-# wd <- "/Users/letisalba/Desktop/Data_621/Final_Project/figs/"
-# knitr::include_graphics(paste0(wd, "fig1.png"))
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/"
+knitr::include_graphics(paste0(wd, "fig1.png"))
+knitr::include_graphics(paste0(wd, "fig2.png"))
+knitr::include_graphics(paste0(wd, "fig2_2.png"))
+knitr::include_graphics(paste0(wd, "fig3.png"))
+knitr::include_graphics(paste0(wd, "fig3_2.png"))
+knitr::include_graphics(paste0(wd, "fig3_3.png"))
+knitr::include_graphics(paste0(wd, "fig4.png"))
+knitr::include_graphics(paste0(wd, "fig5.png"))
+knitr::include_graphics(paste0(wd, "fig6.png"))
+knitr::include_graphics(paste0(wd, "fig7.png"))
+knitr::include_graphics(paste0(wd, "fig8.png"))
+knitr::include_graphics(paste0(wd, "fig9.png"))
+knitr::include_graphics(paste0(wd, "fig10.png"))
+knitr::include_graphics(paste0(wd, "fig11.png"))
+knitr::include_graphics(paste0(wd, "fig12.png"))
+knitr::include_graphics(paste0(wd, "fig13.png"))
+knitr::include_graphics(paste0(wd, "fig14.png"))
+knitr::include_graphics(paste0(wd, "fig15.png"))
+knitr::include_graphics(paste0(wd, "fig16.png"))
+knitr::include_graphics(paste0(wd, "fig17.png"))
+knitr::include_graphics(paste0(wd, "fig18.png"))
 ```
 
 
@@ -284,7 +339,11 @@ $~$
 ### Appendix B - Tables:
 
 ```{r, out.width="80%", fig.align="center", warning=FALSE, message=FALSE, echo=FALSE}
-# knitr::include_graphics(paste0(wd, "table1.png"))
+knitr::include_graphics(paste0(wd, "table1.png"))
+knitr::include_graphics(paste0(wd, "table2.png"))
+knitr::include_graphics(paste0(wd, "table3.png"))
+knitr::include_graphics(paste0(wd, "table4.png"))
+knitr::include_graphics(paste0(wd, "table5.png"))
 ```
 
 
@@ -292,7 +351,7 @@ $~$
 
 ### Appendix C - R Code:
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, tidy.opts=list(width.cutoff=60)}
 # load libraries
 library(tidyverse) # data prep
 library(DataExplorer) # histograms for datasets
@@ -429,7 +488,8 @@ pcos2 <- pcos2 %>%
 pcos_data <- merge(pcos, pcos2,  by=c("Sl.No"))
 # display the merged dataset
 pcos_data %>% 
-kable(caption = "<font color=#000000><b>Table 3.</b>`pcos_data` merged data </font>", format = "html", col.names = colnames(pcos_data)) %>%
+kable(caption = "<font color=#000000><b>Table 3.</b>`pcos_data` merged data </font>", 
+      format = "html", col.names = colnames(pcos_data)) %>%
   kable_styling(bootstrap_options = c("hover", "condensed"), font_size = 13) %>%
   kableExtra::scroll_box(width = "100%", height = "400px")
 
@@ -450,13 +510,16 @@ pcos_data$"Waist_Hip_Ratio" <- round((pcos_data$"Waist" / pcos_data$"Hip"),2)
 pcos_data$"FSH_LH" <- round((pcos_data$"FSH_mIUmL"/pcos_data$"LH_mIUmL"),2)
 
 # calculate Married years
-pcos_data$"Married(yrs)"[is.na(pcos_data$"Married(yrs)")] <- median(pcos_data$"Married(yrs)", na.rm = T)
+pcos_data$"Married(yrs)"[is.na(pcos_data$"Married(yrs)")] <- median(pcos_data$"Married(yrs)", 
+                                                                    na.rm = T)
 
 # calculate Fast food
-pcos_data$"Fast_food"[is.na(pcos_data$"Fast_food")] <- median(pcos_data$"Fast_food", na.rm = T)
+pcos_data$"Fast_food"[is.na(pcos_data$"Fast_food")] <- median(pcos_data$"Fast_food", 
+                                                              na.rm = T)
 
 # calculate 
-pcos_data$"AMH_ngmL"[is.na(pcos_data$"AMH_ngmL")] <- median(pcos_data$"AMH_ngmL", na.rm = T)
+pcos_data$"AMH_ngmL"[is.na(pcos_data$"AMH_ngmL")] <- median(pcos_data$"AMH_ngmL", 
+                                                            na.rm = T)
 
 # List of variables to round
 vars_to_round <- c("Hb_gdl", "Married_yrs", "IbetaHCG_mIUmL", "IbetaHCG_mIUmL", 
@@ -473,7 +536,8 @@ pcos_cleaned <- pcos_data[-1]
 
 # display results of cleaned pcos
 pcos_cleaned %>% 
-kable(caption = "<font color=#000000><b>Table 4.</b>`pcos_cleaned` dataset </font>", format = "html", col.names = colnames(pcos_cleaned)) %>%
+kable(caption = "<font color=#000000><b>Table 4.</b>`pcos_cleaned` dataset </font>", 
+      format = "html", col.names = colnames(pcos_cleaned)) %>%
   kable_styling(bootstrap_options = c("hover", "condensed"), font_size = 13) %>%
   kableExtra::scroll_box(width = "100%", height = "400px")
 
@@ -491,7 +555,7 @@ cor_matrix <- cor(numerical_data)
 
 # Print the correlation matrix
 corrplot(cor_matrix, method = "color", type = "lower", 
-         tl.col = "black", tl.cex = 0.9, title = "Fig. 4 Correlation plot of `pcos_cleaned` data",mar=c(0,0,1,0))#http://stackoverflow.com/a/14754408/54964
+         tl.col = "black", tl.cex = 0.9, title = "Fig. 4 Correlation plot of `pcos_cleaned` data", mar=c(0,0,1,0)) #http://stackoverflow.com/a/14754408/54964
 
 # boxplot of the variables with the outlier parameters
 pcos_df2 <- pcos_cleaned %>%
@@ -525,7 +589,7 @@ p2 <- pcos_cleaned %>%
     labs(title="Weight Distribution", x ="Weight (kg)", y = "Count") +
     theme_ipsum() +
       theme(
-        plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
+        plot.title = element_text(size=12), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
     )
 
 # Histogram of years married distribution
@@ -536,7 +600,7 @@ p3 <- pcos_cleaned %>%
     labs(title="Years Married Distribution", x ="Married (yrs)", y = "count") +
     theme_ipsum() +
       theme(
-        plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
+        plot.title = element_text(size=12), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
     )
 
 # plot all histograms
@@ -714,8 +778,8 @@ ggplot(aes(x=`AMH_ngmL`, y=`FSH_LH`, color=as.factor(`PCOS`))) +
     )
 
 # plot all scatterplots
-ggp_all2 <- (p4 + p5 + p6) / (p7 + p8 + p9) / (p10 + p11 + p12) / (p13 + p14 + p15) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 7 - Scatterplot of variables with PCOS yes or no as factor") & 
+ggp_all2 <- (p4 + p5 + p6) / (p7 + p8 + p9) / (p10 + p11 + p12) / (p13 + p14 + p15) +
+  plot_annotation(title = "Fig. 7 - Scatterplot of variables with PCOS yes or no as factor") &
   theme(plot.title = element_text(hjust = 0.5))
 ggp_all2 
 
@@ -837,7 +901,7 @@ p24 <- pcos_cleaned %>%
     )
 
 # plot all barcharts
-ggp_all3 <- (p16 + p17 + p18) / (p19 + p20 + p21) / (p22 + p23 + p24) +    # Create grid of plots with title
+ggp_all3 <- (p16 + p17 + p18) / (p19 + p20 + p21) / (p22 + p23 + p24) +    
   plot_annotation(title = "Fig. 8 - Bar charts of Bloodwork variables") & 
   theme(plot.title = element_text(hjust = 0.5))
 ggp_all3 
@@ -846,7 +910,6 @@ ggp_all3
 p25 <- pcos_cleaned %>% 
   ggplot(aes(x = Blood_Group, fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Blood Group with PCOS") +
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
@@ -962,7 +1025,6 @@ p33 <- pcos_cleaned %>%
 p34 <- pcos_cleaned %>% 
   ggplot(aes(x = `Cycle_length_days`, fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Cycle length in days with PCOS") +
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
@@ -982,7 +1044,7 @@ p35 <- pcos_cleaned %>%
     )
 
 # plot all barcharts
-ggp_all4 <- (p25 + p26 + p27) / (p28 + p29 + p30) / (p31 + p32 + p33) / (p34 + p35) +    # Create grid of plots with title
+ggp_all4 <- (p25 + p26 + p27) / (p28 + p29 + p30) / (p31 + p32 + p33) / (p34 + p35) +
   plot_annotation(title = "Fig. 9 - Bar charts of yes or no variables") & 
   theme(plot.title = element_text(hjust = 0.5))
 ggp_all4 
@@ -991,7 +1053,6 @@ ggp_all4
 p36 <- pcos_cleaned %>% 
   ggplot(aes(x = as.factor(`Vit_D3_ngmL`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Vitamin D3 levels with PCOS") +
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
@@ -1003,7 +1064,6 @@ p36 <- pcos_cleaned %>%
 p37 <- pcos_cleaned %>% 
   ggplot(aes(x = as.factor(`FSH_LH`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("FSH/LH levels with PCOS") +
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
@@ -1016,7 +1076,6 @@ p37 <- pcos_cleaned %>%
 p38 <- pcos_cleaned %>% 
   ggplot(aes(x = as.factor(`TSH_mIUmL`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Thyroid Hormone levels with PCOS") +
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
@@ -1028,7 +1087,6 @@ p38 <- pcos_cleaned %>%
 p39 <- pcos_cleaned %>% 
   ggplot(aes(x = as.factor(`Hb_gdl`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Hemoglobin levels with PCOS") +
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
@@ -1040,7 +1098,6 @@ p39 <- pcos_cleaned %>%
 p40 <- pcos_cleaned %>% 
   ggplot(aes(x = as.factor(`PRL_ngmL`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Prolactin levels with PCOS") +
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
@@ -1052,7 +1109,6 @@ p40 <- pcos_cleaned %>%
 p41 <- pcos_cleaned %>% 
   ggplot(aes(x = as.factor(`PRG_ngmL`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Progesterone levels with PCOS") +
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
@@ -1064,7 +1120,6 @@ p41 <- pcos_cleaned %>%
 p42 <- pcos_cleaned %>% 
   ggplot(aes(x = as.factor(`RBS_mgdl`), fill = as.factor(`PCOS`))) +
     geom_bar(position = "dodge") +
-    #geom_text(aes(label = ..count..), position = position_dodge(width = 1), stat = "count", vjust = 1.5, colour = "black") +
     ggtitle("Glucose levels with PCOS") +
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
@@ -1073,10 +1128,12 @@ p42 <- pcos_cleaned %>%
     )
 
 # plot barcharts
-ggp_all5 <- (p36 + p37 + p38 + p39) / (p40 + p41 + p42)  +    # Create grid of plots with title
+ggp_all5 <- (p36 + p37 + p38 + p39) / (p40 + p41 + p42)  +
   plot_annotation(title = "Fig. 10 - Bar charts of Yes or No variables") & 
   theme(plot.title = element_text(hjust = 0.5))
 ggp_all5 
+
+
 
 # DECISION TREE:
 
@@ -1092,10 +1149,13 @@ valid <- pcos_cleaned[-inTrain,]
 rpart_model <- rpart(`PCOS` ~ ., method = "class", data = train)
 
 # display the decision tree
-prp(rpart_model, main = "Fig. 12 - Decision Tree with entire dataset", extra=1, faclen=0,  nn=T, box.palette="Blues")
+prp(rpart_model, main = "Fig. 12 - Decision Tree with entire dataset", 
+    extra=1, faclen=0,  nn=T, box.palette="Blues")
 
 # creating our prediction
-rpart_result <- predict(rpart_model, newdata = valid[, !colnames(valid) %in% "PCOS"], type = 'class')
+rpart_result <- predict(rpart_model, 
+                        newdata = valid[, !colnames(valid) %in% "PCOS"], 
+                        type = 'class')
 
 # confusion matrix
 confusionMatrix(rpart_result, as.factor(valid$`PCOS`))
@@ -1109,7 +1169,8 @@ kable(accuracy_rpart, align = "l")
 
 # creating the second dataset from the original
 pcos_cleaned2 <- pcos_cleaned %>%
-  select(`PCOS`, `Follicle_NoR`, `Follicle_NoL`, `Weight_gain`, `Skin_darkening`, `Hair_growth`)
+  select(`PCOS`, `Follicle_NoR`, `Follicle_NoL`, `Weight_gain`, 
+         `Skin_darkening`, `Hair_growth`)
 
 # create some random number for reproduction
 set.seed(28)
@@ -1123,10 +1184,13 @@ valid2 <- pcos_cleaned2[-inTrain2,]
 rpart_model2 <- rpart(`PCOS` ~ ., method = "class", data = train2)
 
 # display the decision tree
-prp(rpart_model2, main = "Fig. 13 - Second Decision Tree with 6 variables", extra=1, faclen=0,  nn=T, box.palette="Blues")
+prp(rpart_model2, main = "Fig. 13 - Second Decision Tree with 6 variables", 
+    extra=1, faclen=0,  nn=T, box.palette="Blues")
 
 # creating our prediction
-rpart_result2 <- predict(rpart_model2, newdata = valid2[, !colnames(valid2) %in% "PCOS"], type = 'class')
+rpart_result2 <- predict(rpart_model2, 
+                         newdata = valid2[, !colnames(valid2) %in% "PCOS"], 
+                         type = 'class')
 
 # creating the second confusion matrix
 confusionMatrix(rpart_result2, as.factor(valid2$`PCOS`))
@@ -1135,7 +1199,8 @@ confusionMatrix(rpart_result2, as.factor(valid2$`PCOS`))
 varImp(rpart_model2) %>% kable()
 
 # Extract accuracy from the confusion matrix
-accuracy_rpart2 <- confusionMatrix(rpart_result2, as.factor(valid2$`PCOS`))$overall["Accuracy"]
+accuracy_rpart2 <- confusionMatrix(rpart_result2,
+                                   as.factor(valid2$`PCOS`))$overall["Accuracy"]
 kable(accuracy_rpart2, align = "l")
 
 # RANDOM FOREST:
@@ -1235,7 +1300,9 @@ levels(rf_valid2$PCOS)
 set.seed(7)
 
 # create the second random forest model using the training data from the third decision tree
-rf_model2 <- randomForest(PCOS ~ Follicle_NoR + Follicle_NoL + Weight_gain + Skin_darkening + Hair_growth, data = rf_train2)
+rf_model2 <- randomForest(PCOS ~ Follicle_NoR + Follicle_NoL + 
+                            Weight_gain + Skin_darkening + 
+                            Hair_growth, data = rf_train2)
 rf_model2
 
 # creating the prediction for the third decision tree
@@ -1268,7 +1335,8 @@ varImpPlot(rf_model2)
 varImp(rf_model2) %>% kable()
 
 # Extract accuracy from the confusion matrix for the rf_model2
-accuracy_rf2 <- confusionMatrix(data = rf_result2_factor, reference = rf_valid2$PCOS)$overall["Accuracy"]
+accuracy_rf2 <- confusionMatrix(data = rf_result2_factor, 
+                                reference = rf_valid2$PCOS)$overall["Accuracy"]
 accuracy_rf2
 
 # GRADIENT BOOSTING MACHINES:
@@ -1277,7 +1345,10 @@ accuracy_rf2
 set.seed(67)
 
 # Train the GBM model
-gbm_model <- gbm(`PCOS` ~ ., data = train, distribution = "bernoulli", n.trees = 100, interaction.depth = 4, shrinkage = 0.01, bag.fraction = 0.5)
+gbm_model <- gbm(`PCOS` ~ ., data = train, 
+                 distribution = "bernoulli", n.trees = 100, 
+                 interaction.depth = 4, shrinkage = 0.01, 
+                 bag.fraction = 0.5)
 
 # Print the summary of the trained model
 summary(gbm_model)
@@ -1297,7 +1368,8 @@ cat("Accuracy:", gbm_accuracy)
 
 # creating the second dataset from the original
 pcos_cleaned3 <- pcos_cleaned %>%
-  select(`PCOS`, `Follicle_NoR`, `Follicle_NoL`, `Weight_gain`, `Skin_darkening`, `Hair_growth`)
+  select(`PCOS`, `Follicle_NoR`, `Follicle_NoL`, 
+         `Weight_gain`, `Skin_darkening`, `Hair_growth`)
 
 # Set seed for reproducibility
 set.seed(68)
@@ -1308,7 +1380,10 @@ train3 <- pcos_cleaned3[inTrain3,]
 valid3 <- pcos_cleaned3[-inTrain3,]
 
 # Train the GBM model
-gbm_model2 <- gbm(`PCOS` ~ ., data = train3, distribution = "bernoulli", n.trees = 100, interaction.depth = 4, shrinkage = 0.01, bag.fraction = 0.5)
+gbm_model2 <- gbm(`PCOS` ~ ., data = train3, 
+                  distribution = "bernoulli", n.trees = 100, 
+                  interaction.depth = 4, shrinkage = 0.01, 
+                  bag.fraction = 0.5)
 
 # Print the summary of the trained model
 summary(gbm_model2)
@@ -1414,7 +1489,9 @@ levels(svm_valid2$PCOS)
 
 
 # Second SVM
-svm_model2 <- svm(PCOS ~ Follicle_NoR + Follicle_NoL + Weight_gain + Skin_darkening + Hair_growth, svm_train2)
+svm_model2 <- svm(PCOS ~ Follicle_NoR + Follicle_NoL + 
+                    Weight_gain + Skin_darkening + 
+                    Hair_growth, svm_train2)
 
 # create prediction
 svm_result2 <- predict(svm_model2, newdata = svm_valid2)
@@ -1481,7 +1558,8 @@ nn_accuracy
 set.seed(13)
 
 # create the second model
-nn_model2 <-  neuralnet(`PCOS`~Follicle_NoL + Follicle_NoR + Hair_growth + Skin_darkening + Weight_gain,
+nn_model2 <-  neuralnet(`PCOS`~Follicle_NoL + Follicle_NoR + 
+                          Hair_growth + Skin_darkening + Weight_gain,
                         data=train2,
                         hidden=c(2,1),
                         linear.output = FALSE,
@@ -1536,7 +1614,8 @@ knn_accuracy
 
 # Filter and select the desired columns for the new dataset
 pcos_cleaned4 <- pcos_cleaned %>%
-  select(`PCOS`, `Follicle_NoR`, `Follicle_NoL`, `Weight_gain`, `Skin_darkening`, `Hair_growth`)
+  select(`PCOS`, `Follicle_NoR`, `Follicle_NoL`, `Weight_gain`, 
+         `Skin_darkening`, `Hair_growth`)
 
 # Split the data into training and validation sets (if needed)
 set.seed(123)  # Set seed for reproducibility
@@ -1562,8 +1641,15 @@ knn_accuracy2 <- mean(knn_model2 == valid4$`PCOS`)
 knn_accuracy2
 
 # Compare models
-model_names <- c("Decision Tree 1","Decision Tree 2", "Random Forest 1", "Random Forest 2", "Gradient Boost Machines 1", "Gradient Boost Machines 2" ,"SVM 1", "SVM 2", "Neural Network 1", "Neural Network 2", "k-Nearest 1", "k-Nearest 2")
-accuracies <- c(0.8592593, 0.9185185, 0.6148148, 0.9037037, 0.8814815, 0.6222222, 0.9111111, 0.9185185, 0.3037037, 0.3037037, 0.7111111, 0.8814815)
+model_names <- c("Decision Tree 1","Decision Tree 2", 
+                 "Random Forest 1", "Random Forest 2", 
+                 "Gradient Boost Machines 1", 
+                 "Gradient Boost Machines 2" ,
+                 "SVM 1", "SVM 2", "Neural Network 1", 
+                 "Neural Network 2", "k-Nearest 1", "k-Nearest 2")
+accuracies <- c(0.8592593, 0.9185185, 0.6148148, 0.9037037, 
+                0.8814815, 0.6222222, 0.9111111, 0.9185185, 
+                0.3037037, 0.3037037, 0.7111111, 0.8814815)
 
 # place accuracies in data frame
 results <- data.frame(Model = model_names, Accuracy = accuracies)
@@ -1572,7 +1658,8 @@ results <- data.frame(Model = model_names, Accuracy = accuracies)
 results <- results[order(results$Accuracy, decreasing = TRUE), ]
 
 # Display the results
-kable(results, caption = "<font color=#000000><b>Table 5.</b>Model Comparison </font>", format = "html") %>%
+kable(results, caption = "<font color=#000000><b>Table 5.</b>Model Comparison </font>",
+      format = "html") %>%
   kable_styling(bootstrap_options = c("hover", "condensed"), font_size = 13) %>%
   kableExtra::scroll_box(width = "100%", height = "400px")
 ```

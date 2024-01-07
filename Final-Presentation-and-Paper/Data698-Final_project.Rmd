@@ -99,35 +99,56 @@ Variables                               Description
 ----------------------------            ---------------------------------------
 "Sl..No"                                unique identification number assigned to each entry
 "Patient.File.No."                      file number for each patient's record.       
-"PCOS..Y.N."                            indicates the presence or absence of PCOS, with "Y" denoting "1 or Yes" and "N" for "0 or No."
-"I...beta.HCG.mIU.mL."                  pregnancy hormone case I measured in milli-international units per liter (mIU/L)
-"II....beta.HCG.mIU.mL."                pregnancy hormone case II measured in milli-international units per liter (mIU/L)
+"PCOS..Y.N."                            presence or absence of PCOS
+"I...beta.HCG.mIU.mL."                  pregnancy hormone case I measured in 
+                                        milli-international units per liter (mIU/L)
+"II....beta.HCG.mIU.mL."                pregnancy hormone case II measured in 
+                                        milli-international units per liter (mIU/L)
 "AMH.ng.mL."                            detects ovarian reserve (egg count)           
 "Age..yrs."                             age of patient in years            
 "Weight..Kg."                           weight of patient in kg            
 "Height.Cm."                            height of patient in cm            
 "BMI"                                   body mass index                    
-"Blood.Group"                           Blood Groups: A+ = 11, A- = 12, B+ = 13, B- = 14, O+ = 15, O- = 16, AB+ = 17, AB- = 18            
+"Blood.Group"                           Blood Groups: 
+                                        A+ = 11, A- = 12, B+ = 13, B- = 14, 
+                                        O+ = 15, O- = 16, AB+ = 17, AB- = 18            
 "Pulse.rate.bpm."                       beats per minute       
 "RR..breaths.min."                      respiration rates per minute       
-"Hb.g.dl."                              hemoglobin concentration measured in grams per deciliter (g/dL).               
-"Cycle.R.I."                            cycle Regularity Index used to assess the regularity or irregularity of menstrual cycles in women: 4 indicates irregular menstrual cycle, 2 indicates a regular menstrual cycle           
+"Hb.g.dl."                              hemoglobin concentration measured in 
+                                        grams per deciliter (g/dL).               
+"Cycle.R.I."                            cycle Regularity Index used to assess the 
+                                        regularity or irregularity of menstrual cycles 
+                                        in women: 4 indicates irregular menstrual cycle, 
+                                        2 indicates a regular menstrual cycle           
 "Cycle.length.days."                    length of menstrual cycle     
 "Marraige.Status..Yrs."                 years married  
 "Pregnant.Y.N."                         pregnant yes or no         
 "No..of.aborptions"                     number of abortions      
-"FSH.mIU.mL."                           follicle stimulating hormone measured in milli-international units per liter (mIU/L)            
-"LH.mIU.mL."                            luteinizing hormone (increases during ovulation) measured in milli-international units per liter (mIU/L)             
-"FSH.LH"                                ratio between Follicle-Stimulating Hormone (FSH) and Luteinizing Hormone (LH)                
+"FSH.mIU.mL."                           follicle stimulating hormone measured 
+                                        in milli-international units per liter (mIU/L)            
+"LH.mIU.mL."                            luteinizing hormone (increases during ovulation) 
+                                        measured in milli-international units per liter (mIU/L)             
+"FSH.LH"                                ratio between Follicle-Stimulating Hormone (FSH) 
+                                        and Luteinizing Hormone (LH)                
 "Hip.inch."                             measurement of hips in inches              
 "Waist.inch."                           measurement of waist in inches            
 "Waist.Hip.Ratio"                       ratio of measurement of waist and hip       
-"TSH..mIU.L."                           thyroid stimulating hormone measured in milli-international units per liter (mIU/L)           
-"AMH.ng.mL."                            Anti-Müllerian Hormone (AMH) measured in nanograms per milliliter (ng/mL); a marker used in reproductive medicine to assess ovarian reserve             
-"PRL.ng.mL."                            Prolactin measured in nanograms per milliliter (ng/mL); a hormone produced by the pituitary gland           
-"Vit.D3..ng.mL."                        Vitamin D3 measured in nanograms per milliliter (ng/mL); is essential for bone health, immune function, and various other bodily processes.         
-"PRG.ng.mL."                            Progesterone measured in nanograms per milliliter (ng/mL); a hormone involved in the menstrual cycle, pregnancy, and maintaining the uterine lining for a developing embryo.             
-"RBS.mg.dl."                            Random Blood Sugar measured in milligrams per deciliter (mg/dL); it represents the level of glucose (sugar) present in the blood at a random time, without fasting.            
+"TSH..mIU.L."                           thyroid stimulating hormone measured in 
+                                        milli-international units per liter (mIU/L)           
+"AMH.ng.mL."                            Anti-Müllerian Hormone (AMH) measured in 
+                                        nanograms per milliliter (ng/mL); a marker used in 
+                                        reproductive medicine to assess ovarian reserve             
+"PRL.ng.mL."                            Prolactin measured in nanograms per milliliter (ng/mL); 
+                                        a hormone produced by the pituitary gland           
+"Vit.D3..ng.mL."                        Vitamin D3 measured in nanograms per milliliter (ng/mL); 
+                                        is essential for bone health, immune function, and 
+                                        various other bodily processes.         
+"PRG.ng.mL."                            Progesterone measured in nanograms per milliliter (ng/mL); a
+                                        hormone involved in the menstrual cycle, pregnancy, and
+                                        maintaining the uterine lining for a developing embryo.             
+"RBS.mg.dl."                            Random Blood Sugar measured in milligrams per deciliter 
+                                        (mg/dL); it represents the level of glucose (sugar) present
+                                        in the blood at a random time, without fasting.            
 "Weight.gain.Y.N."                      weight gain yes or no       
 "hair.growth.Y.N."                      hair growth yes or no (hirsutism)       
 "Skin.darkening..Y.N."                  darkening of skin yes or no  
@@ -135,13 +156,13 @@ Variables                               Description
 "Pimples.Y.N."                          pimples (acne) yes or no           
 "Fast.food..Y.N."                       consumption of fast food yes or no    
 "Reg.Exercise.Y.N."                     regularly exercise yes or no                 
-"BP._Systolic..mmHg."                   systolic blood pressure measured in millimeters of mercury (mmHg).     
+"BP._Systolic..mmHg."                   systolic blood pressure measured in millimeters of mercury (mmHg)     
 "BP._Diastolic..mmHg."                  diastolic blood pressure measured in millimeters of mercury (mmHg)  
 "Follicle.No...L."                      number of follicles on left ovary       
 "Follicle.No...R."                      number of follicles in right ovary       
 "Avg..F.size..L...mm."                  average size of follicles in left ovary measured in millimeters (mm)  
 "Avg..F.size..R...mm."                  average size of follicles in right ovary measured in millimeters (mm)  
-"Endometrium..mm."                      size of the endometrial thickness in millimeters (mm)      
+"Endometrium..mm."                      size of the endometrial thickness in millimeters (mm)
 
 $~$
 
@@ -389,11 +410,11 @@ kable(caption = "<font color=#000000><b>Table 3.</b>`pcos_data` merged data </fo
 
 $~$
 
-In the second part, I addressed missing values by initially converting `Height` from centimeters to meters, computing `BMI`, `Waist_Hip_Ratio`, and `FSH/LH`. Following a thorough assessment of the dataset, I opted to substitute missing values in `Married_yrs`, `AMH(ng/mL)`, and `Fast_food` with the median value as it didn't significantly affect the data's distribution.
+In the second part, I addressed missing values by initially converting `Height` from centimeters to meters, `Hip` and `Waist` from inches to cm and computing `BMI`, `Waist_Hip_Ratio`, and `FSH/LH`. Following a thorough assessment of the dataset, I opted to substitute missing values in `Married_yrs`, `AMH(ng/mL)`, and `Fast_food` with the median value as it didn't significantly affect the data's distribution.
 
 
 ```{r, echo=FALSE, warning=FALSE}
-# convert Height from cm to
+# convert Height from cm to meters
 pcos_data$"Height" <- round((pcos_data$"Height" * 0.01),1)
 
 # convert hip and waist from inches to cm
@@ -415,7 +436,7 @@ pcos_data$"Married(yrs)"[is.na(pcos_data$"Married(yrs)")] <- median(pcos_data$"M
 # calculate Fast food
 pcos_data$"Fast_food"[is.na(pcos_data$"Fast_food")] <- median(pcos_data$"Fast_food", na.rm = T)
 
-# calculate 
+# calculate AMH_ngml
 pcos_data$"AMH_ngmL"[is.na(pcos_data$"AMH_ngmL")] <- median(pcos_data$"AMH_ngmL", na.rm = T)
 
 # List of variables to round
@@ -495,7 +516,7 @@ pcos_df2 %>%
   ggtitle("Fig. 5 - Boxplot outliers for `pcos_cleaned` data") +
   theme_ipsum() +
     theme(
-      plot.title = element_text(size=12)
+      plot.title = element_text(size=14)
     )
 ```
 
@@ -521,7 +542,7 @@ p1 <- pcos_cleaned %>%
   labs(title = "Age Distribution", x = "Age (years)", y = "Count") +
   theme_ipsum() +
   theme(
-    plot.title = element_text(size = 10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
+    plot.title = element_text(size = 12), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
   )
 
 # Histogram of Weight distribution
@@ -532,7 +553,7 @@ p2 <- pcos_cleaned %>%
     labs(title="Weight Distribution", x ="Weight (kg)", y = "Count") +
     theme_ipsum() +
       theme(
-        plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
+        plot.title = element_text(size=12), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
     )
 
 # Histogram of years married distribution
@@ -543,13 +564,15 @@ p3 <- pcos_cleaned %>%
     labs(title="Years Married Distribution", x ="Married (yrs)", y = "count") +
     theme_ipsum() +
       theme(
-        plot.title = element_text(size=10), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
+        plot.title = element_text(size=12), axis.text.x = element_text(angle = 90, vjust = 1, hjust=2, size=5)
     )
 
 # plot all histograms
-ggp_all <- (p1 + p2 + p3) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 6 - Scatterplot of Biometric measures Variables") & 
-  theme(plot.title = element_text(hjust = 0.5))
+ggp_all <- (p1 + p2 + p3) +
+  plot_annotation(
+    title = 'Fig. 6 - Scatterplot of Biometric measures Variables',
+    theme = theme(plot.title = element_text(hjust = 0.5, size = 16))
+  )
 ggp_all 
 ```
 
@@ -751,9 +774,11 @@ ggplot(aes(x=`AMH_ngmL`, y=`FSH_LH`, color=as.factor(`PCOS`))) +
     )
 
 # plot all scatterplots
-ggp_all2 <- (p4 + p5 + p6) / (p7 + p8 + p9) / (p10 + p11 + p12) / (p13 + p14 + p15) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 7 - Scatterplot of variables with PCOS (Y/N) as factor") & 
-  theme(plot.title = element_text(hjust = 0.5))
+ggp_all2 <- (p4 + p5 + p6) / (p7 + p8 + p9) / (p10 + p11 + p12) / (p13 + p14 + p15) + 
+    plot_annotation(
+    title = 'Fig. 7 - Scatterplot of variables with PCOS (Y/N) as factor',
+    theme = theme(plot.title = element_text(hjust = 0.5, size = 16))
+  )
 ggp_all2  
 ```
 
@@ -791,7 +816,7 @@ p16 <- pcos_cleaned %>%
     labs(title="PCOS", x ="PCOS(Yes or No)", y = "count") +
    theme_ipsum() +
       theme(
-        plot.title = element_text(size=10)
+        plot.title = element_text(size=12)
       )
 
 # barchart of Pregnant variable
@@ -804,7 +829,7 @@ p17 <- pcos_cleaned %>%
     labs(title="Pregnant", x ="Pregnant(Yes or No)", y = "count") +
   theme_ipsum() +
     theme(
-      plot.title = element_text(size=10)
+      plot.title = element_text(size=12)
     )
 
 # barchart of Weight gain variable
@@ -817,7 +842,7 @@ p18 <- pcos_cleaned %>%
     labs(title="Weight Gain", x ="Weight Gain (Yes or No)", y = "count") +
   theme_ipsum() +
     theme(
-      plot.title = element_text(size=10)
+      plot.title = element_text(size=12)
     )
 
 # barchart of Hair growth variable
@@ -830,7 +855,7 @@ p19 <- pcos_cleaned %>%
     labs(title="Hair Growth", x ="Hair Growth(Yes or No)", y = "count") +
   theme_ipsum() +
     theme(
-      plot.title = element_text(size=10)
+      plot.title = element_text(size=12)
     )
 
 # barchart of Skin darkening variable
@@ -843,7 +868,7 @@ p20 <- pcos_cleaned %>%
     labs(title="Skin Darkening", x ="Skin Darkening (Yes or No)", y = "count") +
   theme_ipsum() +
     theme(
-      plot.title = element_text(size=10)
+      plot.title = element_text(size=12)
     )
 
 # barchart of Hair loss variable
@@ -856,7 +881,7 @@ p21 <- pcos_cleaned %>%
     labs(title="Hair Loss", x ="Hair Loss(Yes or No)", y = "count") +
   theme_ipsum() +
     theme(
-      plot.title = element_text(size=10)
+      plot.title = element_text(size=12)
     )
 
 # barchart of Pimples variable
@@ -869,7 +894,7 @@ p22 <- pcos_cleaned %>%
     labs(title="Pimples", x ="Pimples(Yes or No)", y = "count") +
   theme_ipsum() +
     theme(
-      plot.title = element_text(size=10)
+      plot.title = element_text(size=12)
     )
 
 # barchart of Fast food variable
@@ -882,7 +907,7 @@ p23 <- pcos_cleaned %>%
     labs(title="Fast Food", x ="Fast Food(Yes or No)", y = "count") +
   theme_ipsum() +
     theme(
-      plot.title = element_text(size=10)
+      plot.title = element_text(size=12)
     )
 
 # barchart of Regularly Exercise variable
@@ -895,13 +920,15 @@ p24 <- pcos_cleaned %>%
     labs(title="Regularly Exercise", x ="Regular Exercise(Yes or No)", y = "count") +
   theme_ipsum() +
     theme(
-      plot.title = element_text(size=10)
+      plot.title = element_text(size=12)
     )
 
 # plot all barcharts
-ggp_all3 <- (p16 + p17 + p18) / (p19 + p20 + p21) / (p22 + p23 + p24) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 8 - Bar charts of Bloodwork variables") & 
-  theme(plot.title = element_text(hjust = 0.5))
+ggp_all3 <- (p16 + p17 + p18) / (p19 + p20 + p21) / (p22 + p23 + p24) +
+    plot_annotation(
+    title = 'Fig. 8 - Bar charts of Bloodwork variables',
+    theme = theme(plot.title = element_text(hjust = 0.5, size = 18))
+  )
 ggp_all3 
 ```
 
@@ -942,7 +969,7 @@ p25 <- pcos_cleaned %>%
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+      plot.title = element_text(size=12), axis.text.x = element_text(angle = 45)
     )
 
 # barchart of Pregnant variable against PCOS
@@ -955,7 +982,7 @@ p26 <- pcos_cleaned %>%
     scale_x_discrete(labels=c('No', 'Yes')) +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+      plot.title = element_text(size=12), axis.text.x = element_text(angle = 45)
     )
 
 # barchart of Weight gain variable against PCOS
@@ -968,7 +995,7 @@ p27 <- pcos_cleaned %>%
     scale_x_discrete(labels=c('No','Yes')) +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+      plot.title = element_text(size=12), axis.text.x = element_text(angle = 45)
     )
 
 # barchart of Hair growth variable against PCOS
@@ -981,7 +1008,7 @@ p28 <- pcos_cleaned %>%
     scale_x_discrete(labels=c('No','Yes')) +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+      plot.title = element_text(size=12), axis.text.x = element_text(angle = 45)
     )
 
 # barchart of Skin darkening variable against PCOS
@@ -994,7 +1021,7 @@ p29 <- pcos_cleaned %>%
     scale_x_discrete(labels=c('No','Yes')) +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+      plot.title = element_text(size=12), axis.text.x = element_text(angle = 45)
     )
 
 # barchart of Hair loss variable against PCOS
@@ -1007,7 +1034,7 @@ p30 <- pcos_cleaned %>%
     scale_x_discrete(labels=c('No','Yes')) +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+      plot.title = element_text(size=12), axis.text.x = element_text(angle = 45)
     )
 
 # barchart of Pimples variable against PCOS
@@ -1020,7 +1047,7 @@ p31 <- pcos_cleaned %>%
     scale_x_discrete(labels=c('No','Yes')) +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+      plot.title = element_text(size=12), axis.text.x = element_text(angle = 45)
     )
 
 # barchart of Fast food variable against PCOS
@@ -1033,7 +1060,7 @@ p32 <- pcos_cleaned %>%
     scale_x_discrete(labels=c('No','Yes')) +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+      plot.title = element_text(size=12), axis.text.x = element_text(angle = 45)
     )
 
 # barchart of Reg. Exercise variable against PCOS
@@ -1046,7 +1073,7 @@ p33 <- pcos_cleaned %>%
     scale_x_discrete(labels=c('No','Yes')) +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+      plot.title = element_text(size=12), axis.text.x = element_text(angle = 45)
     )
 
 # barchart of Length of Cycle variable against PCOS
@@ -1058,7 +1085,7 @@ p34 <- pcos_cleaned %>%
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+      plot.title = element_text(size=12), axis.text.x = element_text(angle = 45)
     )
 
 # barchart of Number of abortions variable against PCOS
@@ -1069,13 +1096,15 @@ p35 <- pcos_cleaned %>%
     scale_fill_discrete(name = "PCOS", labels = c("No", "Yes")) +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=10), axis.text.x = element_text(angle = 45)
+      plot.title = element_text(size=12), axis.text.x = element_text(angle = 45)
     )
 
 # plot all barcharts
-ggp_all4 <- (p25 + p26 + p27) / (p28 + p29 + p30) / (p31 + p32 + p33) / (p34 + p35) +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 9 - Bar charts of yes or no variables") & 
-  theme(plot.title = element_text(hjust = 0.5))
+ggp_all4 <- (p25 + p26 + p27) / (p28 + p29 + p30) / (p31 + p32 + p33) / (p34 + p35) + 
+    plot_annotation(
+    title = 'Fig. 9 - Bar charts of yes or no variables',
+    theme = theme(plot.title = element_text(hjust = 0.5, size = 18))
+  )
 ggp_all4 
 ```
 
@@ -1183,9 +1212,11 @@ p42 <- pcos_cleaned %>%
     )
 
 # plot barcharts
-ggp_all5 <- (p36 + p37 + p38 + p39) / (p40 + p41 + p42)  +    # Create grid of plots with title
-  plot_annotation(title = "Fig. 10 - Bar charts of Biometrics Measures including PCOS (Y/N) as factor") & 
-  theme(plot.title = element_text(hjust = 0.5))
+ggp_all5 <- (p36 + p37 + p38 + p39) / (p40 + p41 + p42)  +
+    plot_annotation(
+    title = 'Fig. 10 - Bar charts of Biometrics Measures including PCOS (Y/N) as factor',
+    theme = theme(plot.title = element_text(hjust = 0.5, size = 16))
+  )
 ggp_all5 
 ```
 
@@ -1274,10 +1305,11 @@ confusionMatrix(rpart_result, as.factor(valid$`PCOS`))
 ```
 $~$
 
-```{r}
-precision(rpart_result,as.factor(valid$`PCOS`))
-recall(rpart_result, as.factor(valid$`PCOS`))
-F_meas(rpart_result, as.factor(valid$`PCOS`))
+```{r, echo=FALSE}
+# confirming statistical predictions
+dt_precision <- precision(rpart_result,as.factor(valid$`PCOS`))
+dt_recall <- recall(rpart_result, as.factor(valid$`PCOS`))
+dt_F <- F_meas(rpart_result, as.factor(valid$`PCOS`))
 ```
 
 
@@ -1583,7 +1615,7 @@ gbm_model <- gbm(`PCOS` ~ ., data = train, distribution = "bernoulli", n.trees =
 # Print the summary of the trained model
 summary(gbm_model)
 
-# Predict on the validation dataset (assuming 'valid' contains your validation dataset) fig 15
+# Predict on the validation dataset fig 15
 gbm_pred <- predict(gbm_model, newdata = valid, type = "response")
 ```
 
@@ -1636,7 +1668,7 @@ gbm_model2 <- gbm(`PCOS` ~ ., data = train3, distribution = "bernoulli", n.trees
 # Print the summary of the trained model
 summary(gbm_model2)
 
-# Predict on the validation dataset (assuming 'valid' contains your validation dataset) fig 16
+# Predict on the validation dataset fig 16
 gbm_pred2 <- predict(gbm_model2, newdata = valid3, type = "response")
 ```
 
@@ -1873,7 +1905,7 @@ nn_model <- neuralnet(`PCOS`~.,
 
 Although not displayed when knitting, the plot produced is seen below:
 
-![Fig. 17 - Neural Network 1](/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/Fig.15-Neural_Network_1.png)
+![Fig. 17 - Neural Network 1](/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/fig17.png)
 
 ```{r, echo=FALSE, fig.width=18, fig.height=12, fig.align='center', include=FALSE, error=TRUE}
 # create the plot based on the model above
@@ -2020,7 +2052,8 @@ For the second kNN, the same steps were takes as the first model with the except
 ```{r, echo=FALSE}
 # Filter and select the desired columns for the new dataset
 pcos_cleaned4 <- pcos_cleaned %>%
-  select(`PCOS`, `Follicle_NoR`, `Follicle_NoL`, `Weight_gain`, `Skin_darkening`, `Hair_growth`)
+  select(`PCOS`, `Follicle_NoR`, `Follicle_NoL`, `Weight_gain`, 
+         `Skin_darkening`, `Hair_growth`)
 
 # Split the data into training and validation sets (if needed)
 set.seed(123)  # Set seed for reproducibility
@@ -2067,8 +2100,15 @@ Overall, these accuracies suggest that Decision Tree 2, SVM 2, SVM 1, and Random
 
 ```{r, echo=FALSE}
 # Compare models
-model_names <- c("Decision Tree 1","Decision Tree 2", "Random Forest 1", "Random Forest 2", "Gradient Boost Machines 1", "Gradient Boost Machines 2" ,"SVM 1", "SVM 2", "Neural Network 1", "Neural Network 2", "k-Nearest 1", "k-Nearest 2")
-accuracies <- c(0.8592593, 0.9185185, 0.6148148, 0.9037037, 0.8814815, 0.6222222, 0.9111111, 0.9185185, 0.3037037, 0.3037037, 0.7111111, 0.8814815)
+model_names <- c("Decision Tree 1","Decision Tree 2", 
+                 "Random Forest 1", "Random Forest 2", 
+                 "Gradient Boost Machines 1", 
+                 "Gradient Boost Machines 2",
+                 "SVM 1", "SVM 2", "Neural Network 1", 
+                 "Neural Network 2", "k-Nearest 1", "k-Nearest 2")
+accuracies <- c(0.8592593, 0.9185185, 0.6148148, 0.9037037, 
+                0.8814815, 0.6222222, 0.9111111, 0.9185185, 
+                0.3037037, 0.3037037, 0.7111111, 0.8814815)
 
 # place accuracies in data frame
 results <- data.frame(Model = model_names, Accuracy = accuracies)
@@ -2086,7 +2126,7 @@ $~$
 
 ### Conclusion:
 
-I anticipated answering the following questions with my data:
+As per the questions I anticipated answering with my predictive modeling, below are the results:
 
 1.	Are there commonalities women with and without PCOS have that can be easily dismissed as normal?
 
@@ -2116,20 +2156,53 @@ $~$
 
 ### References:
 
-1.	Bulsara, J., Patel, P., Soni, A., &amp; Acharya, S. (2021, February 10). A review: Brief insight into polycystic ovarian syndrome. Endocrine and Metabolic Science. Retrieved February 23, 2023, from https://www.sciencedirect.com 
+1.	Aggarwal, S., & Pandey, K. (2023). Early identification of PCOS with commonly known diseases: Obesity, diabetes, high blood pressure, and heart disease using machine learning techniques. Expert Systems with Applications, 217, 119532. https://doi.org/10.1016/j.eswa.2023.119532
 
-2.	World female population, 1960-2022. Knoema. (2022). Retrieved February 24, 2023, from https://knoema.com. 
+2.	Anda, D., & Iyamah, E. (2022, December). Comparative analysis of artificial intelligence in the diagnosis of ... ResearchGate. Retrieved April 1, 2023, from https://www.researchgate.net/publication/366320486_Comparative_Analysis_of_Artificial_Intelligence_in_the_Diagnosis_of_Polycystic_Ovary_Syndrome 
 
-3.	MarchofDimes. (2022). Population of women 15-44 years by age: United States, 2020. March of Dimes | PeriStats. Retrieved February 24, 2023, from https://www.marchofdimes.org
+3.	Bartlett, E., & Erlich, L. (2015). Part 3: Dealing with Obstacles — Chapter 5: Polycystic Ovary Syndrome (PCOS). In Feed your fertility: Your guide to cultivating a healthy pregnancy with traditional Chinese medicine, real food, and holistic living (pp. 342–349). essay, Fair Winds Press. 
 
-4.	Engmann, L., Jin, S., Sun, F., Legro, R. S., Polotsky, A. J., Hansen, K. R., Coutifaris, C., Diamond, M. P., Eisenberg, E., Zhang, H., Santoro, N., & Reproductive Medicine Network (2017). Racial and ethnic differences in the polycystic ovary syndrome metabolic phenotype. American journal of obstetrics and gynecology, 216(5), 493.e1–493.e13. https://doi.org
+4.	Bulsara, J., Patel, P., Soni, A., &amp; Acharya, S. (2021, February 10). A review: Brief insight into polycystic ovarian syndrome. Endocrine and Metabolic Science. Retrieved February 23, 2023, from https://www.sciencedirect.com 
 
-5.	Fehring, Richard J., "Menstrual Cycle Data" (2012). Randomized Comparison of Two Internet-Supported Methods of Natural Family Planning. 7.
-https://epublications.marquette.edu
+5. Engmann, L., Jin, S., Sun, F., Legro, R. S., Polotsky, A. J., Hansen, K. R., Coutifaris, C., Diamond, M. P., Eisenberg, E., Zhang, H., Santoro, N., & Reproductive Medicine Network (2017). Racial and ethnic differences in the polycystic ovary syndrome metabolic phenotype. American journal of obstetrics and gynecology, 216(5), 493.e1–493.e13. https://doi.org
 
-6.	Khan, M. J., Ullah, A., & Basit, S. (2019). Genetic Basis of Polycystic Ovary Syndrome (PCOS): Current Perspectives. The application of clinical genetics, 12, 249–260. https://doi.org/
+6.	Goodarzi, Carmina, E., & Azziz, R. (2015). DHEA, DHEAS and PCOS. The Journal of Steroid Biochemistry and Molecular Biology, 145, 213–225. https://doi.org/10.1016/j.jsbmb.2014.06.003
 
+7.	Hassan, Malik & Mirza, Tabasum. (2020). Comparative Analysis of Machine Learning Algorithms in Diagnosis of Polycystic Ovarian Syndrome. International Journal of Computer Applications. Volume 175. 10.5120/ijca2020920688.
 
+8.	Khan, M. J., Ullah, A., & Basit, S. (2019). Genetic Basis of Polycystic Ovary Syndrome (PCOS): Current Perspectives. The application of clinical genetics, 12, 249–260. https://doi.org/
 
+9.	Kambale, T., Sawaimul, K. D., & Prakash, S. (2023). A study of hormonal and anthropometric parameters in polycystic ovarian syndrome. Annals of African medicine, 22(1), 112–116. https://doi.org/10.4103/aam.aam_15_22
 
+10.	Kavitha, K., Tangudu, N., Sahu, S. R., Narayana, G. V. L., & Anusha, V. (2023). Detection of PCOS using Machine Learning Algorithms with Grid Search CV Optimization. International Journal of Engineering Trends and Technology, 71(7), 201-208. https://doi.org/10.14445/22315381/IJETT-V71I7P219
+
+11. Kottarathil, P. (2020). Polycystic Ovary Syndrome (PCOS) Dataset. Kaggle. https://www.kaggle.com/datasets/prasoonkottarathil/polycystic-ovary-syndrome-pcos/data
+
+12.	MarchofDimes. (2022). Population of women 15-44 years by age: United States, 2020. March of Dimes | PeriStats. Retrieved February 24, 2023, from https://www.marchofdimes.org
+
+13.	Patel, J., & Rai, S. (2018, September). Polycystic ovarian syndrome (PCOS) awareness among young women of central India. ResearchGate. Retrieved March 29, 2023, from https://www.researchgate.net/publication/327566794_Polycystic_ovarian_syndrome_PCOS_awareness_among_young_women_of_central_India 
+
+14.	Ramanand, S. J., Ghongane, B. B., Ramanand, J. B., Patwardhan, M. H., Ghanghas, R. R., & Jain, S. S. (2013, January). Clinical characteristics of polycystic ovary syndrome in Indian women. Indian journal of endocrinology and metabolism. Retrieved March 18, 2023, from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3659881/ 
+
+15.	S;, K. M. J. U. A. B. (2019). Genetic basis of polycystic ovary syndrome (PCOS): Current Perspectives. The application of clinical genetics. Retrieved March 18, 2023, from https://pubmed.ncbi.nlm.nih.gov/31920361/ 
+
+16.	S. Nasim, M. S. Almutairi, K. Munir, A. Raza and F. Younas, "A Novel Approach for Polycystic Ovary Syndrome Prediction Using Machine Learning in Bioinformatics," in IEEE Access, vol. 10, pp. 97610-97624, 2022, doi: 10.1109/ACCESS.2022.3205587.
+
+17.	Shetty, Disha & Chandrasekaran, Baskaran & Singh, ArulWatson & Oliverraj, Joseph. (2017). Exercise in polycystic ovarian syndrome: An evidence-based review. Saudi Journal of Sports Medicine. 17. 123. 10.4103/sjsm.sjsm_10_17.
+
+18.	 Tiwari, S., Kane, L., Koundal, D., Jain, A., Alhudhaif, A., Polat, K., Zaguia, A., Alenezi, F., & Althubiti, S. A. (2022). SPOSDS: A smart Polycystic Ovary Syndrome diagnostic system using machine learning. Expert Systems with Applications, 203, 117592. https://doi.org/10.1016/j.eswa.2022.117592
+
+19.	Thakre, V., Vedpathak, S., Thakre, K., & Sonawani, S. (2020, December). PCOcare: PCOS detection and prediction using machine learning algorithms. ResearchGate. Retrieved April 1, 2023, from https://www.researchgate.net/publication/348627784_PCOcare_PCOS_Detection_and_Prediction_using_Machine_Learning_Algorithms 
+
+20.	Thomas, Neetha. (2020). Prediction of polycystic ovarian syndrome with clinical dataset using a novel hybrid data mining classification technique. International journal of advanced research in engineering & technology. 11. 1872-1881,. 10.34218/IJARET.11.11.2020.174.
+
+21.	Vikas, B., Anuhya, B. S., Chilla, M., & Sarangi, S. (2018). A Critical Study of Polycystic Ovarian Syndrome (PCOS) Classification Techniques. International Journal of Computational Engineering & Management, 21(4), 1. Retrieved from http://www.ijcem.org/volume21/issue4/IJCEM_2104_01.pdf
+
+22.	Wijeyaratne, C. N., Seneviratne, R.deA., Dahanayake, S., Kumarapeli, V., Palipane, E., Kuruppu, N., Yapa, C., Seneviratne, R.deA., & Balen, A. H. (2011). Phenotype and metabolic profile of South Asian women with polycystic ovary syndrome (PCOS): results of a large database from a specialist Endocrine Clinic. Human reproduction (Oxford, England), 26(1), 202–213. https://doi.org/10.1093/humrep/deq310
+
+23.	World female population, 1960-2022. Knoema. (2022). Retrieved February 24, 2023, from https://knoema.com.
+
+24. World Health Organization. (2023, June 28). Polycystic ovary syndrome (PCOS) - Fact sheet. Retrieved July 20, 2023, from https://www.who.int/news-room/fact-sheets/detail/polycystic-ovary-syndrome?gclid=Cj0KCQiAkeSsBhDUARIsAK3tiec_ZvLzUc6iwWqRVVN2FctmFAz4u1kL-_NJysQTPNT6cjuvWJxjuUoaAhh9EALw_wcB
+
+25.	Wu, J., Chen, X.-Y., Zhang, H., Xiong, L.-D., Lei, H., & Deng, S.-H. (2019). Hyperparameter Optimization for Machine Learning Models Based on Bayesian Optimization. Journal of Electronic Science and Technology, 17(1), 26-40. https://doi.org/10.11989/JEST.1674-862X.80904120
 
