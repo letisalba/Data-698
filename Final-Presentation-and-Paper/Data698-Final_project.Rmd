@@ -1,7 +1,7 @@
 ---
 title: "Data 698 - Final Project"
 author: "Leticia Salazar"
-date: "May 17, 2023"
+date: "January 8, 2024"
 output:
   html_document:
     theme: united
@@ -410,7 +410,7 @@ kable(caption = "<font color=#000000><b>Table 3.</b>`pcos_data` merged data </fo
 
 $~$
 
-In the second part, I addressed missing values by initially converting `Height` from centimeters to meters, `Hip` and `Waist` from inches to cm and computing `BMI`, `Waist_Hip_Ratio`, and `FSH/LH`. Following a thorough assessment of the dataset, I opted to substitute missing values in `Married_yrs`, `AMH(ng/mL)`, and `Fast_food` with the median value as it didn't significantly affect the data's distribution.
+In the second part, I addressed missing values by initially converting `Height` from centimeters to meters, `Hip` and `Waist` from inches to cm and computing `BMI`, `Waist_Hip_Ratio`, and `FSH_LH`. Following a thorough assessment of the dataset, I opted to substitute missing values in `Married_yrs`, `AMH_ngmL`, and `Fast_food` with the median value as it didn't significantly affect the data's distribution.
 
 
 ```{r, echo=FALSE, warning=FALSE}
@@ -1478,8 +1478,9 @@ varImp(rf_model) %>% kable()
 ```
 $~$
 
-The model's accuracy stood at 61.48%, demonstrating a performance that was not particularly strong.
+The model's accuracy stood at 62.96%, demonstrating a performance that was not particularly strong.
 ```{r, echo=FALSE, error=TRUE}
+set.seed(321)
 # Extract accuracy from the confusion matrix for the rf_model
 accuracy_rf <- confusionMatrix(rf_result, valid$PCOS)$overall["Accuracy"]
 accuracy_rf
@@ -1612,11 +1613,11 @@ set.seed(67)
 # Train the GBM model
 gbm_model <- gbm(`PCOS` ~ ., data = train, distribution = "bernoulli", n.trees = 100, interaction.depth = 4, shrinkage = 0.01, bag.fraction = 0.5)
 
-# Print the summary of the trained model
-summary(gbm_model)
-
 # Predict on the validation dataset fig 15
 gbm_pred <- predict(gbm_model, newdata = valid, type = "response")
+
+# Print the summary of the trained model
+summary(gbm_model, main="Fig.15 - Summary of first GBM model")
 ```
 
 $~$
@@ -1665,11 +1666,11 @@ valid3 <- pcos_cleaned3[-inTrain3,]
 # Train the GBM model
 gbm_model2 <- gbm(`PCOS` ~ ., data = train3, distribution = "bernoulli", n.trees = 100, interaction.depth = 4, shrinkage = 0.01, bag.fraction = 0.5)
 
-# Print the summary of the trained model
-summary(gbm_model2)
-
 # Predict on the validation dataset fig 16
 gbm_pred2 <- predict(gbm_model2, newdata = valid3, type = "response")
+
+# Print the summary of the trained model
+summary(gbm_model2, main="Fig.16 - Summary of second GBM model")
 ```
 
 $~$
@@ -1761,6 +1762,13 @@ svm_result <- predict(svm_model, newdata = valid)
 # confusion matrix for svm
 confusionMatrix(svm_result, valid$PCOS)
 ```
+
+```{r, echo=FALSE, error=TRUE}
+#plot support vector machine
+plot(svm_model, train)
+```
+
+
 $~$
 
 Within the SVM, there were 98 instances have been predicted as class 0 and 37 instances have been predicted as class 1.
@@ -1844,6 +1852,13 @@ svm_result2 <- predict(svm_model2, newdata = svm_valid2)
 # confusion matrix for svm_valid2
 confusionMatrix(svm_result2, svm_valid2$PCOS)
 ```
+
+
+```{r, echo=FALSE, error=TRUE}
+#plot second support vector machine model
+plot(svm_model2, svm_train2)
+```
+
 
 
 ```{r, echo=FALSE, error=TRUE}
@@ -2016,7 +2031,7 @@ $~$
 
 #### K-Nearest Neighbors (kknn or class):
 
-To build the k-Nearest Neighbors model I prepared the data by removing rows with missing values, although there were none, the code wouldn't run without it. After setting a seed for reproducibility I trained a kNN model using the training data and predict the 'PCOS' variable for the validation dataset. The kNN algorithm allows tweaking the number of neighbors (k) to impact the outcome. Here, it was fixed at 5; as a result, the accuracy achieved was 71.11%.
+To build the k-Nearest Neighbors model I prepared the data by removing rows with missing values, although there were none, the code wouldn't run without it. After setting a seed for reproducibility I trained a kNN model using the training data and predict the 'PCOS' variable for the validation dataset. The kNN algorithm allows tweaking the number of neighbors (k) to impact the outcome. Here, it was fixed at 5; as a result, the accuracy achieved was 65.19%.
 
 ```{r, echo=FALSE}
 # Remove rows with missing values from train and valid datasets
@@ -2034,6 +2049,19 @@ knn_model <- knn(train[, -which(names(train) == "PCOS")],
                  valid[, -which(names(valid) == "PCOS")], 
                  train$`PCOS`, 
                  k = k)
+```
+
+
+```{r, echo=FALSE}
+# Create confusion matrix for knn model
+conf_matrix <- confusionMatrix(knn_model, valid$`PCOS`)
+conf_matrix
+
+# Plot confusion matrix
+plot(conf_matrix$table, col = conf_matrix$byClass, 
+     main = "Fig. 19 - Confusion Matrix for first kNN Model",
+     xlab = "Predicted",
+     ylab = "Actual")
 ```
 
 
@@ -2075,6 +2103,20 @@ knn_model2 <- knn(train4[, -which(names(train4) == "PCOS")],
                   k = k)
 ```
 
+
+```{r, echo=FALSE}
+# Create confusion matrix for the second model
+conf_matrix2 <- confusionMatrix(knn_model2, valid$`PCOS`)
+conf_matrix2
+
+# Plot confusion matrix
+plot(conf_matrix2$table, col = conf_matrix2$byClass, 
+     main = "Fig. 20 - Confusion Matrix for second kNN Model",
+     xlab = "Predicted",
+     ylab = "Actual")
+```
+
+
 ```{r, echo=FALSE}
 # Calculate accuracy for the new kNN model
 knn_accuracy2 <- mean(knn_model2 == valid4$`PCOS`)
@@ -2106,9 +2148,12 @@ model_names <- c("Decision Tree 1","Decision Tree 2",
                  "Gradient Boost Machines 2",
                  "SVM 1", "SVM 2", "Neural Network 1", 
                  "Neural Network 2", "k-Nearest 1", "k-Nearest 2")
-accuracies <- c(0.8592593, 0.9185185, 0.6148148, 0.9037037, 
-                0.8814815, 0.6222222, 0.9111111, 0.9185185, 
-                0.3037037, 0.3037037, 0.7111111, 0.8814815)
+accuracies <- c(0.8592593, 0.9185185, 
+                0.6296296, 0.9037037, 
+                0.8814815, 0.6222222, 
+                0.9111111, 0.9185185, 
+                0.3037037, 0.3037037, 
+                0.6518519, 0.8814815)
 
 # place accuracies in data frame
 results <- data.frame(Model = model_names, Accuracy = accuracies)
@@ -2126,31 +2171,33 @@ $~$
 
 ### Conclusion:
 
-As per the questions I anticipated answering with my predictive modeling, below are the results:
+Initially, I presumed that due to the scarcity of information within the medical domain and the limited availability of datasets for analysis, I held reservations about the potential success in accurately predicting a PCOS diagnosis. Surprisingly, 8 out of the 12 models developed exhibited accuracies surpassing 85%, with only 4 out of the 8 achieving an accuracy exceeding 90%. In comparison to the findings in existing literature utilizing the same Kaggle dataset, the top 5 algorithms I employed showed a slightly lower performance, where these achieved accuracies above 95%. If I had to pick an algorithm to best represent my dataset I'd select `SVM 1` as its accuracy was of 91.11%, a unique percentage not replicated by other algorithms. Conversely, the utilization of Neural Networks in this analysis did not yield satisfactory results, deviating from the expectations set by the literature. This outcome might be attributed to the specific package utilized and the parameter settings chosen for the neural network model. For the future work, I aim to explore datasets such as [NICHDash](https://dash.nichd.nih.gov/study/15920) which are not publicly available and feature a slightly larger and more diverse population within the United States. This exploration will facilitate a more comprehensive assessment of PCOS, enabling a deeper understanding of the condition's nuances and complexities.
+
+Having subjected the data to various algorithms, I am now able to address the anticipated questions:
 
 1.	Are there commonalities women with and without PCOS have that can be easily dismissed as normal?
 
-  * Some shared patterns identified through analysis included Body Mass Index (BMI), vital signs, anthropometric measures, and specific hormone levels, yet within this dataset, insufficient evidence exists to conclusively dismiss these as unrelated to Polycystic Ovary Syndrome (PCOS).
+  * Some shared patterns identified through analysis included Body Mass Index (BMI), vital signs, biometric measurements, and specific hormone levels, yet within this dataset, insufficient evidence exists to conclusively dismiss these as unrelated to Polycystic Ovary Syndrome (PCOS).
 
 2.	Are there differences for women of different race/ethnic background when it comes to having PCOS? What about women without PCOS?
 
-  * These accuracies don't directly address racial or ethnic differences. Further analysis involving feature exploration or specific subgroup analysis using demographic data might unveil associations or variations among different racial/ethnic groups in PCOS prevalence or features.
+  * These accuracies don't directly address racial or ethnic differences as the dataset only involved women from Kerala, India. Further analysis involving feature exploration or specific subgroup analysis using demographic data might unveil associations or variations among different racial/ethnic groups in PCOS prevalence or features.
 
 3.	What is the likelihood of a woman developing PCOS based on her age, ethnicity, and BMI history?
 
-  * The accuracies do not explicitly signify predictions regarding probability due to the lack of diverse ethnic backgrounds in the collected records. Moreover, age and BMI were not influential variables across most of the created models in this dataset.. Specific models with feature importance or coefficients might offer insights into how age, ethnicity, and BMI contribute to predicting PCOS likelihood.
+  * The accuracies did not explicitly signify predictions regarding probability due to the lack of diverse ethnic backgrounds in the collected records. Moreover, age and BMI were not influential variables across most of the created models in this dataset. Specific models with feature importance or coefficients might offer insights into how age, ethnicity, and BMI contribute to predicting PCOS likelihood but the data would have to include such diversity.
 
 4.	Can we predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on their medical history, hormone levels, and lifestyle factors?
 
-  * Machine learning models could help predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on available medical history, hormone levels, and lifestyle factors. For this a larger dataset would be needed in order to create specialized modeling to derive precise predictions.
+  * Machine learning models could help predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on available medical history, hormone levels, and lifestyle factors. For this a larger dataset would be needed in order to create specialized modeling to derive precise predictions. Regrettably, my dataset would not be well-suited for conducting such forecasts.
 
 5.	Can we predict the likelihood of successful pregnancy outcomes in women with PCOS based on their age, weight, hormone levels, and treatment history?
 
-  * Similar to the above, machine learning models can potentially predict the likelihood of successful pregnancy outcomes in women with PCOS based on various factors like age, weight, hormone levels, and treatment history. A larger dataset, specific models or analyses could provide more detailed predictive insights.
+  * Similar to the above, machine learning models can potentially predict the likelihood of successful pregnancy outcomes in women with PCOS based on various factors like age, weight, hormone levels, and treatment history. A more expansive dataset, specialized models, or in-depth analyses could offer more intricate predictive insights, exceeding the capabilities of my current dataset.
 
 6.	Can we predict the long-term health outcomes and quality of life of women with PCOS based on their age, lifestyle factors, hormone levels, and treatment history?
 
-  * Machine learning models, when trained with extensive data including age, lifestyle factors, hormone levels, and treatment history, might offer predictive insights into long-term health outcomes and quality of life for women with PCOS. However, these models might need additional feature engineering and specialized analyses to offer accurate predictions.
+  * Machine learning models, when trained with extensive data including age, lifestyle factors, hormone levels, and treatment history, might offer predictive insights into long-term health outcomes and quality of life for women with PCOS. However, these models might need additional feature engineering and specialized analyses to offer accurate predictions. I expect that accurately predicting long-term health outcomes, despite an improved dataset, will remain challenging due to the varied presentation of PCOS in women, which poses ongoing diagnostic challenges.
 
 $~$
 

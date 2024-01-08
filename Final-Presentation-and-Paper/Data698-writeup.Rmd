@@ -2,7 +2,7 @@
 title: 'Using Machine Learning Algorithms to Predict the likelihood of Polycystic Ovarian Syndrome based on Demographic, Clinical and Lifestyle Factors'
 subtitle: 'CUNY SPS Data 698 - Analytics Masters Research Project'
 author: 'Leticia Salazar'
-date: 'May 16, 2023'
+date: 'January 8, 2024'
 output:
   pdf_document:
     latex_engine: xelatex
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE, tidy.opts=list(width.cutoff=60))
 
 ## Abstract:
 
-Polycystic Ovarian Syndrome (PCOS) stands as a prevalent endocrine disorder affecting women of reproductive age worldwide, presenting a confluence of hormonal imbalances, reproductive irregularities, and potential metabolic complications. Characterized by irregular menstrual cycles, hyperandrogenism, and polycystic ovaries, PCOS poses multifaceted challenges that extend beyond reproductive health, encompassing metabolic disturbances and psychological implications.This multifaceted syndrome, influenced by intricate interactions among genetic predispositions, hormonal imbalances, and environmental elements, presents with diverse manifestations among those affected. The clinical landscape of PCOS often requires a comprehensive, multidisciplinary approach, incorporating lifestyle modifications, pharmacological interventions, and personalized treatments to address symptoms and reduce associated health risks. Despite ongoing research efforts, unraveling the exact cause and identifying the most effective management approaches for PCOS remains an evolving field of investigation within modern medicine. This research project aims to investigate the current studies on PCOS diagnosis, assessing the effectiveness of various machine learning algorithms including Decision Tree (rpart), Random Forest (randomForest), Gradient Boosting Machines (xgboost or gbm), Support Vector Machines (SVM; e1071), Neural Networks (neuralnet), and K-Nearest Neighbors (knn or class). From my analysis, it was concluded that the accuracies of Decision Tree 2, SVM 2, SVM 1, and Random Forest 2 performed relatively better in distinguishing between PCOS and non-PCOS cases in this dataset, while Gradient Boost Machines 1 and k-Nearest 2 demonstrated slightly reduced yet still sufficiently acceptable predictive accuracies.
+Polycystic Ovarian Syndrome (PCOS) stands as a prevalent endocrine disorder affecting women of reproductive age worldwide, presenting a confluence of hormonal imbalances, reproductive irregularities, and potential metabolic complications. Characterized by irregular menstrual cycles, hyperandrogenism, and polycystic ovaries, PCOS poses multifaceted challenges that extend beyond reproductive health, encompassing metabolic disturbances and psychological implications. This multifaceted syndrome, influenced by intricate interactions among genetic predispositions, hormonal imbalances, and environmental elements, presents with diverse manifestations among those affected. The clinical landscape of PCOS often requires a comprehensive, multidisciplinary approach, incorporating lifestyle modifications, pharmacological interventions, and personalized treatments to address symptoms and reduce associated health risks. Despite ongoing research efforts, unraveling the exact cause and identifying the most effective management approaches for PCOS remains an evolving field of investigation within modern medicine. This research seeks to explore current studies related to PCOS diagnosis by acquiring datasets from Kaggle.com and assessing the efficiency of diverse machine learning algorithms, encompassing Decision Tree (rpart), Random Forest (randomForest), Gradient Boosting Machines (xgboost or gbm), Support Vector Machines (SVM; e1071), Neural Networks (neuralnet), and K-Nearest Neighbors (knn or class). Upon data exploration and preprocessing, models were constructed using the six distinct algorithms. The analysis revealed that Decision Tree 2, SVM 2, SVM 1, and Random Forest 2 exhibited relatively superior performance in discerning between PCOS and non-PCOS cases within this dataset. On the other hand, k-Nearest Neighbor 1, Random Forest 1, Gradient Boost Machines 2 and both Neural Networks models displayed lower predictive accuracies.
 
 ## Key words:
 
@@ -31,7 +31,7 @@ Polycystic Ovarian Syndrome, PCOS, Women's Health, Machine Learning Algorithms, 
 
 ## The Problem:
 
-Polycystic Ovarian Syndrome (PCOS) is a hormonal imbalance disorder affecting women of reproductive age. Determining the precise global count of women affected by PCOS poses challenges due to many cases remaining undiagnosed. However, the World Health Organization (WHO) estimates that approximately 3.4% of women are affected [WHO, 2023]. While this percentage might seem relatively small, considering that women constitute 49.7% of today’s population [Knoema, 2022], nearly 13% of them fall within the reproductive age bracket [MarchofDimes, 2022]. This data suggests that approximately 17.5 million women report suffering from PCOS. Beyond the physical and emotional toll PCOS exacts, it also disrupts ovarian function, leading to challenges in maintaining a healthy menstrual cycle and can result in the formation of cysts, ultimately impacting fertility. It's important to note that the prevalence of PCOS varies by region and ethnic groups, with some studies suggesting higher rates of PCOS in certain populations [Engmann, 2017]. Early identification of risk factors associated with PCOS can assist in timely interventions and lifestyle adjustments. Tailoring suggestions or treatments based on individualized risk profiles has the potential to enhance patient outcomes. Employing predictive models can play a pivotal role in increasing awareness regarding PCOS risk factors and preventive measures. However, limitations may exist in accessing comprehensive and varied datasets containing accurate demographic, clinical, and lifestyle data [Thakre, 2020]. Addressing these challenges involves the development of a robust predictive model using machine learning techniques. Such an endeavor holds the promise of significantly contributing to the identification of individuals at risk of PCOS, thereby enabling early interventions and guiding personalized healthcare strategies for improved management of the condition. This project will investigate publicly available datasets that will be used to develop machine learning models that predicts the probability or risk of an individual having or developing PCOS based on demographic information (age, ethnicity, geographical location), clinical data (hormonal levels, BMI, menstrual irregularities), and lifestyle factors (dietary habits, exercise routine, stress levels).
+Polycystic Ovarian Syndrome (PCOS) is a hormonal imbalance disorder affecting women of reproductive age. Determining the precise global count of women affected by PCOS poses challenges due to many cases remaining undiagnosed. However, the World Health Organization (WHO) estimates that approximately 3.4% of women are affected [WHO, 2023]. While this percentage might seem relatively small, considering that women constitute 49.7% of today’s population [Knoema, 2022], nearly 13% of them fall within the reproductive age bracket [MarchofDimes, 2022]. This data suggests that approximately 17.5 million women report suffering from PCOS. Beyond the physical and emotional toll PCOS exacts, it also disrupts ovarian function, leading to challenges in maintaining a healthy menstrual cycle and can result in the formation of cysts, ultimately impacting fertility. It's important to note that the prevalence of PCOS varies by region and ethnic groups, with some studies suggesting higher rates of PCOS in certain populations [Engmann, 2017]. Early identification of risk factors associated with PCOS can assist in timely interventions and lifestyle adjustments. Tailoring suggestions or treatments based on individualized risk profiles has the potential to enhance patient outcomes. Employing predictive models can play a pivotal role in increasing awareness regarding PCOS risk factors and preventive measures. However, limitations may exist in accessing comprehensive and varied datasets containing accurate demographic, clinical, and lifestyle data [Thakre, 2020]. Addressing these challenges involves the development of a robust predictive models using machine learning techniques. Such efforts holds the promise of significantly contributing to the identification of individuals at risk of PCOS, thereby enabling early interventions and guiding personalized healthcare strategies for improved management of the condition. This project will investigate publicly available datasets that will be used to develop machine learning models that predicts the probability or risk of an individual having or developing PCOS based on demographic information (age, ethnicity, geographical location), clinical data (hormonal levels, BMI, menstrual irregularities), and lifestyle factors (dietary habits, exercise routine, stress levels).
 
 \newpage
 
@@ -161,15 +161,15 @@ Variables                               Description
 
 Upon importing the data into R, I conducted an assessment to gain a comprehensive understanding of the dataset. The exploration revealed a necessity for substantial data preparation before commencing model construction. Utilizing the `skimr` library, I generated concise summaries for both datasets, which indicated the presence of character and numeric column types without any missing values. Employing the `Data Explorer` library, histograms were created to examine the distribution of variables in both datasets. However, these distributions did not display any discernible patterns or distinct shapes.
 
-The data preparation phase involved standardizing the `pcos` and `pcos2` datasets as numeric due to variations in variable classes. While confirming the absence of missing data, it was identified that `pcos2` contained a few variables with missing values. Upon obtaining a comprehensive overview of both datasets, the procedure involved eliminating unnecessary columns, renaming columns for enhanced readability, and merging the datasets. Additionally, transformations were applied, converting `Height` from centimeters to meters, `Hip` and `Waist` from inches to centimeters. Subsequently, missing values in columns such as `BMI`, `Waist_Hip_Ratio`, and `FSH/LH` were computed and replaced. For `Married_yrs`, `AMH_ngmL`, and `Fast_food`, the missing values were substituted with the median values, as these replacements did not significantly impact the data distribution. Detecting outliers was crucial and accomplished through boxplots for visual representation. Despite their presence, I chose to retain these outliers, acknowledging their importance in representing natural variations within the population. Furthermore, additional visualizations were created to scrutinize trends within the refined `pcos_cleaned` dataset.
+The data preparation phase involved standardizing the `pcos` and `pcos2` datasets as numeric due to variations in variable classes. While confirming the absence of missing data, it was identified that `pcos2` contained a few variables with missing values. Upon obtaining a comprehensive overview of both datasets, the procedure involved eliminating unnecessary columns, renaming columns for enhanced readability, and merging the datasets. Additionally, transformations were applied, converting `Height` from centimeters to meters, `Hip` and `Waist` from inches to centimeters. Subsequently, missing values in columns such as `BMI`, `Waist_Hip_Ratio`, and `FSH_LH` were computed and replaced. For `Married_yrs`, `AMH_ngmL`, and `Fast_food`, the missing values were substituted with the median values, as these replacements did not significantly impact the data distribution. Detecting outliers was crucial and accomplished through boxplots for visual representation. Despite their presence, I chose to retain these outliers, acknowledging their importance in representing natural variations within the population. Additional visualizations were created to visualize trends within the refined `pcos_cleaned` dataset.
 
-Building the models involved the development of six distinct machine learning algorithms: Decision Trees, Random Forest, Gradient Boost Machines, Support Vector Machines, Neural Networks, and k-Nearest Neighbor. We initiate by dividing the dataset into training and validation subsets tailored for machine learning models. The training subset is utilized for model training, while the validation subset assesses its performance. Employing a 75:25 ratio strikes a balance, ensuring adequate data for effective model training and a sizable validation set for robust evaluation.
+Building the models involved the development of six distinct machine learning algorithms: Decision Trees, Random Forest, Gradient Boost Machines, Support Vector Machines, Neural Networks, and k-Nearest Neighbor. I initiate by dividing the dataset into training and validation subsets tailored for machine learning models. The training subset is utilized for model training, while the validation subset assesses its performance. Employing a 75:25 ratio strikes a balance, ensuring adequate data for effective model training and a sizable validation set for robust evaluation.
 
 For each algorithm, the following procedures were executed:
 
 1. Establish a cross-validation configuration, employing the `PCOS` variable as the target against the entire dataset. The split data designated `train` and `valid` labeled the training and testing subsets, respectively. Additionally, another cross-validation setup centered on the `PCOS` target variable, utilizing pivotal contributing variables: `Follicle_NoL`, `Follicle_NoR`, `Hair_growth`, `Skin_darkening`, and `Weight_gain`.
 
-2. After the model creation using the `train` dataset, predictions were generated for the model utilizing the `valid` data. The output encompassed a confusion matrix and associated statistics affirming the predictive output for the target variable (`PCOS`). Moreover, this included metrics providing insights into the model's efficacy in classifying positive and negative cases accurately in binary classification.
+2. After the model creation using the `train` dataset, predictions were generated for the model utilizing the `valid` data. The output encompassed a confusion matrix and associated statistics affirming the predictive output for the target variable (`PCOS`). This also included metrics providing insights into the model's efficacy in classifying positive and negative cases accurately in binary classification.
 
 3. Evaluate the individual contributions of each variable within the model and, if necessary, visualize their significance.
 
@@ -207,9 +207,238 @@ Overall, I'll be able to explore the insights into PCOS pathophysiology, diagnos
 
 ## Experimentation and Results:
 
-Once I started our data exploration process I uncovered the following:
 
-Overall the top 5 models with the highest accuracies were: Decision Tree (second model), SVM (second and first model), Random Forest (second model), and Gradient Boost Machine (first model).
+#### Data Exploration and Preparation
+
+Once I started the data exploration process I uncovered the following:
+
+* In total, the dataset is composed of 48 variables and 541 data entries
+
+* The data was collected from 10 different hospitals across Kerala, India
+
+* There seemed to be no missing variables
+
+* The initial histograms of `pcos` and `pcos2` did not indicate a distinct pattern or discernible shape.
+
+The data preparation process included renaming columns and addressing missing values. This included handling missing values by calculating the median as a replacement strategy for columns like `Marraied_yrs`, `AMH_ngmL` and `Fast_food`. Additionally, for columns such as `BMI`, `FSH_LH`, and `Waist_Hip_Ratio`, the values were computed. Specific columns were converted to the metric system, and redundant or unnecessary columns were removed. These steps aim to streamline data management before merging the two datasets. 
+
+```{r, figures-side, fig.show="hold", out.width="50%", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/write_up/"
+knitr::include_graphics(paste0(wd, "table4_wu.png"))
+knitr::include_graphics(paste0(wd, "table4_wu2.png"))
+knitr::include_graphics(paste0(wd, "table4_wu3.png"))
+knitr::include_graphics(paste0(wd, "table4_wu4.png"))
+```
+
+Once the data was cleaned named `pcos_cleaned`, another `DataExplorer` histogram was created; each variable demonstrated variations, displaying either a normal distribution, right-skewed, left-skewed, or no discernible pattern. A correlation plot was then created to measure the degree of linear relationship within the dataset. Based on my findings, there are not many variables that exhibit a notably strong positive or negative correlation, although some variables do fall within these categories to some extent.
+
+* Positive correlations between: `BMI` and `Weight`, `Weight_gain`, `Hair_growth`, `Skin_darkening` and `PCOS` and `Follicle_NoL`, `Follicle_NoR`, and `PCOS` to name a few.
+
+* Negative correlations between:` Waist_Hip_Ratio` and `Hip`, `AMH_ngmL` and `Age_yrs`, and `Follicle_NoR`, `Follicle_NoL` and `Age_yrs`.
+
+```{r, out.width="60%", fig.align="center", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/write_up/"
+knitr::include_graphics(paste0(wd, "fig4_wu.png"))
+```
+
+Detecting and managing outliers is essential for maintaining the integrity and reliability of data-driven analyses. With the help of boxplots we can identify outliers across a complete dataset. According to the visualizations provided, a handful of outliers are evident. Variables that included outliers were mainly hormonal markers such as: `AMH_ngml`, `Endometrium_mm`, `FSH_LH`, `FSH_mIUmL`, `Hb_gdl`, `IbetaHCG_mIUmL`, `IIbetaHCG_mIUmL`, `LH_mIUmL`, `PRL_ngml`, and `TSH_mgdl`. Considering the dataset’s relatively small size, I’ve chosen to retain these outliers to ensure the inclusion of every individual data point as it represents natural variations in the population.
+
+```{r, figures-side2, fig.show="hold", out.width="50%", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/write_up/"
+knitr::include_graphics(paste0(wd, "fig5_wu.png"))
+knitr::include_graphics(paste0(wd, "fig5_wu2.png"))
+```
+
+
+As the datasets initially contained missing information during the data exploration phase, additional visualizations were generated specifically for the `pcos_cleaned` dataset. These visualizations include a series of histograms, barcharts and scatterplots. 
+
+* There is a wide range of distribution between the age of these women most falling between 23 to 38 years old. Similarly, weight also has a wide range of distribution.
+
+* Most of the women in this study are between 1.5 - 1.6 meters tall (4’9” - 5’2”).
+
+* The distribution of years married also varies where the majority of the women fall between the first 10 years.
+
+```{r, out.width="60%", fig.align="center", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/write_up/"
+knitr::include_graphics(paste0(wd, "fig6_wu.png"))
+```
+
+Various physiological and hormonal patterns within the dataset and related to PCOS show that:
+
+* The age and weight of the women are distributed evenly throughout as opposed to being clustered in a certain age and weight group.
+
+* Hip to waist counts increase for those with and without PCOS.
+
+* Cycle length seems to be very consistent regardless of PCOS diagnosis.
+
+* Women with PCOS experience more irregular periods with a few with no PCOS do as well.
+
+* With or without PCOS women’s BMI fluctuates in women of all ages.
+
+* The distribution of number of follicles is greater for those women without PCOS.
+
+* The distribution of size in follicles left or right don’t differ as greatly as I thought for women with and without PCOS.
+
+* The variance in endometrial thickness between women with PCOS (thinner) and those without PCOS (thicker) evolves as the menstrual cycle progresses. This discrepancy arises due to hormonal imbalances. In women affected by PCOS, the absence of regular menstrual cycles leads to an unaltered endometrial lining, contrasting with the changes observed in women without the condition.
+
+* Pregnancy hormones are clustered with the exceptions of some outliers which were initially noted.
+
+* Blood pressure levels, Pulse rate and Respiration rate for women with and without PCOS are in normal range.
+
+* The quantity of eggs and the development of follicles show similar patterns between women self-reporting PCOS and those without, yet there is no discernible correlation between them.
+
+```{r, out.width="80%", fig.align="center", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/write_up/"
+knitr::include_graphics(paste0(wd, "fig7_wu.png"))
+```
+
+Out of 541 women:
+
+* 32.72% reported to have PCOS
+
+* 38.08% of women reported to being pregnant
+
+* 37.71% reported to experience weight gain
+
+* 27.36% reported to experience hair growth
+
+* 30.68% experience skin darkening
+
+* 45.29% reported to experience hair loss
+
+* 48.98% reported to experience pimples
+
+* 51.57% reported to have fast food
+
+* 24.77% reported to exercise regularly
+
+Taking into account the presence of PCOS within the study:
+
+* Women possessing blood types A+, B+, and O+ reported a higher incidence of PCOS compared to those with blood types A-, B-, O-, AB+, and AB-.
+
+* Being that PCOS and infertility are linked, there are 11.83% of women who reported to being pregnant with PCOS.
+
+* 22.37% of women reported to experience weight gain with PCOS.
+
+* 18.67% of women reported to experience hair growth with PCOS.
+
+* 20.33% of women reported to experience skin darkening with PCOS.
+
+* 18.85% of women reported to experience hair loss with PCOS.
+
+* 22.74% of women reported to experience pimples with PCOS.
+
+* 25.13% of women reported to consume fast food with PCOS.
+
+* 9.43% of women reported to regularly exercise with PCOS.
+
+* Not surprised to see how fluctuated the cycle length is especially for women without PCOS since they tend to have a more regular cycle.
+
+* Abortions were also included in this study but there’s no evidence that it’s influenced by PCOS; more women without PCOS experience 1 or more abortions.
+
+Within hormonal markers:
+
+* Vitamin D3 levels are spread out for those who reported with or without PCOS.
+
+* FSH/LH levels are right skewed for those who reported with or without PCOS.
+
+* TSH levels are also spread out for women who reported to have PCOS and those who don’t.
+
+* Hemoglobin levels seem to be higher for those who reported to have PCOS.
+
+* PRL levels (prolactin in the blood) are consistent at 1 or 2 for those with or without PCOS.
+
+* RBS (random glucose) is fairly distributed with those with and without PCOS.
+
+```{r, figures-side3, fig.show="hold", out.width="50%", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/write_up/"
+knitr::include_graphics(paste0(wd, "fig8_wu.png"))
+knitr::include_graphics(paste0(wd, "fig9_wu.png"))
+knitr::include_graphics(paste0(wd, "fig10_wu.png"))
+```
+\newpage
+
+#### Model Building:
+
+The model building involved the creation of 6 algorithms: Decision Tree (rpart), Random Forest (randomForest), Gradient Boosting Machines (xgboost or gbm), Support Vector Machines (e1071), Neural Networks (neuralnet), and K-Nearest Neighbors (kknn or class). For each algorithm, two models were generated. The first model was developed using the entire dataset with the target variable `PCOS`, while the second models were established using only the most influential variables, `Follicle_NoL`, `Follicle_NoR`, `Hair_growth`, `Skin_darkening`, `Weight_gain` and the target variable `PCOS`.
+
+$~$
+
+Decision Tree:
+
+* Model 1 `Decision Tree 1` was run against the whole dataset and yield an accuracy of 85.93%
+* Model 2 `Decision Tree 2` was run against the 6 most influential variables and yield and accuracy of 91.85%
+
+```{r, figures-side4, fig.show="hold", out.width="50%", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/"
+knitr::include_graphics(paste0(wd, "fig11.png"))
+knitr::include_graphics(paste0(wd, "fig12.png"))
+```
+
+
+Random Forest:
+
+* Model 3 `Random Forest 1` was run against the whole dataset and yield an accuracy of 62.96%
+* Model 4 `Random Forest 2` was run against the 6 most influential variables and yield and accuracy of 90.37%
+
+```{r, figures-side5, fig.show="hold", out.width="50%", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/"
+knitr::include_graphics(paste0(wd, "fig13.png"))
+knitr::include_graphics(paste0(wd, "fig14.png"))
+```
+
+
+Gradient Boosting Machines:
+
+* Model 5 `Gradient Boosting Machines 1` was run against the whole dataset and yield an accuracy of 88.89%
+* Model 6 `Gradient Boosting Machines 2` was run against the 6 most influential variables and yield and accuracy of 88.15%
+
+```{r, figures-side6, fig.show="hold", out.width="50%", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/"
+knitr::include_graphics(paste0(wd, "fig15.png"))
+knitr::include_graphics(paste0(wd, "fig16.png"))
+```
+
+
+Support Vector Machines:
+
+* Model 7 `Support Vector Machines 1` was run against the whole dataset and yield an accuracy of 91.11%
+* Model 8 `Support Vector Machines 2` was run against the 6 most influential variables and yield and accuracy of 91.85%
+
+*Unfortunately, I encountered difficulty generating a plot for the SVM model.*
+
+\newpage
+
+Neural Networks:
+
+* Model 9 `Neural Networks 1` was run against the whole dataset and yield an accuracy of 30.37%
+* Model 10 `Neural Networks 2` was run against the 6 most influential variables and yield and accuracy of 30.37%
+
+```{r, figures-side8, fig.show="hold", out.width="50%", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/"
+knitr::include_graphics(paste0(wd, "fig17.png"))
+knitr::include_graphics(paste0(wd, "fig18.png"))
+```
+
+
+K-Nearest Neighbors
+
+* Model 11 `k-Nearest Neighbors 1` was run against the whole dataset and yield an accuracy of 65.19%
+* Model 12 `k-Nearest Neighbors 2` was run against the 6 most influential variables and yield and accuracy of 88.15%
+
+```{r, figures-side9, fig.show="hold", out.width="50%", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/"
+knitr::include_graphics(paste0(wd, "fig19.png"))
+knitr::include_graphics(paste0(wd, "fig20.png"))
+```
+
+
+Overall the top 5 models with the highest accuracies were: Model 2: `Decision Tree 2`, Model 7 and 8: `SVM2` and `SVM 1`, Model 3: `Random Forest 2`, and Model 5: `Gradient Boost Machine 1`.
+
+```{r, fig.align='center', out.width="100%", warning=FALSE, message=FALSE, echo=FALSE}
+wd <- "/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/write_up/"
+knitr::include_graphics(paste0(wd, "table5_wu.png"))
+```
 
 Both Decision Tree 2 and SVM 2 achieved similar high accuracies of approximately 91.85%. This implies that these models were quite successful in making accurate predictions for PCOS diagnosis based on the given data and features. SVM 1 achieved a slightly lower accuracy compared to Decision Tree 2 and SVM 2 but still performed reasonably well at approximately 91.11%. It remains effective in predicting PCOS diagnosis but might be slightly less accurate than the aforementioned models. The second Random Forest model achieved an accuracy of around 90.37%, indicating its capability to correctly classify PCOS and non-PCOS cases with slightly less accuracy than SVM 1 and Decision Tree 2. Both Gradient Boost Machines 1 and k-Nearest 2 models obtained accuracies around 88.15%, which, while lower than the previous models, still demonstrate a moderate ability to predict PCOS diagnosis based on the provided features.
 
@@ -217,31 +446,33 @@ Overall, these accuracies suggest that Decision Tree 2, SVM 2, SVM 1, and Random
 
 ## Conclusion:
 
-My initial assumption was that while there’s limited information available in the medical field and even less data sets available to analyze, I have some concerns on being successful in predicting a PCOS diagnosis. I anticipated answering the following questions with my data:
+Initially, I presumed that due to the scarcity of information within the medical domain and the limited availability of datasets for analysis, I held reservations about the potential success in accurately predicting a PCOS diagnosis. Surprisingly, 8 out of the 12 models developed exhibited accuracies surpassing 85%, with only 4 out of the 8 achieving an accuracy exceeding 90%. In comparison to the findings in existing literature utilizing the same Kaggle dataset, the top 5 algorithms I employed showed a slightly lower performance, where these achieved accuracies above 95%. If I had to pick an algorithm to best represent my dataset I'd select `SVM 1` as its accuracy was of 91.11%, a unique percentage not replicated by other algorithms. Conversely, the utilization of Neural Networks in this analysis did not yield satisfactory results, deviating from the expectations set by the literature. This outcome might be attributed to the specific package utilized and the parameter settings chosen for the neural network model. For the future work, I aim to explore datasets such as [NICHDash](https://dash.nichd.nih.gov/study/15920) which are not publicly available and feature a slightly larger and more diverse population within the United States. This exploration will facilitate a more comprehensive assessment of PCOS, enabling a deeper understanding of the condition's nuances and complexities.
+
+Having subjected the data to various algorithms, I am now able to address the anticipated questions:
 
 1.	Are there commonalities women with and without PCOS have that can be easily dismissed as normal?
 
-  * Some shared patterns identified through analysis included Body Mass Index (BMI), vital signs, anthropometric measures, and specific hormone levels, yet within this dataset, insufficient evidence exists to conclusively dismiss these as unrelated to Polycystic Ovary Syndrome (PCOS).
+  * Some shared patterns identified through analysis included Body Mass Index (BMI), vital signs, biometric measurements, and specific hormone levels, yet within this dataset, insufficient evidence exists to conclusively dismiss these as unrelated to Polycystic Ovary Syndrome (PCOS).
 
 2.	Are there differences for women of different race/ethnic background when it comes to having PCOS? What about women without PCOS?
 
-  * These accuracies don't directly address racial or ethnic differences. Further analysis involving feature exploration or specific subgroup analysis using demographic data might unveil associations or variations among different racial/ethnic groups in PCOS prevalence or features.
+  * These accuracies don't directly address racial or ethnic differences as the dataset only involved women from Kerala, India. Further analysis involving feature exploration or specific subgroup analysis using demographic data might unveil associations or variations among different racial/ethnic groups in PCOS prevalence or features.
 
 3.	What is the likelihood of a woman developing PCOS based on her age, ethnicity, and BMI history?
 
-  * The accuracies do not explicitly signify predictions regarding probability due to the lack of diverse ethnic backgrounds in the collected records. Moreover, age and BMI were not influential variables across most of the created models in this dataset.. Specific models with feature importance or coefficients might offer insights into how age, ethnicity, and BMI contribute to predicting PCOS likelihood.
+  * The accuracies did not explicitly signify predictions regarding probability due to the lack of diverse ethnic backgrounds in the collected records. Moreover, age and BMI were not influential variables across most of the created models in this dataset. Specific models with feature importance or coefficients might offer insights into how age, ethnicity, and BMI contribute to predicting PCOS likelihood but the data would have to include such diversity.
 
 4.	Can we predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on their medical history, hormone levels, and lifestyle factors?
 
-  * Machine learning models could help predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on available medical history, hormone levels, and lifestyle factors. For this a larger dataset would be needed in order to create specialized modeling to derive precise predictions.
+  * Machine learning models could help predict the risk of insulin resistance, diabetes, and cardiovascular disease in women with PCOS based on available medical history, hormone levels, and lifestyle factors. For this a larger dataset would be needed in order to create specialized modeling to derive precise predictions. Regrettably, my dataset would not be well-suited for conducting such forecasts.
 
 5.	Can we predict the likelihood of successful pregnancy outcomes in women with PCOS based on their age, weight, hormone levels, and treatment history?
 
-  * Similar to the above, machine learning models can potentially predict the likelihood of successful pregnancy outcomes in women with PCOS based on various factors like age, weight, hormone levels, and treatment history. A larger dataset, specific models or analyses could provide more detailed predictive insights.
+  * Similar to the above, machine learning models can potentially predict the likelihood of successful pregnancy outcomes in women with PCOS based on various factors like age, weight, hormone levels, and treatment history. A more expansive dataset, specialized models, or in-depth analyses could offer more intricate predictive insights, exceeding the capabilities of my current dataset.
 
 6.	Can we predict the long-term health outcomes and quality of life of women with PCOS based on their age, lifestyle factors, hormone levels, and treatment history?
 
-  * Machine learning models, when trained with extensive data including age, lifestyle factors, hormone levels, and treatment history, might offer predictive insights into long-term health outcomes and quality of life for women with PCOS. However, these models might need additional feature engineering and specialized analyses to offer accurate predictions.
+  * Machine learning models, when trained with extensive data including age, lifestyle factors, hormone levels, and treatment history, might offer predictive insights into long-term health outcomes and quality of life for women with PCOS. However, these models might need additional feature engineering and specialized analyses to offer accurate predictions. I expect that accurately predicting long-term health outcomes, despite an improved dataset, will remain challenging due to the varied presentation of PCOS in women, which poses ongoing diagnostic challenges.
 
 \newpage
 
@@ -331,6 +562,8 @@ knitr::include_graphics(paste0(wd, "fig15.png"))
 knitr::include_graphics(paste0(wd, "fig16.png"))
 knitr::include_graphics(paste0(wd, "fig17.png"))
 knitr::include_graphics(paste0(wd, "fig18.png"))
+knitr::include_graphics(paste0(wd, "fig19.png"))
+knitr::include_graphics(paste0(wd, "fig20.png"))
 ```
 
 
@@ -1449,6 +1682,9 @@ confusionMatrix(svm_result, valid$PCOS)
 # summary of svm_result
 summary(svm_result)
 
+#plot support vector machine
+plot(svm_model, train)
+
 #Extract accuracy from the confusion matrix
 accuracy_svm <- confusionMatrix(svm_result, as.factor(valid$`PCOS`))$overall["Accuracy"]
 accuracy_svm
@@ -1501,6 +1737,9 @@ confusionMatrix(svm_result2, svm_valid2$PCOS)
 
 # summary
 summary(svm_result2)
+
+#plot support vector machine
+plot(svm_model2, svm_train2)
 
 #Extract accuracy from the confusion matrix
 accuracy_svm2 <- confusionMatrix(svm_result2, svm_valid2$`PCOS`)$overall["Accuracy"]
@@ -1592,6 +1831,10 @@ check2 <- as.numeric(valid2$`PCOS`) == max.col(pred2)
 nn_accuracy2 <-  (sum(check2)/nrow(valid2))
 nn_accuracy2
 
+
+# K-NEAREST NEIGHBOR
+
+
 # Remove rows with missing values from train and valid datasets
 train <- train[complete.cases(train), ]
 valid <- valid[complete.cases(valid), ]
@@ -1607,6 +1850,16 @@ knn_model <- knn(train[, -which(names(train) == "PCOS")],
                  valid[, -which(names(valid) == "PCOS")], 
                  train$`PCOS`, 
                  k = k)
+
+# Create confusion matrix for knn model
+conf_matrix <- confusionMatrix(knn_model, valid$`PCOS`)
+conf_matrix
+
+# Plot confusion matrix
+plot(conf_matrix$table, col = conf_matrix$byClass, 
+     main = "Fig. 19 - Confusion Matrix for first kNN Model",
+     xlab = "Predicted",
+     ylab = "Actual")
 
 # Calculate accuracy
 knn_accuracy <- mean(knn_model == valid$`PCOS`)
@@ -1636,6 +1889,16 @@ knn_model2 <- knn(train4[, -which(names(train4) == "PCOS")],
                   train4$`PCOS`, 
                   k = k)
 
+# Create confusion matrix for the second model
+conf_matrix2 <- confusionMatrix(knn_model2, valid$`PCOS`)
+conf_matrix2
+
+# Plot confusion matrix
+plot(conf_matrix2$table, col = conf_matrix2$byClass, 
+     main = "Fig. 20 - Confusion Matrix for second kNN Model",
+     xlab = "Predicted",
+     ylab = "Actual")
+
 # Calculate accuracy for the new kNN model
 knn_accuracy2 <- mean(knn_model2 == valid4$`PCOS`)
 knn_accuracy2
@@ -1644,12 +1907,15 @@ knn_accuracy2
 model_names <- c("Decision Tree 1","Decision Tree 2", 
                  "Random Forest 1", "Random Forest 2", 
                  "Gradient Boost Machines 1", 
-                 "Gradient Boost Machines 2" ,
+                 "Gradient Boost Machines 2",
                  "SVM 1", "SVM 2", "Neural Network 1", 
                  "Neural Network 2", "k-Nearest 1", "k-Nearest 2")
-accuracies <- c(0.8592593, 0.9185185, 0.6148148, 0.9037037, 
-                0.8814815, 0.6222222, 0.9111111, 0.9185185, 
-                0.3037037, 0.3037037, 0.7111111, 0.8814815)
+accuracies <- c(0.8592593, 0.9185185, 
+                0.6296296, 0.9037037, 
+                0.8814815, 0.6222222, 
+                0.9111111, 0.9185185, 
+                0.3037037, 0.3037037, 
+                0.6518519, 0.8814815)
 
 # place accuracies in data frame
 results <- data.frame(Model = model_names, Accuracy = accuracies)
@@ -1658,8 +1924,7 @@ results <- data.frame(Model = model_names, Accuracy = accuracies)
 results <- results[order(results$Accuracy, decreasing = TRUE), ]
 
 # Display the results
-kable(results, caption = "<font color=#000000><b>Table 5.</b>Model Comparison </font>",
-      format = "html") %>%
+kable(results, caption = "<font color=#000000><b>Table 5. </b>Model Comparison </font>", format = "html") %>%
   kable_styling(bootstrap_options = c("hover", "condensed"), font_size = 13) %>%
   kableExtra::scroll_box(width = "100%", height = "400px")
 ```
