@@ -20,7 +20,7 @@ $~$
 
 ## Overview: 
 
-Polycystic Ovarian Syndrome (PCOS) stands as one of the most prevalent endocrine disorders affecting reproductive-aged women globally. This complex condition disrupts hormone levels within the body, impacting the ovaries and often leading to a myriad of symptoms. PCOS is characterized by a spectrum of irregularities, including menstrual irregularities, hormonal imbalances, and the formation of cysts on the ovaries. Its manifestation varies among individuals, typically marked by excessive production of androgens, irregular menstrual cycles, and difficulties in ovulation, potentially leading to fertility challenges. Beyond reproductive health concerns, PCOS also presents with metabolic implications, such as insulin resistance, which can elevate the risk of developing type 2 diabetes and cardiovascular issues. The exact cause of PCOS remains multifaceted and isn't singularly defined, encompassing a combination of genetic, hormonal, and lifestyle factors. As a chronic disorder, PCOS poses significant challenges to those affected, impacting their overall health and quality of life.
+Polycystic Ovarian Syndrome (PCOS) stands as one of the most prevalent endocrine disorders affecting reproductive aged women globally. This complex condition disrupts hormone levels within the body, impacting the ovaries and often leading to a myriad of symptoms. PCOS is characterized by a spectrum of irregularities, including menstrual irregularities, hormonal imbalances, and the formation of cysts on the ovaries. Its manifestation varies among individuals, typically marked by excessive production of androgens, irregular menstrual cycles, and difficulties in ovulation, potentially leading to fertility challenges. Beyond reproductive health concerns, PCOS also presents with metabolic implications, such as insulin resistance, which can elevate the risk of developing type 2 diabetes and cardiovascular issues. The exact cause of PCOS remains multifaceted and isn't singularly defined, encompassing a combination of genetic, hormonal, and lifestyle factors. As a chronic disorder, PCOS poses significant challenges to those affected, impacting their overall health and quality of life.
 
 This syndrome's diagnosis is often challenging due to its diverse array of symptoms and the absence of a singular definitive test. Clinicians typically rely on a set of diagnostic criteria, such as irregular menstrual cycles, elevated androgen levels, and the presence of ovarian cysts, to identify and evaluate PCOS. However, the complexity of this condition extends beyond its diagnostic challenges, as managing PCOS necessitates a multifaceted approach. Treatment strategies often focus on alleviating specific symptoms, such as irregular periods, infertility, and excessive hair growth, through medications, lifestyle modifications, and sometimes surgical interventions. Additionally, lifestyle changes involving diet adjustments and regular exercise play a crucial role in managing the metabolic aspects of PCOS. Research into PCOS continues to expand, aiming to enhance diagnostic accuracy, refine treatment approaches, and deepen our understanding of its underlying mechanisms to better support individuals grappling with this pervasive syndrome.
 
@@ -1705,36 +1705,25 @@ To start the SVM algorithm and following the similar criteria as the previous mo
 # check the levels of PCOS using levels() 
 levels(train$PCOS)
 levels(valid$PCOS)
-```
 
-```{r, echo=FALSE, include=FALSE}
 # Convert PCOS to factor in svm_train
 train$PCOS <- factor(train$PCOS)
 
 # Convert PCOS to factor in svm_valid
 valid$PCOS <- factor(valid$PCOS)
-```
 
-
-```{r, echo=FALSE, include=FALSE}
 # rechecking levels again to ensure no NULL values
 levels(train$PCOS)
 levels(valid$PCOS)
-```
 
-```{r, echo=FALSE, include=FALSE}
 # checking the structure of both valid and train datasets
 str(valid)
 str(train)
-```
 
-```{r, echo=FALSE, include=FALSE}
 # explicitly set the levels to match the levels in svm_train.
 valid$PCOS <- factor(valid$PCOS, levels = levels(train$PCOS))
 levels(valid$PCOS)
-```
 
-```{r, echo=FALSE, include=FALSE}
 # # Check the length of svm_result and svm_valid$PCOS
 # length_svm_result <- length(svm_result)
 # length_svm_valid <- length(svm_valid$PCOS)
@@ -1763,9 +1752,20 @@ svm_result <- predict(svm_model, newdata = valid)
 confusionMatrix(svm_result, valid$PCOS)
 ```
 
+$~$
+
+A Principal Component Analysis (PCA) plot visualizes the data in a reduced dimensional space based on the principal components extracted from the original dataset. The visualization illustrates a clustering of data points primarily in the lower left section of the chart, representing both classes (individuals with PCOS and those without). This clustering is a result of the inherent variance within the data and may not be specifically optimized for distinct separation between the classes.
+
 ```{r, echo=FALSE, error=TRUE}
 #plot support vector machine
-plot(svm_model, train)
+#plot(svm_model, train)
+
+# Using PCA for dimensionality reduction (assuming 'train' has multiple features)
+pca_model <- prcomp(train[, -which(names(train) == "PCOS")])  # PCA on features except target
+train_pca <- predict(pca_model, train)
+
+# Plotting the reduced dimensions (first two principal components)
+plot(train_pca[, 1], train_pca[, 2], col = train$PCOS, main="Fig.17 - PCA plot for SVM 1 model")
 ```
 
 
@@ -1806,30 +1806,21 @@ svm_valid2 <- pcos_cleaned2[-svm_inTrain2,]
 # check the levels of PCOS using levels() 
 levels(svm_train2$PCOS)
 levels(svm_valid2$PCOS)
-```
 
-```{r, echo=FALSE, include=FALSE}
 # Convert PCOS to factor in svm_train2
 svm_train2$PCOS <- factor(svm_train2$PCOS)
 
 # Convert PCOS to factor in svm_valid2
 svm_valid2$PCOS <- factor(svm_valid2$PCOS)
-```
 
-
-```{r, echo=FALSE, include=FALSE}
 # rechecking levels again to ensure no NULL values
 levels(svm_train2$PCOS)
 levels(svm_valid2$PCOS)
-```
 
-```{r, echo=FALSE, include=FALSE}
 # explicitly set the levels to match the levels in svm_train2
 valid$PCOS <- factor(svm_valid2$PCOS, levels = levels(svm_train2$PCOS))
 levels(svm_valid2$PCOS)
-```
 
-```{r, echo=FALSE, include=FALSE}
 # # Check the length of svm_result and svm_valid$PCOS
 # length_svm_result <- length(svm_result)
 # length_svm_valid2 <- length(svm_valid2$PCOS)
@@ -1853,16 +1844,26 @@ svm_result2 <- predict(svm_model2, newdata = svm_valid2)
 confusionMatrix(svm_result2, svm_valid2$PCOS)
 ```
 
+$~$
+
+The plot for the second SVM model shows a similar pattern as the first SVM plot. 
 
 ```{r, echo=FALSE, error=TRUE}
 #plot second support vector machine model
-plot(svm_model2, svm_train2)
+# plot(svm_model2, svm_train2)
+
+# Using PCA for dimensionality reduction (assuming 'train' has multiple features)
+pca_model2 <- prcomp(svm_train2[, -which(names(svm_train2) == "PCOS")])  # PCA on features except target
+train_pca2 <- predict(pca_model, train)
+
+# Plotting the reduced dimensions (first two principal components)
+plot(train_pca2[, 1], train_pca2[, 2], col = svm_train2$PCOS, main="Fig.18 - PCA plot for SVM 2 model")
 ```
 
 
 
 ```{r, echo=FALSE, error=TRUE}
-# summary
+# summary of the results
 summary(svm_result2)
 ```
 
@@ -1892,7 +1893,6 @@ For context, neural network plots are composed of:
 
 * The far-right (output node(s)) node is the final output of the neural network.
 
-
 ```{r,echo=FALSE}
 # create some random numbers for reproduction
 set.seed(67)
@@ -1910,27 +1910,41 @@ $~$
 set.seed(19)
 
 # create the model
-nn_model <- neuralnet(`PCOS`~.,
-                      data = nn_train,
-                      hidden = c(12, 8),  # Specify the number of hidden layers and neurons
-                      linear.output = FALSE,
-                      stepmax = 20000  # Increase the maximum number of iterations
+# nn_model <- neuralnet(`PCOS`~.,
+#                       data = nn_train,
+#                       hidden = c(12, 8),  # Specify the number of hidden layers and neurons
+#                       linear.output = FALSE,
+#                       stepmax = 20000  # Increase the maximum number of iterations
+# )
+
+# recreate the first model:
+nn_model2 <-  neuralnet(`PCOS`~.,
+                        data=train,
+                        hidden=c(4,1),
+                        linear.output = FALSE,
+                        stepmax = 10000  # Increase the maximum number of iterations
 )
 ```
 
-Although not displayed when knitting, the plot produced is seen below:
+Although not displayed when knitted, the first neural network plot produced is seen below:
 
-![Fig. 17 - Neural Network 1](/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/fig17.png)
+![Fig. 19 - Neural Network 1](/Users/letisalba/Desktop/Data-698/Final-Presentation-and-Paper/figs:tables/fig19.png)
 
-```{r, echo=FALSE, fig.width=18, fig.height=12, fig.align='center', include=FALSE, error=TRUE}
+$~$
+
+I tried to recreated the neural network once more with the same data only this time, the parameters included 2 hidden layers with the first hidden layer containing 4 neurons and the second hidden layer containing 1 neuron. The stepmax parameter determines the maximum number of iterations allowed during training, here set to 10000 to ensure the model has enough iterations to learn from the data and optimize its parameters. Results are seen below:
+
+```{r, echo=FALSE, fig.width=10, fig.height=12, fig.align='center', error=TRUE}
 # create the plot based on the model above
-#plot(nn_model, rep = "best", main="")
-#grid::grid.text("Fig. 15 - Neural Network", x = 0.5, y = 0.1)
+plot(nn_model2, rep = "best")
+grid::grid.text("Fig. 19.2 - First Neural Network Model", x = 0.5, y = 0.1)
 ```
+$~$
 
+`PCOS` table displaying the predicted outcomes, where the highest count of predictions corresponds to the absence of PCOS.
 ```{r, echo=FALSE, error=TRUE}
 # make predictions on the test data using a previously trained model
-pred <- predict(nn_model, valid)
+pred <- predict(nn_model2, valid)
 
 # create a vector of labels for the two possible `PCOS(Y/N)` status in the dataset.
 labels <- c("0", "1")
@@ -1949,10 +1963,13 @@ table(valid$`PCOS`, prediction_label)
 
 $~$
 
-The accuracy of the model above was of 30.37%. Hoping this could improve in the second model.
+The accuracy of the first nn_model was of 30.37%. The recreated nn_model2 accuracy was 72.59% which is relatively higher but still hoping this could improve in the third model.
 
 ```{r, echo=FALSE, error=TRUE}
-#checking the accuracy
+# set seed for reproduction
+set.seed(098)
+
+# checking the accuracy recreation of first model
 check <- as.numeric(valid$`PCOS`) == max.col(pred)
 nn_accuracy <-  (sum(check)/nrow(valid))
 nn_accuracy
@@ -1969,7 +1986,7 @@ For the second neural network model I am also using the `neuralnet` package. Sim
 set.seed(13)
 
 # create the second model
-nn_model2 <-  neuralnet(`PCOS`~Follicle_NoL + Follicle_NoR + Hair_growth + Skin_darkening + Weight_gain,
+nn_model3 <-  neuralnet(`PCOS`~Follicle_NoL + Follicle_NoR + Hair_growth + Skin_darkening + Weight_gain,
                         data=train2,
                         hidden=c(2,1),
                         linear.output = FALSE,
@@ -1989,8 +2006,8 @@ In the context of a `neuralnet` plot displaying an error of 13.733636 and steps 
 
 ```{r, echo=FALSE}
 # create the plot based on the model above
-plot(nn_model2, rep = "best", main="")
-grid::grid.text("Fig. 18 -  Second Neural Network", x = .5, y = .2)
+plot(nn_model3, rep = "best", main="")
+grid::grid.text("Fig. 20 -  Second Neural Network", x = .5, y = .2)
 ```
 
 $~$
@@ -1999,7 +2016,7 @@ Below is a table displaying the predicted outcomes for the `PCOS` status, where 
 
 ```{r, echo=FALSE}
 # make predictions on the test data using a previously trained model
-pred2 <- predict(nn_model2, valid2)
+pred2 <- predict(nn_model3, valid2)
 
 # create a vector of labels for the two possible `PCOS` status in the dataset.
 labels2 <- c("0", "1")
@@ -2007,7 +2024,7 @@ labels2 <- c("0", "1")
 # creates a data frame with the column index of the maximum value in each row of the "pred" variable
 prediction_label2 <- data.frame(max.col(pred2)) %>% 
 # use the mutate function to add a new column to the data frame called "pred"
-mutate(pred=labels2[max.col.pred2.]) %>%
+mutate(pred2=labels2[max.col.pred2.]) %>%
 select(2) %>%
 # convert the data frame to a vector.
 unlist()
@@ -2018,7 +2035,7 @@ table(valid2$`PCOS`, prediction_label2)
 
 $~$
 
-Lastly, we check the accuracy using the validation data by first converting actual categorical values into numerical ones and compare them with predicted values. The `neuralnet` accuracy is 30.37% which is oddly similar to the accuracy of the first model.
+Lastly, we check the accuracy using the validation data by first converting actual categorical values into numerical ones and compare them with predicted values. The `neuralnet` accuracy is 30.37% which is oddly similar to the accuracy of the first model that couldn't be reproduced.
 ```{r, echo=FALSE}
 # checking the accuracy
 check2 <- as.numeric(valid2$`PCOS`) == max.col(pred2)
@@ -2059,7 +2076,7 @@ conf_matrix
 
 # Plot confusion matrix
 plot(conf_matrix$table, col = conf_matrix$byClass, 
-     main = "Fig. 19 - Confusion Matrix for first kNN Model",
+     main = "Fig. 21 - Confusion Matrix for first kNN Model",
      xlab = "Predicted",
      ylab = "Actual")
 ```
@@ -2111,7 +2128,7 @@ conf_matrix2
 
 # Plot confusion matrix
 plot(conf_matrix2$table, col = conf_matrix2$byClass, 
-     main = "Fig. 20 - Confusion Matrix for second kNN Model",
+     main = "Fig. 22 - Confusion Matrix for second kNN Model",
      xlab = "Predicted",
      ylab = "Actual")
 ```
@@ -2144,15 +2161,15 @@ Overall, these accuracies suggest that Decision Tree 2, SVM 2, SVM 1, and Random
 # Compare models
 model_names <- c("Decision Tree 1","Decision Tree 2", 
                  "Random Forest 1", "Random Forest 2", 
-                 "Gradient Boost Machines 1", 
-                 "Gradient Boost Machines 2",
+                 "GBM 1", "GBM 2",
                  "SVM 1", "SVM 2", "Neural Network 1", 
-                 "Neural Network 2", "k-Nearest 1", "k-Nearest 2")
+                 "Neural Network 1.2", "Neural Network 2", 
+                 "k-NN 1", "k-NN 2")
 accuracies <- c(0.8592593, 0.9185185, 
                 0.6296296, 0.9037037, 
                 0.8814815, 0.6222222, 
                 0.9111111, 0.9185185, 
-                0.3037037, 0.3037037, 
+                0.3037037, 0.7259259, 0.3037037, 
                 0.6518519, 0.8814815)
 
 # place accuracies in data frame
@@ -2164,14 +2181,18 @@ results <- results[order(results$Accuracy, decreasing = TRUE), ]
 # Display the results
 kable(results, caption = "<font color=#000000><b>Table 5. </b>Model Comparison </font>", format = "html") %>%
   kable_styling(bootstrap_options = c("hover", "condensed"), font_size = 13) %>%
-  kableExtra::scroll_box(width = "100%", height = "400px")
+  kableExtra::scroll_box(width = "100%", height = "500px")
 ```
 
 $~$
 
 ### Conclusion:
 
-Initially, I presumed that due to the scarcity of information within the medical domain and the limited availability of datasets for analysis, I held reservations about the potential success in accurately predicting a PCOS diagnosis. Surprisingly, 8 out of the 12 models developed exhibited accuracies surpassing 85%, with only 4 out of the 8 achieving an accuracy exceeding 90%. In comparison to the findings in existing literature utilizing the same Kaggle dataset, the top 5 algorithms I employed showed a slightly lower performance, where these achieved accuracies above 95%. If I had to pick an algorithm to best represent my dataset I'd select `SVM 1` as its accuracy was of 91.11%, a unique percentage not replicated by other algorithms. Conversely, the utilization of Neural Networks in this analysis did not yield satisfactory results, deviating from the expectations set by the literature. This outcome might be attributed to the specific package utilized and the parameter settings chosen for the neural network model. For the future work, I aim to explore datasets such as [NICHDash](https://dash.nichd.nih.gov/study/15920) which are not publicly available and feature a slightly larger and more diverse population within the United States. This exploration will facilitate a more comprehensive assessment of PCOS, enabling a deeper understanding of the condition's nuances and complexities.
+Initially, I presumed that due to the scarcity of information within the medical domain and the limited availability of datasets for analysis, I held reservations about the potential success in accurately predicting a PCOS diagnosis. Surprisingly, 8 out of the 12 models developed exhibited accuracies surpassing 85%, with only 4 out of the 8 achieving an accuracy exceeding 90%. In comparison to the findings in existing literature utilizing the same Kaggle dataset, the top 5 algorithms I employed showed a slightly lower performance, where these achieved accuracies above 95%. If I had to pick an algorithm to best represent my dataset I'd select `SVM 1` as its accuracy was of 91.11%, a unique percentage not replicated by other algorithms. Conversely, the utilization of Neural Networks in this analysis did not yield satisfactory results, deviating from the expectations set by the literature. This outcome might be attributed to the specific package utilized and the parameter settings chosen for the neural network model. 
+
+For the future work, I aim to explore datasets such as [NICHDash](https://dash.nichd.nih.gov/study/15920) which are not publicly available and feature a slightly larger and more diverse population within the United States. This exploration will facilitate a more comprehensive assessment of PCOS, enabling a deeper understanding of the condition's nuances and complexities. I'd also futher delve into additional machine learning methodologies highlighted in the literature reviews. Specifically, I intend to gain more hands-on experience with Support Vector Machines, Neural Networks (NN), and K-Nearest Neighbors (K-NN) algorithms. By combining strategies and considering the constraints posed by limited data, researchers | data scientist can potentially improve the predictive capabilities of machine learning models for diagnosing Polycystic Ovarian Syndrome while maintaining robustness and reliability.
+
+$~$
 
 Having subjected the data to various algorithms, I am now able to address the anticipated questions:
 
