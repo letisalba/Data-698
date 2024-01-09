@@ -285,7 +285,7 @@ $~$
 
 #### `pcos2` data:
 
-Upon visual inspection, no distinct pattern or discernible shape emerges from the histograms for the second dataset as a whole. Similar to the first dataset, `SI..No` and `Patient.File.No.` has a unimodel distribution but plays no significant role in my analysis.
+Upon visual inspection, the second dataset had a small distinct pattern where some of  variables were right or left skewed. Similar to the first dataset, `SI..No` and `Patient.File.No.` has a unimodel distribution but plays no significant role in my analysis.
 
 ```{r, fig.height = 10, fig.width = 10, fig.align='center', warning=FALSE, echo=FALSE, message=FALSE}
 DataExplorer::plot_histogram(
