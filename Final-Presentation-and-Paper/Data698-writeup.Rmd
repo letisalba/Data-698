@@ -4,19 +4,19 @@ subtitle: 'CUNY SPS Data 698 - Analytics Masters Research Project'
 author: 'Leticia Salazar'
 date: 'January 8, 2024'
 output:
-  pdf_document:
-    latex_engine: xelatex
-    toc: yes
   html_document:
     toc: yes
     toc_float: yes
     number_sections: no
     theme: united
     highlight: kate
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
 ---
 $~$
 
-## [YouTube Presentation](www.youtube.com)
+## [YouTube Presentation](https://youtu.be/VE5TZQjNAfQ)
 
 $~$
 
